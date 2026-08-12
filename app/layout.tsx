@@ -11,8 +11,16 @@ import { APP_NAME, APP_DESCRIPTION } from "@/config/constants";
 export const metadata: Metadata = {
   title: `${APP_NAME} | Built for Arc`,
   description: APP_DESCRIPTION,
+  manifest: "/manifest.json",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/images/arc-logo.png",
+    apple: "/images/arc-logo.png",
+  },
+  openGraph: {
+    title: `${APP_NAME} | Built for Arc`,
+    description: APP_DESCRIPTION,
+    siteName: APP_NAME,
+    type: "website",
   },
 };
 
@@ -23,6 +31,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+      </head>
       <body className="bg-arc-radial-glow text-slate-100 flex min-h-screen">
         <Web3Providers>
           <WalletProvider>
