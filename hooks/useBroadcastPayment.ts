@@ -73,7 +73,38 @@ export function useBroadcastPayment() {
       tokenAddress: `0x${string}` = CONTRACTS.arcTestnet.usdc,
       batchContractAddress: `0x${string}` = CONTRACTS.arcTestnet.batchPayment
     ) => {
-      console.log("[BROADCAST] button clicked");
+      console.log("[BROADCAST] executeBroadcastPayment initiated");
+
+      // ==========================================================
+      // STRICT SECURITY CHECK
+      // ==========================================================
+      console.log("[BROADCAST SECURITY CHECK]");
+      console.log("Token:", tokenAddress);
+      console.log("Approval Spender:", batchContractAddress);
+      console.log("Batch Target:", batchContractAddress);
+      console.log("Chain:", chainId);
+
+      // Verify spender is strictly the authorized ArcBatchPayment contract
+      if (
+        batchContractAddress.toLowerCase() !==
+        CONTRACTS.arcTestnet.batchPayment.toLowerCase()
+      ) {
+        console.error(
+          "[BROADCAST SECURITY ALERT] Spender mismatch! Expected:",
+          CONTRACTS.arcTestnet.batchPayment,
+          "Received:",
+          batchContractAddress
+        );
+        setStep("ERROR");
+        setError("Security Error: Invalid batch payment contract address.");
+        setStatusText("Security Error");
+        showToast({
+          title: "Security Alert",
+          message: "Transaction blocked: Spender address does not match ArcBatchPayment.",
+          type: "error",
+        });
+        return;
+      }
 
       // 1. Connection check
       if (!isConnected || !address) {
@@ -89,9 +120,6 @@ export function useBroadcastPayment() {
         return;
       }
 
-      console.log("[BROADCAST] wallet address:", address);
-      console.log("[BROADCAST] chain ID:", chainId);
-
       // 2. Network check
       if (chainId !== ARC_CHAIN_ID) {
         console.warn("[BROADCAST] Wrong network:", chainId, "Expected:", ARC_CHAIN_ID);
@@ -106,7 +134,7 @@ export function useBroadcastPayment() {
         return;
       }
 
-      // 3. Contract address verification (Section 5 & 16)
+      // 3. Contract address verification
       if (
         !batchContractAddress ||
         batchContractAddress.trim() === "" ||
@@ -131,7 +159,7 @@ export function useBroadcastPayment() {
         return;
       }
 
-      // 4. Contract bytecode check (Section 16)
+      // 4. Contract bytecode check
       const hasBytecode = await checkContractBytecode(batchContractAddress);
       if (!hasBytecode) {
         const errorMsg = "Batch payment contract is not deployed at the configured address.";
@@ -147,7 +175,7 @@ export function useBroadcastPayment() {
         return;
       }
 
-      // 5. Recipient validation (Section 11)
+      // 5. Recipient validation
       setStep("VALIDATING");
       setStatusText("Validating recipients...");
 
@@ -208,7 +236,7 @@ export function useBroadcastPayment() {
           totalAmount: totalFormatted,
         });
 
-        // 6. Balance check (Section 9)
+        // 6. Balance check
         setStep("CHECKING_BALANCE");
         setStatusText("Checking USDC balance...");
         const balanceData = await getErc20Balance(address, tokenAddress);
@@ -228,16 +256,16 @@ export function useBroadcastPayment() {
           return;
         }
 
-        // 7. Allowance check (Section 8)
+        // 7. Allowance check
         setStep("CHECKING_ALLOWANCE");
         setStatusText("Checking allowance...");
         const currentAllowance = await checkAllowance(address, batchContractAddress, tokenAddress);
         console.log("[BROADCAST] current allowance:", currentAllowance.toString());
         console.log("[BROADCAST] required allowance:", totalAtomic.toString());
 
-        // 8. Request approval if allowance is insufficient
+        // 8. Request approval ONLY for exact required amount if allowance is insufficient
         if (currentAllowance < totalAtomic) {
-          console.log("[BROADCAST] requesting approval from wallet...");
+          console.log("[BROADCAST] requesting approval from wallet for EXACT amount:", totalAtomic.toString());
           setStep("AWAITING_APPROVAL_WALLET");
           setStatusText("Confirm USDC Approval in your wallet");
 
@@ -284,7 +312,7 @@ export function useBroadcastPayment() {
           console.log("[BROADCAST] Current allowance is already sufficient. Skipping approval.");
         }
 
-        // 9. Call batchTransfer on ArcBatchPayment contract (Section 4)
+        // 9. Call batchTransfer on ArcBatchPayment contract
         console.log("[BROADCAST] requesting batch transfer from wallet...");
         setStep("AWAITING_BATCH_WALLET");
         setStatusText("Confirm Batch Payment in your wallet");
