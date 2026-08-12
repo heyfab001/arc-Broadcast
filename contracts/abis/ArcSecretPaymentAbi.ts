@@ -1,0 +1,183 @@
+export const ArcSecretPaymentAbi = [
+  {
+    type: "function",
+    name: "createClaim",
+    inputs: [
+      { name: "claimId", type: "bytes32", internalType: "bytes32" },
+      { name: "secretHash", type: "bytes32", internalType: "bytes32" },
+      { name: "token", type: "address", internalType: "address" },
+      { name: "amount", type: "uint256", internalType: "uint256" },
+      { name: "expiry", type: "uint256", internalType: "uint256" },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "claim",
+    inputs: [
+      { name: "claimId", type: "bytes32", internalType: "bytes32" },
+      { name: "secret", type: "bytes", internalType: "bytes" },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "refundExpired",
+    inputs: [{ name: "claimId", type: "bytes32", internalType: "bytes32" }],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "getClaim",
+    inputs: [{ name: "claimId", type: "bytes32", internalType: "bytes32" }],
+    outputs: [
+      {
+        name: "",
+        type: "tuple",
+        internalType: "struct ArcSecretPayment.Claim",
+        components: [
+          { name: "sender", type: "address", internalType: "address" },
+          { name: "token", type: "address", internalType: "address" },
+          { name: "amount", type: "uint256", internalType: "uint256" },
+          { name: "secretHash", type: "bytes32", internalType: "bytes32" },
+          { name: "expiry", type: "uint256", internalType: "uint256" },
+          { name: "claimed", type: "bool", internalType: "bool" },
+          { name: "refunded", type: "bool", internalType: "bool" },
+          { name: "claimedBy", type: "address", internalType: "address" },
+        ],
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "claims",
+    inputs: [{ name: "", type: "bytes32", internalType: "bytes32" }],
+    outputs: [
+      { name: "sender", type: "address", internalType: "address" },
+      { name: "token", type: "address", internalType: "address" },
+      { name: "amount", type: "uint256", internalType: "uint256" },
+      { name: "secretHash", type: "bytes32", internalType: "bytes32" },
+      { name: "expiry", type: "uint256", internalType: "uint256" },
+      { name: "claimed", type: "bool", internalType: "bool" },
+      { name: "refunded", type: "bool", internalType: "bool" },
+      { name: "claimedBy", type: "address", internalType: "address" },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "event",
+    name: "ClaimCreated",
+    inputs: [
+      { name: "claimId", type: "bytes32", indexed: true, internalType: "bytes32" },
+      { name: "sender", type: "address", indexed: true, internalType: "address" },
+      { name: "token", type: "address", indexed: true, internalType: "address" },
+      { name: "amount", type: "uint256", indexed: false, internalType: "uint256" },
+      { name: "secretHash", type: "bytes32", indexed: false, internalType: "bytes32" },
+      { name: "expiry", type: "uint256", indexed: false, internalType: "uint256" },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "Claimed",
+    inputs: [
+      { name: "claimId", type: "bytes32", indexed: true, internalType: "bytes32" },
+      { name: "receiver", type: "address", indexed: true, internalType: "address" },
+      { name: "token", type: "address", indexed: true, internalType: "address" },
+      { name: "amount", type: "uint256", indexed: false, internalType: "uint256" },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "Refunded",
+    inputs: [
+      { name: "claimId", type: "bytes32", indexed: true, internalType: "bytes32" },
+      { name: "sender", type: "address", indexed: true, internalType: "address" },
+      { name: "token", type: "address", indexed: true, internalType: "address" },
+      { name: "amount", type: "uint256", indexed: false, internalType: "uint256" },
+    ],
+    anonymous: false,
+  },
+  {
+    type: "error",
+    name: "AlreadyClaimed",
+    inputs: [{ name: "claimId", type: "bytes32", internalType: "bytes32" }],
+  },
+  {
+    type: "error",
+    name: "AlreadyRefunded",
+    inputs: [{ name: "claimId", type: "bytes32", internalType: "bytes32" }],
+  },
+  {
+    type: "error",
+    name: "ClaimAlreadyExists",
+    inputs: [{ name: "claimId", type: "bytes32", internalType: "bytes32" }],
+  },
+  {
+    type: "error",
+    name: "ClaimDoesNotExist",
+    inputs: [{ name: "claimId", type: "bytes32", internalType: "bytes32" }],
+  },
+  {
+    type: "error",
+    name: "ClaimExpired",
+    inputs: [
+      { name: "claimId", type: "bytes32", internalType: "bytes32" },
+      { name: "expiry", type: "uint256", internalType: "uint256" },
+      { name: "currentTime", type: "uint256", internalType: "uint256" },
+    ],
+  },
+  {
+    type: "error",
+    name: "InvalidExpiry",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "InvalidSecret",
+    inputs: [{ name: "claimId", type: "bytes32", internalType: "bytes32" }],
+  },
+  {
+    type: "error",
+    name: "NotExpiredYet",
+    inputs: [
+      { name: "claimId", type: "bytes32", internalType: "bytes32" },
+      { name: "expiry", type: "uint256", internalType: "uint256" },
+      { name: "currentTime", type: "uint256", internalType: "uint256" },
+    ],
+  },
+  {
+    type: "error",
+    name: "OnlySenderCanRefund",
+    inputs: [
+      { name: "claimId", type: "bytes32", internalType: "bytes32" },
+      { name: "caller", type: "address", internalType: "address" },
+      { name: "sender", type: "address", internalType: "address" },
+    ],
+  },
+  {
+    type: "error",
+    name: "ZeroAmount",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "ZeroClaimId",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "ZeroSecretHash",
+    inputs: [],
+  },
+  {
+    type: "error",
+    name: "ZeroTokenAddress",
+    inputs: [],
+  },
+] as const;
