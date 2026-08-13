@@ -5,6 +5,7 @@ import { PageHeader } from "@/components/layout/PageHeader";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/Button";
 import { ARC_TESTNET } from "@/config/chains";
+import { CONTRACTS } from "@/config/contracts";
 import { useArcWallet } from "@/hooks/useArcWallet";
 import { showToast } from "@/hooks/useToast";
 import {
@@ -15,7 +16,7 @@ import {
   ExternalLink,
   CheckCircle2,
   Lock,
-  RefreshCw,
+  Terminal,
   AlertTriangle,
 } from "lucide-react";
 
@@ -33,6 +34,7 @@ export default function SettingsPage() {
 
   const [notifyOnClaim, setNotifyOnClaim] = useState(true);
   const [autoValidateAddresses, setAutoValidateAddresses] = useState(true);
+  const [showDiagnostics, setShowDiagnostics] = useState(false);
 
   const handleSavePreferences = () => {
     showToast({
@@ -235,7 +237,7 @@ export default function SettingsPage() {
           </div>
         </GlassCard>
 
-        {/* Section 4: Preferences */}
+        {/* Section 4: Preferences & Diagnostics Toggle */}
         <GlassCard variant="default" className="p-6 space-y-4">
           <div className="flex items-center gap-2.5 pb-3 border-b border-white/[0.08]">
             <div className="w-8 h-8 rounded-xl bg-arc-600/10 border border-arc-600/20 flex items-center justify-center text-arc-400">
@@ -268,14 +270,24 @@ export default function SettingsPage() {
               </button>
             </div>
 
-            <div className="flex items-center justify-between py-2">
+            <div className="flex items-center justify-between py-2 border-b border-white/[0.04]">
               <div>
-                <span className="text-white font-medium block">UI Theme</span>
-                <span className="text-slate-500 text-[11px]">Arc Obsidian Dark Mode</span>
+                <span className="text-white font-medium block">Developer Diagnostics Panel</span>
+                <span className="text-slate-500 text-[11px]">Inspect canonical contract addresses & bytecode</span>
               </div>
-              <span className="px-2 py-0.5 rounded text-[11px] font-semibold bg-white/5 text-arc-400 border border-white/10">
-                Dark Only
-              </span>
+              <button
+                type="button"
+                onClick={() => setShowDiagnostics(!showDiagnostics)}
+                className={`w-10 h-6 rounded-full transition-colors p-1 ${
+                  showDiagnostics ? "bg-arc-500" : "bg-slate-800"
+                }`}
+              >
+                <div
+                  className={`w-4 h-4 rounded-full bg-white transition-transform ${
+                    showDiagnostics ? "translate-x-4" : "translate-x-0"
+                  }`}
+                />
+              </button>
             </div>
 
             <div className="pt-2">
@@ -291,6 +303,48 @@ export default function SettingsPage() {
           </div>
         </GlassCard>
       </div>
+
+      {/* Production-Safe Diagnostic Panel (Section 5) */}
+      {showDiagnostics && (
+        <GlassCard variant="glow" className="p-6 space-y-4 animate-fade-in border-arc-500/40">
+          <div className="flex items-center gap-2.5 pb-3 border-b border-white/[0.08]">
+            <div className="w-8 h-8 rounded-xl bg-arc-500/20 border border-arc-500/30 flex items-center justify-center text-arc-400">
+              <Terminal className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-white">Runtime Contract Diagnostics</h3>
+              <p className="text-xs text-slate-400">Canonical on-chain deployment parameters</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono">
+            <div className="p-3.5 rounded-xl bg-black/40 border border-white/[0.06] space-y-1.5">
+              <span className="text-slate-500 block font-sans text-[11px]">Arc Testnet Chain ID</span>
+              <span className="text-white font-bold">{ARC_TESTNET.id}</span>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-black/40 border border-white/[0.06] space-y-1.5">
+              <span className="text-slate-500 block font-sans text-[11px]">USDC ERC-20 Interface</span>
+              <span className="text-arc-300 truncate block">{CONTRACTS.arcTestnet.usdc}</span>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-black/40 border border-white/[0.06] space-y-1.5">
+              <span className="text-slate-500 block font-sans text-[11px]">ArcBatchPayment (Spender & Target)</span>
+              <span className="text-emerald-400 truncate block">{CONTRACTS.arcTestnet.batchPayment}</span>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-black/40 border border-white/[0.06] space-y-1.5">
+              <span className="text-slate-500 block font-sans text-[11px]">ArcSecretPayment (Escrow Deposit)</span>
+              <span className="text-purple-400 truncate block">{CONTRACTS.arcTestnet.secretPayment}</span>
+            </div>
+          </div>
+
+          <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+            <span>Canonical hardcoded configuration active. Zero private keys or credentials exposed.</span>
+          </div>
+        </GlassCard>
+      )}
     </div>
   );
 }

@@ -84,6 +84,25 @@ export function useBroadcastPayment() {
       console.log("Batch Target:", batchContractAddress);
       console.log("Chain:", chainId);
 
+      // Verify token is strictly the official Arc Testnet USDC ERC-20 contract
+      if (tokenAddress.toLowerCase() !== CONTRACTS.arcTestnet.usdc.toLowerCase()) {
+        console.error(
+          "[BROADCAST SECURITY ALERT] Token mismatch! Expected:",
+          CONTRACTS.arcTestnet.usdc,
+          "Received:",
+          tokenAddress
+        );
+        setStep("ERROR");
+        setError("Security Error: Invalid token contract address.");
+        setStatusText("Security Error");
+        showToast({
+          title: "Security Alert",
+          message: "Transaction blocked: Token address does not match Arc USDC.",
+          type: "error",
+        });
+        return;
+      }
+
       // Verify spender is strictly the authorized ArcBatchPayment contract
       if (
         batchContractAddress.toLowerCase() !==
@@ -147,13 +166,12 @@ export function useBroadcastPayment() {
         );
         setStep("NOT_DEPLOYED");
         setError(
-          "Batch payment contract is not deployed. Deploy ArcBatchPayment to Arc Testnet and set NEXT_PUBLIC_ARC_BATCH_PAYMENT_ADDRESS."
+          "Batch payment contract is not deployed. Deploy ArcBatchPayment to Arc Testnet."
         );
         setStatusText("Contract Not Deployed");
         showToast({
           title: "Contract Not Deployed",
-          message:
-            "Deploy ArcBatchPayment to Arc Testnet and configure NEXT_PUBLIC_ARC_BATCH_PAYMENT_ADDRESS.",
+          message: "Deploy ArcBatchPayment to Arc Testnet.",
           type: "error",
         });
         return;
@@ -162,7 +180,7 @@ export function useBroadcastPayment() {
       // 4. Contract bytecode check
       const hasBytecode = await checkContractBytecode(batchContractAddress);
       if (!hasBytecode) {
-        const errorMsg = "Batch payment contract is not deployed at the configured address.";
+        const errorMsg = "Batch payment contract bytecode not found at address.";
         console.error(`[BROADCAST] No bytecode found at ${batchContractAddress} on Arc Testnet.`);
         setStep("NOT_DEPLOYED");
         setError(errorMsg);
@@ -265,6 +283,17 @@ export function useBroadcastPayment() {
 
         // 8. Request approval ONLY for exact required amount if allowance is insufficient
         if (currentAllowance < totalAtomic) {
+          // Explicit Approval Assertions (Section 6)
+          if (tokenAddress.toLowerCase() !== "0x3600000000000000000000000000000000000000".toLowerCase()) {
+            throw new Error("Security Alert: Unauthorized token contract for approval.");
+          }
+          if (batchContractAddress.toLowerCase() !== "0x91C0a4dDCe2AD63F217eEc8a5829ae7f2A814c78".toLowerCase()) {
+            throw new Error("Security Alert: Unauthorized spender contract for approval.");
+          }
+          if (chainId !== ARC_CHAIN_ID) {
+            throw new Error("Security Alert: Unauthorized chain ID for approval.");
+          }
+
           console.log("[BROADCAST] requesting approval from wallet for EXACT amount:", totalAtomic.toString());
           setStep("AWAITING_APPROVAL_WALLET");
           setStatusText("Confirm USDC Approval in your wallet");
@@ -313,6 +342,17 @@ export function useBroadcastPayment() {
         }
 
         // 9. Call batchTransfer on ArcBatchPayment contract
+        // Explicit Batch Transfer Assertions (Section 7)
+        if (batchContractAddress.toLowerCase() !== "0x91C0a4dDCe2AD63F217eEc8a5829ae7f2A814c78".toLowerCase()) {
+          throw new Error("Security Alert: Unauthorized target contract for batchTransfer.");
+        }
+        if (tokenAddress.toLowerCase() !== "0x3600000000000000000000000000000000000000".toLowerCase()) {
+          throw new Error("Security Alert: Unauthorized token contract for batchTransfer.");
+        }
+        if (chainId !== ARC_CHAIN_ID) {
+          throw new Error("Security Alert: Unauthorized chain ID for batchTransfer.");
+        }
+
         console.log("[BROADCAST] requesting batch transfer from wallet...");
         setStep("AWAITING_BATCH_WALLET");
         setStatusText("Confirm Batch Payment in your wallet");
