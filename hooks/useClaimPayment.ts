@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useAccount, useWriteContract, usePublicClient } from "wagmi";
 import { Hex, Address } from "viem";
 import { CONTRACTS } from "@/config/contracts";
+import { TRANSACTIONS_FROZEN, TRANSACTIONS_FROZEN_MESSAGE } from "@/config/constants";
 import { ARC_TESTNET_CHAIN } from "@/config/chains";
 import { ArcSecretPaymentAbi } from "@/contracts/abis/ArcSecretPaymentAbi";
 import { getOnChainClaim, OnChainClaim, computeSecretHash } from "@/services/secretPayment";
@@ -115,6 +116,14 @@ export function useClaimPayment(claimIdParam: string) {
     setErrorMessage(null);
     setClaimTxHash(null);
 
+    // Emergency freeze check
+    if (TRANSACTIONS_FROZEN) {
+      console.warn("[CLAIM_PAY SECURITY FREEZE] Transactions are paused for security audit.");
+      setErrorMessage(TRANSACTIONS_FROZEN_MESSAGE);
+      setStep("ERROR");
+      return;
+    }
+
     if (!isConnected || !userAddress) {
       setErrorMessage("Please connect your wallet first.");
       return;
@@ -179,6 +188,14 @@ export function useClaimPayment(claimIdParam: string) {
   const refundPayment = useCallback(async () => {
     setErrorMessage(null);
     setRefundTxHash(null);
+
+    // Emergency freeze check
+    if (TRANSACTIONS_FROZEN) {
+      console.warn("[REFUND_PAY SECURITY FREEZE] Transactions are paused for security audit.");
+      setErrorMessage(TRANSACTIONS_FROZEN_MESSAGE);
+      setStep("ERROR");
+      return;
+    }
 
     if (!isConnected || !userAddress) {
       setErrorMessage("Please connect your wallet first.");

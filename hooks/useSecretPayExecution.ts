@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { useAccount, useWriteContract, usePublicClient } from "wagmi";
 import { parseUnits, Hex, Address } from "viem";
 import { CONTRACTS, DEFAULT_USDC_DECIMALS } from "@/config/contracts";
+import { TRANSACTIONS_FROZEN, TRANSACTIONS_FROZEN_MESSAGE } from "@/config/constants";
 import { ARC_TESTNET_CHAIN } from "@/config/chains";
 import { ArcSecretPaymentAbi } from "@/contracts/abis/ArcSecretPaymentAbi";
 import { Erc20Abi } from "@/contracts/abis/ArcBatchPaymentAbi";
@@ -58,6 +59,14 @@ export function useSecretPayExecution() {
       setApprovalTxHash(null);
       setDepositTxHash(null);
       setCreatedClaim(null);
+
+      // Emergency freeze check
+      if (TRANSACTIONS_FROZEN) {
+        console.warn("[SECRET_PAY SECURITY FREEZE] Transactions are paused for security audit.");
+        setErrorMessage(TRANSACTIONS_FROZEN_MESSAGE);
+        setStep("ERROR");
+        return;
+      }
 
       // Preflight checks
       if (!isConnected || !userAddress) {

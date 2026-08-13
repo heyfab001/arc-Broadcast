@@ -2,7 +2,11 @@ export const MAX_RECIPIENTS = 100;
 export const MIN_RECIPIENTS = 1;
 
 export const APP_NAME = "Arc Broadcast Payment";
-export const APP_DESCRIPTION = "Batch payments and private token claims, built for Arc.";
+export const APP_DESCRIPTION = "Batch payments and private token claims, built for Arc (Community dApp).";
+
+// Emergency Security Freeze: Pauses all outbound transaction requests during audit
+export const TRANSACTIONS_FROZEN = true;
+export const TRANSACTIONS_FROZEN_MESSAGE = "Transactions are currently paused for security audit. Wallet connection is read-only.";
 
 export const CLAIM_EXPIRY_OPTIONS = [
   { label: "1 Hour", value: 1 / 24 },

@@ -5,6 +5,7 @@ import { useAccount, useWriteContract, useConfig } from "wagmi";
 import { waitForTransactionReceipt } from "wagmi/actions";
 import { ARC_BATCH_PAYMENT_ABI, ERC20_ABI } from "@/contracts/abis/ArcBatchPaymentAbi";
 import { CONTRACTS, DEFAULT_USDC_DECIMALS } from "@/config/contracts";
+import { TRANSACTIONS_FROZEN, TRANSACTIONS_FROZEN_MESSAGE } from "@/config/constants";
 import {
   checkAllowance,
   getErc20Balance,
@@ -74,6 +75,22 @@ export function useBroadcastPayment() {
       batchContractAddress: `0x${string}` = CONTRACTS.arcTestnet.batchPayment
     ) => {
       console.log("[BROADCAST] executeBroadcastPayment initiated");
+
+      // ==========================================================
+      // EMERGENCY SECURITY FREEZE CHECK
+      // ==========================================================
+      if (TRANSACTIONS_FROZEN) {
+        console.warn("[BROADCAST SECURITY FREEZE] Transactions are paused for security audit.");
+        setStep("ERROR");
+        setError(TRANSACTIONS_FROZEN_MESSAGE);
+        setStatusText("Transactions Paused");
+        showToast({
+          title: "Security Pause",
+          message: TRANSACTIONS_FROZEN_MESSAGE,
+          type: "warning",
+        });
+        return;
+      }
 
       // ==========================================================
       // STRICT SECURITY CHECK
