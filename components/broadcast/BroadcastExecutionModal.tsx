@@ -46,30 +46,40 @@ export function BroadcastExecutionModal({
   const isCancelled = step === "CANCELLED";
   const isProcessing = !isSuccess && !isError && !isCancelled && step !== "IDLE";
 
+  const getTitle = () => {
+    if (isSuccess) return "Payment sent";
+    if (isCancelled) return "Payment cancelled";
+    if (isError) return "Payment failed";
+    if (step === "AWAITING_APPROVAL_WALLET" || step === "AWAITING_BATCH_WALLET") {
+      return "Confirm in wallet";
+    }
+    return "Ready to send";
+  };
+
+  const getDescription = () => {
+    if (isSuccess) return "Payment sent successfully.";
+    if (isCancelled) return "Payment was cancelled in your wallet.";
+    if (isError) return "Payment failed. Please try again.";
+    if (step === "AWAITING_APPROVAL_WALLET" || step === "AWAITING_BATCH_WALLET") {
+      return "Confirm this payment in your wallet.";
+    }
+    if (step === "WAITING_APPROVAL_CONFIRMATION" || step === "WAITING_BATCH_CONFIRMATION") {
+      return "Waiting for confirmation...";
+    }
+    return statusText || "Preparing transaction...";
+  };
+
   return (
     <Modal
       isOpen={isOpen}
       onClose={() => {
         if (!isProcessing) onClose();
       }}
-      title={
-        isSuccess
-          ? "Payment sent"
-          : isCancelled
-          ? "Transaction cancelled"
-          : isError
-          ? "Transaction failed"
-          : "Sending payment"
-      }
-      description={
-        isSuccess
-          ? "Tokens have been transferred to all recipient wallets."
-          : undefined
-      }
+      title={getTitle()}
       maxWidth="sm"
     >
       <div className="space-y-4 pt-1 text-xs">
-        {/* Status Graphic / Indicator */}
+        {/* Status Graphic */}
         <div className="py-4 text-center space-y-2">
           {isSuccess ? (
             <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mx-auto">
@@ -89,16 +99,23 @@ export function BroadcastExecutionModal({
             </div>
           )}
 
-          <div>
+          <div className="space-y-0.5">
             <h4 className="text-xs font-semibold text-white">
               {isSuccess
                 ? `${totalAmount} ${tokenSymbol} sent to ${recipientCount} ${recipientCount === 1 ? "wallet" : "wallets"}`
                 : isCancelled
-                ? "Transaction was cancelled in your wallet."
+                ? "Payment cancelled."
                 : isError
-                ? error || "Transaction failed. Please try again."
-                : statusText || "Processing transaction..."}
+                ? error || "Payment failed. Please try again."
+                : getDescription()}
             </h4>
+            {!isSuccess && !isCancelled && !isError && (
+              <p className="text-[11px] text-slate-400">
+                {step.includes("AWAITING")
+                  ? "Please check your connected wallet extension."
+                  : "Blockchain confirmation in progress on Arc Testnet."}
+              </p>
+            )}
           </div>
         </div>
 
@@ -107,28 +124,28 @@ export function BroadcastExecutionModal({
           <div className="p-3 rounded-lg bg-[#0C0D12] border border-white/[0.06] space-y-1.5 font-mono text-[11px]">
             {approvalTxHash && (
               <div className="flex justify-between items-center">
-                <span className="text-slate-400">Approval:</span>
+                <span className="text-slate-400 font-sans">Approval:</span>
                 <a
                   href={`${ARC_TESTNET.explorerUrl}/tx/${approvalTxHash}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 hover:underline flex items-center gap-1"
+                  className="text-blue-400 hover:underline flex items-center gap-1 font-mono"
                 >
-                  <span>{approvalTxHash.slice(0, 6)}...</span>
+                  <span>{approvalTxHash.slice(0, 6)}...{approvalTxHash.slice(-4)}</span>
                   <ExternalLink className="w-3 h-3" />
                 </a>
               </div>
             )}
             {batchTxHash && (
               <div className="flex justify-between items-center">
-                <span className="text-slate-400">Payment:</span>
+                <span className="text-slate-400 font-sans">Broadcast:</span>
                 <a
                   href={`${ARC_TESTNET.explorerUrl}/tx/${batchTxHash}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 hover:underline flex items-center gap-1"
+                  className="text-blue-400 hover:underline flex items-center gap-1 font-mono"
                 >
-                  <span>{batchTxHash.slice(0, 6)}...</span>
+                  <span>{batchTxHash.slice(0, 6)}...{batchTxHash.slice(-4)}</span>
                   <ExternalLink className="w-3 h-3" />
                 </a>
               </div>

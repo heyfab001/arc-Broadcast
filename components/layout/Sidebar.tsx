@@ -15,28 +15,29 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const navItems = [
+const mainNavItems = [
   { name: "Overview", href: "/", icon: LayoutDashboard },
   { name: "Broadcast", href: "/broadcast", icon: Send },
   { name: "Secret Pay", href: "/secret-pay", icon: KeyRound },
   { name: "Activity", href: "/history", icon: History },
-  { name: "Settings", href: "/settings", icon: Settings },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
   const { isConnected, shortAddress, balanceUSDC } = useArcWallet();
 
+  const isSettingsActive = pathname.startsWith("/settings");
+
   return (
     <aside className="hidden lg:flex flex-col w-56 border-r border-white/[0.08] bg-[#0C0D12] p-4 sticky top-0 h-screen z-30 shrink-0">
       {/* Brand Header */}
-      <Link href="/" className="px-2 mb-6 block">
+      <Link href="/" className="px-2 mb-6 block hover:opacity-90 transition-opacity">
         <ArcLogo size="md" withText />
       </Link>
 
-      {/* Navigation */}
+      {/* Main Navigation */}
       <nav className="space-y-0.5 flex-1">
-        {navItems.map((item) => {
+        {mainNavItems.map((item) => {
           const Icon = item.icon;
           const isActive =
             item.href === "/"
@@ -48,10 +49,10 @@ export function Sidebar() {
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors",
+                "flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors duration-150",
                 isActive
                   ? "bg-white/[0.08] text-white"
-                  : "text-slate-400 hover:text-white hover:bg-white/[0.03]"
+                  : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
               )}
             >
               <Icon
@@ -65,6 +66,27 @@ export function Sidebar() {
           );
         })}
       </nav>
+
+      {/* Settings Navigation Link */}
+      <div className="pt-2 mb-3 border-t border-white/[0.06]">
+        <Link
+          href="/settings"
+          className={cn(
+            "flex items-center gap-2.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors duration-150",
+            isSettingsActive
+              ? "bg-white/[0.08] text-white"
+              : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
+          )}
+        >
+          <Settings
+            className={cn(
+              "w-4 h-4",
+              isSettingsActive ? "text-blue-400" : "text-slate-400"
+            )}
+          />
+          <span>Settings</span>
+        </Link>
+      </div>
 
       {/* Bottom Wallet Session Indicator */}
       <div className="pt-3 border-t border-white/[0.06]">

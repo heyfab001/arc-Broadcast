@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Transaction } from "@/types/payment";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { HistorySkeleton } from "./HistorySkeleton";
 import { formatAmount, formatSmartTimestamp, truncateAddress } from "@/lib/utils";
 import { ARC_TESTNET } from "@/config/chains";
 import { Button } from "@/components/ui/Button";
@@ -15,7 +16,6 @@ import {
   RefreshCw,
   Copy,
   Check,
-  Loader2,
 } from "lucide-react";
 
 export interface ActivityTableProps {
@@ -46,7 +46,7 @@ export function ActivityTable({
       setCopiedTxHash(hash);
       showToast({
         title: "Copied",
-        message: "Hash copied to clipboard.",
+        message: "Transaction hash copied.",
         type: "success",
       });
       setTimeout(() => setCopiedTxHash(null), 2000);
@@ -107,14 +107,9 @@ export function ActivityTable({
     );
   }
 
-  // 3. Loading
+  // 3. Loading Skeletons
   if (isLoading && transactions.length === 0) {
-    return (
-      <div className="py-8 flex items-center justify-center text-xs text-slate-400 gap-2">
-        <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
-        <span>Loading activity...</span>
-      </div>
-    );
+    return <HistorySkeleton rows={3} />;
   }
 
   // 4. Error
@@ -148,20 +143,21 @@ export function ActivityTable({
   }
 
   const typeLabels = {
-    broadcast: "Broadcast",
+    broadcast: "Broadcast payment",
     secret_pay: "Secret Pay",
-    claim: "Claim",
-    refund: "Refund",
+    claim: "Claim payment",
+    refund: "Refund payment",
   };
 
   return (
     <div className="space-y-2">
-      {/* Desktop Table */}
+      {/* Desktop Table View */}
       <div className="hidden sm:block overflow-hidden rounded-lg border border-white/[0.08] bg-[#0C0D12]">
         <table className="w-full text-left text-xs">
           <thead className="border-b border-white/[0.06] bg-white/[0.01] text-slate-500 font-semibold uppercase tracking-wider text-[10px]">
             <tr>
               <th className="py-2.5 px-3.5">Type</th>
+              <th className="py-2.5 px-3.5">Recipients / Target</th>
               <th className="py-2.5 px-3.5">Amount</th>
               <th className="py-2.5 px-3.5">Status</th>
               <th className="py-2.5 px-3.5">Date</th>
@@ -180,6 +176,15 @@ export function ActivityTable({
                   {/* Type */}
                   <td className="py-2.5 px-3.5 font-medium text-white">
                     {typeLabels[tx.type]}
+                  </td>
+
+                  {/* Recipients / Target */}
+                  <td className="py-2.5 px-3.5 font-mono text-[11px] text-slate-400">
+                    {tx.type === "broadcast" && tx.recipientCount
+                      ? `${tx.recipientCount} ${tx.recipientCount === 1 ? "recipient" : "recipients"}`
+                      : tx.targetAddress
+                      ? truncateAddress(tx.targetAddress, 4)
+                      : "Private claim"}
                   </td>
 
                   {/* Amount */}
@@ -208,6 +213,7 @@ export function ActivityTable({
                           type="button"
                           onClick={(e) => handleCopyHash(e, tx.txHash!)}
                           title="Copy hash"
+                          aria-label="Copy transaction hash"
                           className="p-1 text-slate-500 hover:text-white rounded"
                         >
                           {isCopied ? (
@@ -229,7 +235,7 @@ export function ActivityTable({
         </table>
       </div>
 
-      {/* Mobile Card List */}
+      {/* Mobile Card List View */}
       <div className="sm:hidden space-y-2">
         {transactions.map((tx) => {
           return (
@@ -249,15 +255,17 @@ export function ActivityTable({
                 <span className="font-mono font-bold text-white">
                   {formatAmount(tx.amount)} {tx.token.symbol}
                 </span>
-                <span className="text-[11px] text-slate-500 font-mono">
-                  {formatSmartTimestamp(tx.timestamp)}
+                <span className="text-[11px] text-slate-400">
+                  {tx.type === "broadcast" && tx.recipientCount
+                    ? `${tx.recipientCount} recipients`
+                    : formatSmartTimestamp(tx.timestamp)}
                 </span>
               </div>
 
               {tx.txHash && (
                 <div className="pt-1.5 border-t border-white/[0.04] flex items-center justify-between text-[11px] font-mono text-slate-400">
                   <span>{truncateAddress(tx.txHash, 4)}</span>
-                  <span className="text-blue-400 hover:underline flex items-center gap-1">
+                  <span className="text-blue-400 hover:underline flex items-center gap-1 font-sans">
                     <span>ArcScan</span>
                     <ExternalLink className="w-3 h-3" />
                   </span>

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Recipient } from "@/types/payment";
 import { RecipientRow } from "./RecipientRow";
 import { Button } from "@/components/ui/Button";
@@ -28,16 +28,29 @@ export function RecipientTable({
   onOpenCsvModal,
   onClearAll,
 }: RecipientTableProps) {
+  const [newlyAddedId, setNewlyAddedId] = useState<string | null>(null);
   const isMaxReached = recipients.length >= MAX_RECIPIENTS;
 
+  const handleAdd = () => {
+    onAddRecipient();
+    // Mark next added item to autofocus
+    setTimeout(() => {
+      if (recipients.length > 0) {
+        setNewlyAddedId(recipients[recipients.length - 1].id);
+      }
+    }, 50);
+  };
+
   return (
-    <div className="space-y-3">
-      {/* Table Header Controls */}
-      <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-white/[0.06]">
+    <div className="space-y-3.5">
+      {/* Step Header */}
+      <div className="flex items-center justify-between gap-2 pb-3 border-b border-white/[0.06]">
         <div>
-          <h3 className="text-xs font-semibold text-white">Recipients</h3>
-          <span className="text-[11px] text-slate-400">
-            Up to 100 recipients ({recipients.length}/{MAX_RECIPIENTS})
+          <h3 className="text-xs font-semibold text-white">
+            1. Who are you sending to?
+          </h3>
+          <span className="text-[11px] text-slate-400 mt-0.5 block">
+            {recipients.length} / {MAX_RECIPIENTS} recipients
           </span>
         </div>
 
@@ -56,11 +69,11 @@ export function RecipientTable({
             type="button"
             variant="secondary"
             size="sm"
-            onClick={onAddRecipient}
+            onClick={handleAdd}
             disabled={isMaxReached}
             leftIcon={<Plus className="w-3 h-3" />}
           >
-            Add recipient
+            + Add wallet
           </Button>
 
           {recipients.length > 1 && (
@@ -75,10 +88,10 @@ export function RecipientTable({
         </div>
       </div>
 
-      {/* Table Column Headers */}
+      {/* Table Headers */}
       <div className="grid grid-cols-12 gap-2 px-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
         <div className="col-span-1 text-center">#</div>
-        <div className="col-span-7">Wallet</div>
+        <div className="col-span-7">Wallet address</div>
         <div className="col-span-3">Amount</div>
         <div className="col-span-1 text-center">Action</div>
       </div>
@@ -89,7 +102,7 @@ export function RecipientTable({
           <p className="text-xs text-slate-400">No recipients added.</p>
         </div>
       ) : (
-        <div className="space-y-1 max-h-[480px] overflow-y-auto pr-0.5">
+        <div className="space-y-1.5 max-h-[460px] overflow-y-auto pr-0.5">
           {recipients.map((recipient, index) => {
             const isDup = duplicateAddresses.includes(recipient.address.trim().toLowerCase());
             return (
@@ -102,21 +115,22 @@ export function RecipientTable({
                 onUpdate={onUpdateRecipient}
                 onRemove={onRemoveRecipient}
                 isRemovable={recipients.length > 1}
+                autoFocus={recipient.id === newlyAddedId || index === recipients.length - 1 && newlyAddedId !== null}
               />
             );
           })}
         </div>
       )}
 
-      {/* Quick Add Row Button */}
+      {/* Quick Add Button */}
       <button
         type="button"
-        onClick={onAddRecipient}
+        onClick={handleAdd}
         disabled={isMaxReached}
-        className="w-full py-2 rounded-lg border border-dashed border-white/[0.08] hover:border-white/20 text-xs text-slate-400 hover:text-white transition-colors flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
+        className="w-full py-2.5 rounded-lg border border-dashed border-white/[0.08] hover:border-white/20 text-xs text-slate-400 hover:text-white transition-colors flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
       >
-        <Plus className="w-3 h-3" />
-        <span>Add recipient</span>
+        <Plus className="w-3.5 h-3.5" />
+        <span>+ Add wallet</span>
       </button>
     </div>
   );

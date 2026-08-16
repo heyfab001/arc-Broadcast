@@ -15,53 +15,61 @@ export default function DashboardPage() {
       {/* Page Heading */}
       <div className="pb-4 border-b border-white/[0.06]">
         <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-white">
-          Overview
+          Send USDC on Arc
         </h1>
-        <p className="text-xs text-slate-400 mt-0.5">
-          Send and receive USDC on Arc.
+        <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
+          Send to multiple wallets or create a private claim link.
         </p>
       </div>
 
-      {/* Two Primary Action Blocks */}
+      {/* Two Primary Action Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Broadcast Payment Card */}
         <Link href="/broadcast" className="block group">
-          <GlassCard variant="interactive" className="p-5 space-y-3 h-full">
-            <div className="flex items-center justify-between">
-              <div className="w-9 h-9 rounded-lg bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
-                <Send className="w-4 h-4" />
+          <GlassCard variant="interactive" className="p-5 space-y-4 h-full flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="w-10 h-10 rounded-lg bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                <Send className="w-5 h-5" />
               </div>
-              <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+
+              <div>
+                <h2 className="text-base font-semibold text-white group-hover:text-blue-400 transition-colors">
+                  Broadcast Payment
+                </h2>
+                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                  Send USDC to up to 100 wallets.
+                </p>
+              </div>
             </div>
 
-            <div>
-              <h2 className="text-sm font-semibold text-white group-hover:text-blue-400 transition-colors">
-                Broadcast payment
-              </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Send to multiple wallets
-              </p>
+            <div className="pt-2 flex items-center gap-1.5 text-xs font-medium text-blue-400 group-hover:text-blue-300">
+              <span>Start payment</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
           </GlassCard>
         </Link>
 
         {/* Secret Pay Card */}
         <Link href="/secret-pay" className="block group">
-          <GlassCard variant="interactive" className="p-5 space-y-3 h-full">
-            <div className="flex items-center justify-between">
-              <div className="w-9 h-9 rounded-lg bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
-                <KeyRound className="w-4 h-4" />
+          <GlassCard variant="interactive" className="p-5 space-y-4 h-full flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="w-10 h-10 rounded-lg bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+                <KeyRound className="w-5 h-5" />
               </div>
-              <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+
+              <div>
+                <h2 className="text-base font-semibold text-white group-hover:text-blue-400 transition-colors">
+                  Secret Pay
+                </h2>
+                <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+                  Create a private link that someone can use to claim USDC.
+                </p>
+              </div>
             </div>
 
-            <div>
-              <h2 className="text-sm font-semibold text-white group-hover:text-indigo-400 transition-colors">
-                Secret pay
-              </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
-                Send with a private claim link
-              </p>
+            <div className="pt-2 flex items-center gap-1.5 text-xs font-medium text-blue-400 group-hover:text-blue-300">
+              <span>Create payment</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
             </div>
           </GlassCard>
         </Link>

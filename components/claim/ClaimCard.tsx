@@ -62,13 +62,13 @@ export function ClaimCard({ claimId }: ClaimCardProps) {
           variant="default"
           className="p-6 text-center space-y-4"
         >
-          {/* Label */}
+          {/* Small Label */}
           <span className="text-[11px] font-medium uppercase tracking-wider text-slate-400 block">
             Secret payment
           </span>
 
-          {/* Amount */}
-          <div className="py-2">
+          {/* Large Amount */}
+          <div className="py-1">
             {step === "LOADING_CLAIM" ? (
               <Loader2 className="w-6 h-6 animate-spin text-blue-400 mx-auto" />
             ) : claimData ? (
@@ -82,14 +82,14 @@ export function ClaimCard({ claimId }: ClaimCardProps) {
             )}
           </div>
 
-          {/* Description */}
+          {/* Subtitle / Status Text */}
           {step === "CLAIMED" ? (
             <div className="space-y-1">
               <h2 className="text-sm font-semibold text-emerald-400">
                 Payment claimed
               </h2>
               <p className="text-xs text-slate-400">
-                Funds have been sent to your wallet.
+                USDC has been sent to your wallet.
               </p>
             </div>
           ) : step === "REFUNDED" ? (
@@ -112,7 +112,7 @@ export function ClaimCard({ claimId }: ClaimCardProps) {
             </div>
           ) : (
             <p className="text-xs text-slate-400">
-              Sent to whoever claims this payment.
+              Someone sent you a payment.
             </p>
           )}
 
@@ -123,7 +123,7 @@ export function ClaimCard({ claimId }: ClaimCardProps) {
             </div>
           )}
 
-          {/* Secret Missing / Invalid Alerts */}
+          {/* Secret Missing Alert */}
           {claimData && !secretKey && step === "CLAIM_AVAILABLE" && (
             <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 flex items-start gap-1.5 text-left">
               <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
@@ -147,7 +147,7 @@ export function ClaimCard({ claimId }: ClaimCardProps) {
                 rel="noopener noreferrer"
                 className="font-mono text-blue-400 hover:underline flex items-center gap-1"
               >
-                <span>{claimTxHash.slice(0, 6)}...</span>
+                <span>{claimTxHash.slice(0, 6)}...{claimTxHash.slice(-4)}</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
             </div>
@@ -163,7 +163,7 @@ export function ClaimCard({ claimId }: ClaimCardProps) {
                 leftIcon={<Wallet className="w-3.5 h-3.5" />}
                 className="w-full"
               >
-                Connect wallet
+                Connect wallet to claim
               </Button>
             ) : isWrongNetwork ? (
               <Button

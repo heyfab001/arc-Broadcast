@@ -29,12 +29,12 @@ export default function SecretPayPage() {
       {/* Header */}
       <PageHeader
         title="Secret Pay"
-        subtitle="Send USDC using a private claim link."
+        subtitle="Send USDC with a private claim link."
       />
 
       <WalletStatus />
 
-      {/* Main Creation Form */}
+      {/* Creation Form */}
       <SecretPayForm
         selectedToken={selectedToken}
         onSelectToken={setSelectedToken}

@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useArcWallet } from "@/hooks/useArcWallet";
 import { Button } from "@/components/ui/Button";
 import { WalletModal } from "./WalletModal";
+import { showToast } from "@/hooks/useToast";
 import { Wallet, ChevronDown, AlertTriangle } from "lucide-react";
 
 export function WalletButton() {
@@ -19,6 +20,20 @@ export function WalletButton() {
   } = useArcWallet();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasNotifiedConnect, setHasNotifiedConnect] = useState(false);
+
+  useEffect(() => {
+    if (isConnected && !hasNotifiedConnect) {
+      showToast({
+        title: "Wallet connected",
+        message: shortAddress ? `Connected as ${shortAddress}` : undefined,
+        type: "success",
+      });
+      setHasNotifiedConnect(true);
+    } else if (!isConnected) {
+      setHasNotifiedConnect(false);
+    }
+  }, [isConnected, hasNotifiedConnect, shortAddress]);
 
   if (isSwitching) {
     return (
@@ -26,9 +41,9 @@ export function WalletButton() {
         variant="outline"
         size="sm"
         isLoading
-        className="text-xs min-w-[100px]"
+        className="text-xs min-w-[110px]"
       >
-        Switching
+        Switching...
       </Button>
     );
   }
@@ -39,9 +54,9 @@ export function WalletButton() {
         variant="secondary"
         size="sm"
         isLoading
-        className="font-mono text-xs min-w-[100px]"
+        className="text-xs min-w-[110px]"
       >
-        Connecting
+        Connecting...
       </Button>
     );
   }
@@ -56,7 +71,7 @@ export function WalletButton() {
           leftIcon={<AlertTriangle className="w-3 h-3 text-amber-400" />}
           className="text-xs"
         >
-          Switch to Arc
+          Switch to Arc Testnet
         </Button>
 
         <WalletModal

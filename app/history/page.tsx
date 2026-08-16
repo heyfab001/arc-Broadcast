@@ -7,6 +7,7 @@ import { HistoryFilterTabs } from "@/components/history/HistoryFilterTabs";
 import { ActivityTable } from "@/components/history/ActivityTable";
 import { usePaymentHistory } from "@/hooks/usePaymentHistory";
 import { Button } from "@/components/ui/Button";
+import { showToast } from "@/hooks/useToast";
 import { Search, RefreshCw, X } from "lucide-react";
 
 export default function HistoryPage() {
@@ -23,12 +24,13 @@ export default function HistoryPage() {
     rawTransactionsCount,
   } = usePaymentHistory();
 
-  const [justUpdated, setJustUpdated] = useState(false);
-
   const handleManualRefresh = async () => {
     await refresh();
-    setJustUpdated(true);
-    setTimeout(() => setJustUpdated(false), 2000);
+    showToast({
+      title: "Activity updated",
+      message: "Latest transactions loaded.",
+      type: "success",
+    });
   };
 
   return (
@@ -36,11 +38,12 @@ export default function HistoryPage() {
       {/* Header */}
       <PageHeader
         title="Activity"
+        subtitle="Your recent payments."
       />
 
-      {/* Main Table Container */}
+      {/* Main Container */}
       <GlassCard variant="default" className="p-4 sm:p-5 space-y-4">
-        {/* Controls */}
+        {/* Controls Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <HistoryFilterTabs
             activeTab={activeTab}
@@ -48,7 +51,7 @@ export default function HistoryPage() {
           />
 
           <div className="flex items-center gap-2 w-full sm:w-auto">
-            {/* Search */}
+            {/* Search Input */}
             <div className="relative flex-1 sm:w-56">
               <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-500 pointer-events-none" />
               <input
@@ -62,13 +65,14 @@ export default function HistoryPage() {
                 <button
                   onClick={() => setSearchQuery("")}
                   className="absolute right-2 top-2 p-0.5 text-slate-500 hover:text-white rounded"
+                  aria-label="Clear search"
                 >
                   <X className="w-3 h-3" />
                 </button>
               )}
             </div>
 
-            {/* Refresh */}
+            {/* Refresh Button */}
             <Button
               type="button"
               variant="outline"
@@ -76,11 +80,11 @@ export default function HistoryPage() {
               onClick={handleManualRefresh}
               disabled={isLoading || isRefreshing}
               leftIcon={
-                <RefreshCw className={`w-3 h-3 ${isRefreshing ? "animate-spin" : ""}`} />
+                <RefreshCw className={`w-3 h-3 ${isRefreshing ? "animate-spin text-blue-400" : ""}`} />
               }
               className="h-8 text-xs shrink-0 px-2.5"
             >
-              {justUpdated ? "Updated" : isRefreshing ? "Refreshing" : "Refresh"}
+              {isRefreshing ? "Refreshing..." : "Refresh"}
             </Button>
           </div>
         </div>

@@ -33,8 +33,8 @@ export function SecretPayCreatedModal({
       await navigator.clipboard.writeText(claim.claimUrl);
       setCopied(true);
       showToast({
-        title: "Copied",
-        message: "Link copied to clipboard.",
+        title: "Link copied",
+        message: "Share this link with the recipient.",
         type: "success",
       });
       setTimeout(() => setCopied(false), 2000);
@@ -59,6 +59,7 @@ export function SecretPayCreatedModal({
           {/* Close */}
           <button
             onClick={onClose}
+            aria-label="Close modal"
             className="absolute top-4 right-4 p-1 text-slate-400 hover:text-white rounded hover:bg-white/[0.06] transition-colors"
           >
             <X className="w-3.5 h-3.5" />
@@ -68,8 +69,8 @@ export function SecretPayCreatedModal({
             <h3 className="text-sm font-semibold text-white">
               Payment ready
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
-              Share this link with the recipient.
+            <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+              Share this link with the person you want to receive it.
             </p>
           </div>
 
@@ -80,17 +81,17 @@ export function SecretPayCreatedModal({
                 type="text"
                 readOnly
                 value={claim.claimUrl}
-                className="w-full h-9 bg-[#0C0D12] border border-white/10 rounded-lg px-2.5 text-xs text-slate-300 font-mono select-all outline-none"
+                className="w-full h-10 bg-[#0C0D12] border border-white/10 rounded-lg px-3 text-xs text-slate-300 font-mono select-all outline-none"
               />
               <Button
                 type="button"
                 variant="primary"
-                size="sm"
+                size="md"
                 onClick={handleCopy}
-                leftIcon={copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
-                className="shrink-0 text-xs px-3"
+                leftIcon={copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                className="shrink-0 text-xs px-3 min-w-[120px]"
               >
-                {copied ? "Copied" : "Copy link"}
+                {copied ? "Link copied" : "Copy claim link"}
               </Button>
             </div>
           </div>
@@ -113,7 +114,7 @@ export function SecretPayCreatedModal({
                 rel="noopener noreferrer"
                 className="font-mono text-blue-400 hover:underline flex items-center gap-1"
               >
-                <span>{claim.depositTxHash.slice(0, 6)}...</span>
+                <span>{claim.depositTxHash.slice(0, 6)}...{claim.depositTxHash.slice(-4)}</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
             </div>

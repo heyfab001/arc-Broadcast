@@ -38,21 +38,20 @@ export function TransactionSummary({
       case "CHECKING_ALLOWANCE":
         return "Preparing...";
       case "AWAITING_APPROVAL_WALLET":
-        return "Confirm approval";
+        return "Confirm in wallet";
       case "APPROVAL_SUBMITTED":
       case "WAITING_APPROVAL_CONFIRMATION":
-        return "Waiting for confirmation...";
+        return "Confirming...";
       case "AWAITING_BATCH_WALLET":
         return "Confirm in wallet";
       case "BATCH_SUBMITTED":
       case "WAITING_BATCH_CONFIRMATION":
-        return "Waiting for confirmation...";
+        return "Confirming...";
       case "SUCCESS":
         return "Payment sent";
       case "CANCELLED":
-        return "Transaction cancelled";
       case "ERROR":
-        return "Transaction failed";
+        return "Try again";
       default:
         return "Send payment";
     }
@@ -62,17 +61,20 @@ export function TransactionSummary({
     <>
       <GlassCard variant="default" className="space-y-4 p-4 sm:p-5">
         <div className="pb-3 border-b border-white/[0.06]">
-          <h3 className="text-sm font-semibold text-white">
-            Payment summary
+          <h3 className="text-xs font-semibold text-white">
+            3. Review
           </h3>
+          <span className="text-[11px] text-slate-400 mt-0.5 block">
+            Payment summary
+          </span>
         </div>
 
         {/* Breakdown List */}
-        <div className="space-y-2 text-xs">
+        <div className="space-y-2.5 text-xs">
           <div className="flex items-center justify-between">
             <span className="text-slate-400">Recipients</span>
             <span className="font-mono font-medium text-white">
-              {validation.recipientCount}
+              {validation.recipientCount} {validation.recipientCount === 1 ? "recipient" : "recipients"}
             </span>
           </div>
 
@@ -84,13 +86,13 @@ export function TransactionSummary({
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-slate-400">Fee</span>
+            <span className="text-slate-400">Estimated fee</span>
             <span className="text-slate-300">
               Calculated in wallet
             </span>
           </div>
 
-          <div className="pt-2.5 border-t border-white/[0.06] flex items-center justify-between">
+          <div className="pt-3 border-t border-white/[0.06] flex items-center justify-between">
             <span className="text-slate-300 font-medium">Total</span>
             <span className="text-sm font-bold text-white font-mono">
               {formatAmount(validation.totalAmount)} {token.symbol}
@@ -103,7 +105,7 @@ export function TransactionSummary({
           <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 space-y-1">
             <div className="flex items-center gap-1.5 text-xs text-amber-300 font-medium">
               <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-              <span>Review items:</span>
+              <span>Please review:</span>
             </div>
             <ul className="list-disc list-inside space-y-0.5 text-[11px] text-amber-200/90 pl-1">
               {validation.errors.map((err, i) => (

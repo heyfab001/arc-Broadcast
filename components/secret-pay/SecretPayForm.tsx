@@ -72,17 +72,15 @@ export function SecretPayForm({
     switch (step) {
       case "CHECKING_BALANCE":
       case "CHECKING_ALLOWANCE":
-        return "Preparing...";
+        return "Creating payment...";
       case "AWAITING_APPROVAL":
-        return "Confirm approval in wallet";
+      case "AWAITING_DEPOSIT":
+        return "Confirm in your wallet";
       case "APPROVAL_SUBMITTED":
       case "WAITING_APPROVAL":
-        return "Waiting for confirmation...";
-      case "AWAITING_DEPOSIT":
-        return "Confirm in wallet";
       case "DEPOSIT_SUBMITTED":
       case "WAITING_DEPOSIT":
-        return "Waiting for confirmation...";
+        return "Confirming...";
       default:
         return "Create payment";
     }
@@ -93,7 +91,7 @@ export function SecretPayForm({
       <form onSubmit={handleSubmit}>
         <GlassCard variant="default" className="space-y-4 p-5 sm:p-6">
           {/* Amount & Token */}
-          <div className="space-y-1">
+          <div className="space-y-1.5">
             <div className="flex items-center justify-between text-xs">
               <label className="font-medium text-slate-300">Amount</label>
               <span className="text-slate-400">
@@ -125,7 +123,7 @@ export function SecretPayForm({
           </div>
 
           {/* Expiry */}
-          <div className="space-y-1">
+          <div className="space-y-1.5">
             <label className="block text-xs font-medium text-slate-300">
               Expiry
             </label>
@@ -139,7 +137,7 @@ export function SecretPayForm({
                     disabled={isProcessing}
                     onClick={() => onChangeExpiry(opt.value)}
                     className={cn(
-                      "py-2 px-3 rounded-lg border text-xs font-medium transition-colors text-center",
+                      "h-9 px-3 rounded-lg border text-xs font-medium transition-colors text-center",
                       isSelected
                         ? "bg-blue-600 text-white border-blue-500"
                         : "bg-[#0C0D12] border-white/10 text-slate-400 hover:text-white hover:border-white/20",
@@ -154,7 +152,7 @@ export function SecretPayForm({
           </div>
 
           {/* Message */}
-          <div className="space-y-1">
+          <div className="space-y-1.5">
             <label className="block text-xs font-medium text-slate-300">
               Message (optional)
             </label>
@@ -165,11 +163,11 @@ export function SecretPayForm({
               disabled={isProcessing}
               placeholder="Add a note (optional)"
               maxLength={120}
-              className="w-full h-9 bg-[#0C0D12] border border-white/10 rounded-lg px-3 text-xs text-white placeholder-slate-600 outline-none focus:border-blue-500 disabled:opacity-50"
+              className="w-full h-10 bg-[#0C0D12] border border-white/10 rounded-lg px-3 text-xs text-white placeholder-slate-600 outline-none focus:border-blue-500 disabled:opacity-50"
             />
           </div>
 
-          {/* Error Message Alert */}
+          {/* Error Alert */}
           {errorMessage && (
             <div className="p-2.5 rounded-lg bg-red-500/10 border border-red-500/20 flex items-start gap-2 text-xs text-red-300">
               <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
