@@ -68,13 +68,14 @@ export function ActivityTable({
   if (!isConnected) {
     return (
       <>
-        <div className="py-8 text-center space-y-2 border border-dashed border-white/[0.06] rounded-lg">
-          <p className="text-xs text-slate-400">Connect your wallet to view activity.</p>
+        <div className="py-10 text-center space-y-3 border border-dashed border-white/[0.08] rounded-xl">
+          <p className="text-sm sm:text-base text-slate-300">Connect your wallet to view activity.</p>
           <Button
             variant="primary"
             size="sm"
             onClick={() => setIsWalletModalOpen(true)}
-            leftIcon={<Wallet className="w-3.5 h-3.5" />}
+            leftIcon={<Wallet className="w-4 h-4" />}
+            className="h-11 px-4 text-sm font-semibold"
           >
             Connect wallet
           </Button>
@@ -91,15 +92,15 @@ export function ActivityTable({
   // 2. Wrong Network
   if (isWrongNetwork) {
     return (
-      <div className="py-8 text-center space-y-2 border border-dashed border-white/[0.06] rounded-lg">
-        <p className="text-xs text-amber-300">Wrong network.</p>
+      <div className="py-10 text-center space-y-3 border border-dashed border-white/[0.08] rounded-xl">
+        <p className="text-sm sm:text-base text-amber-300">Wrong network.</p>
         <Button
           variant="primary"
           size="sm"
           onClick={() => switchToArc()}
           isLoading={isSwitching}
-          leftIcon={<RefreshCw className="w-3 h-3" />}
-          className="bg-amber-500 hover:bg-amber-400 text-slate-950"
+          leftIcon={<RefreshCw className="w-4 h-4" />}
+          className="h-11 px-4 text-sm font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950"
         >
           Switch to Arc Testnet
         </Button>
@@ -115,14 +116,15 @@ export function ActivityTable({
   // 4. Error
   if (error && transactions.length === 0) {
     return (
-      <div className="py-8 text-center space-y-2 border border-dashed border-white/[0.06] rounded-lg">
-        <p className="text-xs text-red-400">Unable to load activity.</p>
+      <div className="py-10 text-center space-y-3 border border-dashed border-white/[0.08] rounded-xl">
+        <p className="text-sm text-red-400">Unable to load activity.</p>
         {onRetry && (
           <Button
             variant="outline"
             size="sm"
             onClick={onRetry}
-            leftIcon={<RefreshCw className="w-3 h-3" />}
+            leftIcon={<RefreshCw className="w-4 h-4" />}
+            className="h-10 px-3.5 text-sm"
           >
             Retry
           </Button>
@@ -134,8 +136,8 @@ export function ActivityTable({
   // 5. Empty
   if (transactions.length === 0) {
     return (
-      <div className="py-8 text-center border border-dashed border-white/[0.06] rounded-lg">
-        <p className="text-xs text-slate-400">
+      <div className="py-10 text-center border border-dashed border-white/[0.08] rounded-xl">
+        <p className="text-sm sm:text-base text-slate-400">
           {hasSearchQuery ? "No matching activity found." : "No activity yet."}
         </p>
       </div>
@@ -150,36 +152,36 @@ export function ActivityTable({
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       {/* Desktop Table View */}
-      <div className="hidden sm:block overflow-hidden rounded-lg border border-white/[0.08] bg-[#0C0D12]">
-        <table className="w-full text-left text-xs">
-          <thead className="border-b border-white/[0.06] bg-white/[0.01] text-slate-500 font-semibold uppercase tracking-wider text-[10px]">
+      <div className="hidden sm:block overflow-hidden rounded-xl border border-white/[0.08] bg-[#0C0D12]">
+        <table className="w-full text-left text-sm">
+          <thead className="border-b border-white/[0.06] bg-white/[0.02] text-slate-400 font-semibold uppercase tracking-wider text-xs">
             <tr>
-              <th className="py-2.5 px-3.5">Type</th>
-              <th className="py-2.5 px-3.5">Recipients / Target</th>
-              <th className="py-2.5 px-3.5">Amount</th>
-              <th className="py-2.5 px-3.5">Status</th>
-              <th className="py-2.5 px-3.5">Date</th>
-              <th className="py-2.5 px-3.5 text-right">Transaction</th>
+              <th className="py-3 px-4">Type</th>
+              <th className="py-3 px-4">Recipients / Target</th>
+              <th className="py-3 px-4">Amount</th>
+              <th className="py-3 px-4">Status</th>
+              <th className="py-3 px-4">Date</th>
+              <th className="py-3 px-4 text-right">Transaction</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/[0.04] text-slate-300">
+          <tbody className="divide-y divide-white/[0.04] text-slate-200">
             {transactions.map((tx) => {
               const isCopied = copiedTxHash === tx.txHash;
               return (
                 <tr
                   key={tx.id}
                   onClick={() => handleRowClick(tx.txHash)}
-                  className="hover:bg-white/[0.02] transition-colors cursor-pointer"
+                  className="hover:bg-white/[0.03] transition-colors cursor-pointer"
                 >
                   {/* Type */}
-                  <td className="py-2.5 px-3.5 font-medium text-white">
+                  <td className="py-3.5 px-4 font-medium text-white text-[15px]">
                     {typeLabels[tx.type]}
                   </td>
 
                   {/* Recipients / Target */}
-                  <td className="py-2.5 px-3.5 font-mono text-[11px] text-slate-400">
+                  <td className="py-3.5 px-4 font-mono text-xs sm:text-sm text-slate-400">
                     {tx.type === "broadcast" && tx.recipientCount
                       ? `${tx.recipientCount} ${tx.recipientCount === 1 ? "recipient" : "recipients"}`
                       : tx.targetAddress
@@ -188,24 +190,24 @@ export function ActivityTable({
                   </td>
 
                   {/* Amount */}
-                  <td className="py-2.5 px-3.5 font-mono font-medium text-white">
+                  <td className="py-3.5 px-4 font-mono font-semibold text-white text-[15px]">
                     {formatAmount(tx.amount)} {tx.token.symbol}
                   </td>
 
                   {/* Status */}
-                  <td className="py-2.5 px-3.5">
+                  <td className="py-3.5 px-4">
                     <StatusBadge status={tx.status} />
                   </td>
 
                   {/* Date */}
-                  <td className="py-2.5 px-3.5 text-slate-400 text-[11px]">
+                  <td className="py-3.5 px-4 text-slate-400 text-xs sm:text-sm">
                     {formatSmartTimestamp(tx.timestamp)}
                   </td>
 
                   {/* Hash */}
-                  <td className="py-2.5 px-3.5 text-right">
+                  <td className="py-3.5 px-4 text-right">
                     {tx.txHash ? (
-                      <div className="inline-flex items-center gap-1 font-mono text-[11px]">
+                      <div className="inline-flex items-center gap-1.5 font-mono text-xs sm:text-sm">
                         <span className="text-blue-400 hover:underline">
                           {truncateAddress(tx.txHash, 4)}
                         </span>
@@ -214,15 +216,15 @@ export function ActivityTable({
                           onClick={(e) => handleCopyHash(e, tx.txHash!)}
                           title="Copy hash"
                           aria-label="Copy transaction hash"
-                          className="p-1 text-slate-500 hover:text-white rounded"
+                          className="p-1 text-slate-400 hover:text-white rounded hover:bg-white/[0.08] transition-colors"
                         >
                           {isCopied ? (
-                            <Check className="w-3 h-3 text-emerald-400" />
+                            <Check className="w-3.5 h-3.5 text-emerald-400" />
                           ) : (
-                            <Copy className="w-3 h-3" />
+                            <Copy className="w-3.5 h-3.5" />
                           )}
                         </button>
-                        <ExternalLink className="w-3 h-3 text-slate-500" />
+                        <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
                       </div>
                     ) : (
                       <span className="text-slate-600 font-mono">-</span>
@@ -236,26 +238,26 @@ export function ActivityTable({
       </div>
 
       {/* Mobile Card List View */}
-      <div className="sm:hidden space-y-2">
+      <div className="sm:hidden space-y-2.5">
         {transactions.map((tx) => {
           return (
             <div
               key={tx.id}
               onClick={() => handleRowClick(tx.txHash)}
-              className="p-3 rounded-lg border border-white/[0.08] bg-[#0C0D12] space-y-2 cursor-pointer"
+              className="p-4 rounded-xl border border-white/[0.08] bg-[#0C0D12] space-y-3 cursor-pointer"
             >
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-medium text-white">
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-white text-base">
                   {typeLabels[tx.type]}
                 </span>
                 <StatusBadge status={tx.status} />
               </div>
 
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-mono font-bold text-white">
+              <div className="flex items-center justify-between text-sm">
+                <span className="font-mono font-bold text-white text-base">
                   {formatAmount(tx.amount)} {tx.token.symbol}
                 </span>
-                <span className="text-[11px] text-slate-400">
+                <span className="text-xs sm:text-sm text-slate-400">
                   {tx.type === "broadcast" && tx.recipientCount
                     ? `${tx.recipientCount} recipients`
                     : formatSmartTimestamp(tx.timestamp)}
@@ -263,11 +265,11 @@ export function ActivityTable({
               </div>
 
               {tx.txHash && (
-                <div className="pt-1.5 border-t border-white/[0.04] flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <div className="pt-2 border-t border-white/[0.06] flex items-center justify-between text-xs sm:text-sm font-mono text-slate-400">
                   <span>{truncateAddress(tx.txHash, 4)}</span>
-                  <span className="text-blue-400 hover:underline flex items-center gap-1 font-sans">
+                  <span className="text-blue-400 hover:underline flex items-center gap-1 font-sans font-medium">
                     <span>ArcScan</span>
-                    <ExternalLink className="w-3 h-3" />
+                    <ExternalLink className="w-3.5 h-3.5" />
                   </span>
                 </div>
               )}

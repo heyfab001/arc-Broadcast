@@ -33,34 +33,32 @@ export function RecipientTable({
 
   const handleAdd = () => {
     onAddRecipient();
-    // Mark next added item to autofocus
-    setTimeout(() => {
-      if (recipients.length > 0) {
-        setNewlyAddedId(recipients[recipients.length - 1].id);
-      }
-    }, 50);
+    // Instant marker for auto-focus without artificial setTimeout
+    if (recipients.length > 0) {
+      setNewlyAddedId(recipients[recipients.length - 1].id);
+    }
   };
 
   return (
-    <div className="space-y-3.5">
+    <div className="space-y-4">
       {/* Step Header */}
-      <div className="flex items-center justify-between gap-2 pb-3 border-b border-white/[0.06]">
+      <div className="flex items-center justify-between gap-3 pb-4 border-b border-white/[0.06]">
         <div>
-          <h3 className="text-xs font-semibold text-white">
+          <h3 className="text-sm sm:text-base font-semibold text-white">
             1. Who are you sending to?
           </h3>
-          <span className="text-[11px] text-slate-400 mt-0.5 block">
+          <span className="text-xs sm:text-sm text-slate-400 mt-0.5 block">
             {recipients.length} / {MAX_RECIPIENTS} recipients
           </span>
         </div>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           <Button
             type="button"
             variant="outline"
             size="sm"
             onClick={onOpenCsvModal}
-            leftIcon={<Upload className="w-3 h-3" />}
+            leftIcon={<Upload className="w-3.5 h-3.5" />}
           >
             Import CSV
           </Button>
@@ -71,7 +69,7 @@ export function RecipientTable({
             size="sm"
             onClick={handleAdd}
             disabled={isMaxReached}
-            leftIcon={<Plus className="w-3 h-3" />}
+            leftIcon={<Plus className="w-3.5 h-3.5" />}
           >
             + Add wallet
           </Button>
@@ -80,7 +78,7 @@ export function RecipientTable({
             <button
               type="button"
               onClick={onClearAll}
-              className="text-xs text-slate-500 hover:text-red-400 px-1.5 py-1 transition-colors"
+              className="text-xs sm:text-sm text-slate-400 hover:text-red-400 px-2 py-1 transition-colors"
             >
               Clear
             </button>
@@ -89,7 +87,7 @@ export function RecipientTable({
       </div>
 
       {/* Table Headers */}
-      <div className="grid grid-cols-12 gap-2 px-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
+      <div className="grid grid-cols-12 gap-2.5 px-1 text-xs sm:text-sm font-semibold text-slate-400 uppercase tracking-wider">
         <div className="col-span-1 text-center">#</div>
         <div className="col-span-7">Wallet address</div>
         <div className="col-span-3">Amount</div>
@@ -98,11 +96,11 @@ export function RecipientTable({
 
       {/* Rows */}
       {recipients.length === 0 ? (
-        <div className="py-8 text-center border border-dashed border-white/[0.06] rounded-lg">
-          <p className="text-xs text-slate-400">No recipients added.</p>
+        <div className="py-10 text-center border border-dashed border-white/[0.08] rounded-xl">
+          <p className="text-sm text-slate-400">No recipients added.</p>
         </div>
       ) : (
-        <div className="space-y-1.5 max-h-[460px] overflow-y-auto pr-0.5">
+        <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
           {recipients.map((recipient, index) => {
             const isDup = duplicateAddresses.includes(recipient.address.trim().toLowerCase());
             return (
@@ -127,9 +125,9 @@ export function RecipientTable({
         type="button"
         onClick={handleAdd}
         disabled={isMaxReached}
-        className="w-full py-2.5 rounded-lg border border-dashed border-white/[0.08] hover:border-white/20 text-xs text-slate-400 hover:text-white transition-colors flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
+        className="w-full h-12 rounded-lg border border-dashed border-white/[0.1] hover:border-white/25 text-sm sm:text-base font-medium text-slate-300 hover:text-white transition-colors flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed"
       >
-        <Plus className="w-3.5 h-3.5" />
+        <Plus className="w-4 h-4" />
         <span>+ Add wallet</span>
       </button>
     </div>

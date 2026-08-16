@@ -23,7 +23,7 @@ export function NetworkBadge() {
         }}
         disabled={isSwitching}
         className={cn(
-          "flex items-center gap-1.5 px-2.5 h-8 rounded-lg border text-xs font-medium transition-colors select-none",
+          "flex items-center gap-2 px-3 h-10 rounded-lg border text-sm font-medium transition-colors select-none",
           isSwitching
             ? "bg-blue-600/10 border-blue-500/30 text-blue-300"
             : isWrongNetwork
@@ -33,32 +33,32 @@ export function NetworkBadge() {
       >
         {isSwitching ? (
           <>
-            <RefreshCw className="w-3 h-3 text-blue-400 animate-spin" />
-            <span>Switching</span>
+            <RefreshCw className="w-3.5 h-3.5 text-blue-400 animate-spin" />
+            <span>Switching...</span>
           </>
         ) : isWrongNetwork ? (
           <>
-            <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" />
+            <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
             <span>Wrong network</span>
           </>
         ) : (
           <>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span className="w-2 h-2 rounded-full bg-emerald-400" />
             <span>{ARC_TESTNET.name}</span>
           </>
         )}
-        <ChevronDown className="w-3 h-3 text-slate-400" />
+        <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
       </button>
 
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Network"
-        description="Arc Testnet configuration."
+        title="Network configuration"
+        description="Arc Testnet parameters."
         maxWidth="sm"
       >
-        <div className="space-y-3 pt-1 text-xs">
-          <div className="space-y-1.5 bg-[#0C0D12] p-3 rounded-lg border border-white/[0.06] text-slate-300 font-mono">
+        <div className="space-y-4 pt-1 text-sm">
+          <div className="space-y-2 bg-[#0C0D12] p-4 rounded-lg border border-white/[0.06] text-slate-300 font-mono">
             <div className="flex justify-between py-1 border-b border-white/[0.04]">
               <span className="text-slate-400 font-sans">Network</span>
               <span className="text-white font-sans font-medium">{ARC_TESTNET.name}</span>
@@ -80,7 +80,7 @@ export function NetworkBadge() {
                 className="text-blue-400 hover:underline flex items-center gap-1 font-sans"
               >
                 <span>ArcScan</span>
-                <ExternalLink className="w-3 h-3" />
+                <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
           </div>
@@ -91,7 +91,7 @@ export function NetworkBadge() {
                 switchToArc();
                 setIsModalOpen(false);
               }}
-              className="w-full py-2 px-3 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-semibold"
+              className="w-full h-11 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-sm font-semibold transition-colors"
             >
               Switch to Arc Testnet
             </button>

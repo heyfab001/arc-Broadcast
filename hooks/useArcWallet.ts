@@ -18,12 +18,12 @@ import { WalletConnectionStatus } from "@/types/wallet";
 
 export function useArcWallet() {
   const { address, isConnected, isConnecting, isReconnecting, connector } = useAccount();
-  const { connectAsync, connectors, isPending: isConnectPending, error: connectError } = useConnect();
+  const { connectAsync, connectors, isPending: isConnectPending } = useConnect();
   const { disconnect } = useDisconnect();
   const chainId = useChainId();
   const { isArcTestnet, isWrongNetwork, isSwitching, switchToArc } = useArcNetwork();
 
-  // Query real native USDC balance on Arc Testnet
+  // Query real native USDC balance on Arc Testnet (no aggressive polling)
   const {
     data: balanceData,
     isLoading: isBalanceLoading,
@@ -34,7 +34,8 @@ export function useArcWallet() {
     chainId: ARC_CHAIN_ID,
     query: {
       enabled: isConnected && !!address,
-      refetchInterval: 10_000,
+      refetchInterval: 60_000,
+      refetchIntervalInBackground: false,
     },
   });
 
@@ -49,10 +50,10 @@ export function useArcWallet() {
     return "connected";
   }, [isConnecting, isReconnecting, isConnectPending, isConnected, isWrongNetwork]);
 
-  // Formatted native USDC balance (no ETH display)
+  // Formatted native USDC balance
   const balanceUSDC = useMemo(() => {
     if (!isConnected || !address) return "0.00";
-    if (isBalanceLoading) return "...";
+    if (isBalanceLoading && !balanceData) return "0.00";
     if (isBalanceError || !balanceData) return "0.00";
     return formatArcUsdc(balanceData.value, 4);
   }, [isConnected, address, isBalanceLoading, isBalanceError, balanceData]);
@@ -64,8 +65,8 @@ export function useArcWallet() {
       const conn = targetConnector || connectors[0];
       if (!conn) {
         showToast({
-          title: "Wallet Not Found",
-          message: "No compatible wallet detected. Please install an EVM wallet like MetaMask, Rabby, or Coinbase Wallet.",
+          title: "Wallet not found",
+          message: "Please install an EVM wallet extension like MetaMask or Rabby.",
           type: "warning",
         });
         return;
@@ -73,19 +74,13 @@ export function useArcWallet() {
 
       try {
         await connectAsync({ connector: conn });
-        showToast({
-          title: "Wallet Connected",
-          message: "Successfully connected EVM wallet.",
-          type: "success",
-        });
       } catch (err: unknown) {
         const friendly = parseWalletErrorMessage(err);
         showToast({
-          title: "Connection Failed",
+          title: "Connection failed",
           message: friendly,
           type: "error",
         });
-        console.warn("[Arc Wallet] Connection error:", err);
       }
     },
     [connectAsync, connectors]
@@ -94,8 +89,7 @@ export function useArcWallet() {
   const disconnectWallet = useCallback(() => {
     disconnect();
     showToast({
-      title: "Wallet Disconnected",
-      message: "Disconnected from Arc Broadcast Payment.",
+      title: "Wallet disconnected",
       type: "info",
     });
   }, [disconnect]);

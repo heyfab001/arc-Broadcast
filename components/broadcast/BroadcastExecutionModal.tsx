@@ -78,29 +78,29 @@ export function BroadcastExecutionModal({
       title={getTitle()}
       maxWidth="sm"
     >
-      <div className="space-y-4 pt-1 text-xs">
+      <div className="space-y-5 pt-1 text-sm">
         {/* Status Graphic */}
-        <div className="py-4 text-center space-y-2">
+        <div className="py-4 text-center space-y-3">
           {isSuccess ? (
-            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mx-auto">
-              <CheckCircle2 className="w-5 h-5" />
+            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mx-auto">
+              <CheckCircle2 className="w-6 h-6" />
             </div>
           ) : isCancelled ? (
-            <div className="w-10 h-10 rounded-lg bg-slate-500/10 border border-slate-500/20 flex items-center justify-center text-slate-400 mx-auto">
-              <XCircle className="w-5 h-5" />
+            <div className="w-12 h-12 rounded-xl bg-slate-500/10 border border-slate-500/20 flex items-center justify-center text-slate-400 mx-auto">
+              <XCircle className="w-6 h-6" />
             </div>
           ) : isError ? (
-            <div className="w-10 h-10 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 mx-auto">
-              <AlertCircle className="w-5 h-5" />
+            <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 mx-auto">
+              <AlertCircle className="w-6 h-6" />
             </div>
           ) : (
-            <div className="w-10 h-10 rounded-lg bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mx-auto">
-              <Loader2 className="w-5 h-5 animate-spin" />
+            <div className="w-12 h-12 rounded-xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mx-auto">
+              <Loader2 className="w-6 h-6 animate-spin" />
             </div>
           )}
 
-          <div className="space-y-0.5">
-            <h4 className="text-xs font-semibold text-white">
+          <div className="space-y-1">
+            <h4 className="text-base font-semibold text-white">
               {isSuccess
                 ? `${totalAmount} ${tokenSymbol} sent to ${recipientCount} ${recipientCount === 1 ? "wallet" : "wallets"}`
                 : isCancelled
@@ -110,7 +110,7 @@ export function BroadcastExecutionModal({
                 : getDescription()}
             </h4>
             {!isSuccess && !isCancelled && !isError && (
-              <p className="text-[11px] text-slate-400">
+              <p className="text-xs sm:text-sm text-slate-400">
                 {step.includes("AWAITING")
                   ? "Please check your connected wallet extension."
                   : "Blockchain confirmation in progress on Arc Testnet."}
@@ -121,7 +121,7 @@ export function BroadcastExecutionModal({
 
         {/* Transaction Hashes */}
         {(approvalTxHash || batchTxHash) && (
-          <div className="p-3 rounded-lg bg-[#0C0D12] border border-white/[0.06] space-y-1.5 font-mono text-[11px]">
+          <div className="p-3.5 rounded-xl bg-[#0C0D12] border border-white/[0.06] space-y-2 font-mono text-xs sm:text-sm">
             {approvalTxHash && (
               <div className="flex justify-between items-center">
                 <span className="text-slate-400 font-sans">Approval:</span>
@@ -132,7 +132,7 @@ export function BroadcastExecutionModal({
                   className="text-blue-400 hover:underline flex items-center gap-1 font-mono"
                 >
                   <span>{approvalTxHash.slice(0, 6)}...{approvalTxHash.slice(-4)}</span>
-                  <ExternalLink className="w-3 h-3" />
+                  <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
             )}
@@ -146,7 +146,7 @@ export function BroadcastExecutionModal({
                   className="text-blue-400 hover:underline flex items-center gap-1 font-mono"
                 >
                   <span>{batchTxHash.slice(0, 6)}...{batchTxHash.slice(-4)}</span>
-                  <ExternalLink className="w-3 h-3" />
+                  <ExternalLink className="w-3.5 h-3.5" />
                 </a>
               </div>
             )}
@@ -160,17 +160,17 @@ export function BroadcastExecutionModal({
               variant="primary"
               size="md"
               onClick={onClose}
-              className="w-full"
+              className="w-full h-12 text-base font-semibold"
             >
               Done
             </Button>
           ) : isCancelled || isError ? (
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <Button
                 variant="secondary"
                 size="md"
                 onClick={onClose}
-                className="flex-1"
+                className="flex-1 h-12 text-base font-semibold"
               >
                 Close
               </Button>
@@ -179,8 +179,8 @@ export function BroadcastExecutionModal({
                   variant="primary"
                   size="md"
                   onClick={onRetry}
-                  leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
-                  className="flex-1"
+                  leftIcon={<RefreshCw className="w-4 h-4" />}
+                  className="flex-1 h-12 text-base font-semibold"
                 >
                   Try again
                 </Button>

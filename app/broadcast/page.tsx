@@ -99,7 +99,8 @@ export default function BroadcastPage() {
             variant="secondary"
             size="sm"
             onClick={() => setIsCsvModalOpen(true)}
-            leftIcon={<Upload className="w-3.5 h-3.5" />}
+            leftIcon={<Upload className="w-4 h-4" />}
+            className="h-11 px-4 text-sm font-semibold"
           >
             Import CSV
           </Button>
@@ -113,10 +114,10 @@ export default function BroadcastPage() {
         {/* Left Column: Form & Recipient Table (Col 7 - approx 60%) */}
         <div className="lg:col-span-7 space-y-4">
           {/* Currency selection & Balance bar */}
-          <GlassCard variant="default" className="p-4">
+          <GlassCard variant="default" className="p-5">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <span className="text-[11px] font-medium text-slate-400 block mb-1">
+                <span className="text-xs sm:text-sm font-medium text-slate-300 block mb-1.5">
                   Token
                 </span>
                 <TokenSelector
@@ -125,9 +126,9 @@ export default function BroadcastPage() {
                 />
               </div>
 
-              <div className="text-right text-xs">
-                <span className="text-slate-400 block text-[11px]">Available balance</span>
-                <span className="font-mono font-medium text-white">
+              <div className="text-right text-sm">
+                <span className="text-slate-400 block text-xs sm:text-sm">Available balance</span>
+                <span className="font-mono font-semibold text-white text-sm sm:text-base mt-0.5 block">
                   {!isConnected ? "Not connected" : `${balanceUSDC} USDC`}
                 </span>
               </div>
@@ -135,7 +136,7 @@ export default function BroadcastPage() {
           </GlassCard>
 
           {/* Recipient Table */}
-          <GlassCard variant="default" className="p-4 sm:p-5">
+          <GlassCard variant="default" className="p-5 sm:p-6">
             <RecipientTable
               recipients={recipients}
               tokenSymbol={selectedToken.symbol}

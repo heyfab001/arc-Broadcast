@@ -51,45 +51,45 @@ export function SecretPayCreatedModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75">
-      <div className="w-full max-w-sm relative">
+      <div className="w-full max-w-md relative">
         <GlassCard
           variant="default"
-          className="p-5 space-y-4 relative"
+          className="p-6 space-y-5 relative"
         >
-          {/* Close */}
+          {/* Close Button */}
           <button
             onClick={onClose}
             aria-label="Close modal"
-            className="absolute top-4 right-4 p-1 text-slate-400 hover:text-white rounded hover:bg-white/[0.06] transition-colors"
+            className="absolute top-5 right-5 p-1 text-slate-400 hover:text-white rounded hover:bg-white/[0.06] transition-colors"
           >
-            <X className="w-3.5 h-3.5" />
+            <X className="w-4 h-4" />
           </button>
 
-          <div>
-            <h3 className="text-sm font-semibold text-white">
+          <div className="space-y-1">
+            <h3 className="text-base sm:text-lg font-semibold text-white">
               Payment ready
             </h3>
-            <p className="text-xs text-slate-400 mt-1 leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
               Share this link with the person you want to receive it.
             </p>
           </div>
 
           {/* Link Box */}
-          <div className="space-y-1">
-            <div className="flex items-center gap-1.5">
+          <div className="space-y-1.5">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
               <input
                 type="text"
                 readOnly
                 value={claim.claimUrl}
-                className="w-full h-10 bg-[#0C0D12] border border-white/10 rounded-lg px-3 text-xs text-slate-300 font-mono select-all outline-none"
+                className="w-full h-12 bg-[#0C0D12] border border-white/15 rounded-lg px-3.5 text-sm text-slate-200 font-mono select-all outline-none"
               />
               <Button
                 type="button"
                 variant="primary"
                 size="md"
                 onClick={handleCopy}
-                leftIcon={copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                className="shrink-0 text-xs px-3 min-w-[120px]"
+                leftIcon={copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                className="h-12 shrink-0 text-sm sm:text-base font-semibold px-4 min-w-[140px]"
               >
                 {copied ? "Link copied" : "Copy claim link"}
               </Button>
@@ -97,25 +97,25 @@ export function SecretPayCreatedModal({
           </div>
 
           {/* Details */}
-          <div className="space-y-1.5 text-xs bg-[#0C0D12] p-3 rounded-lg border border-white/[0.06] text-slate-300">
+          <div className="space-y-2 text-sm bg-[#0C0D12] p-4 rounded-lg border border-white/[0.06] text-slate-300">
             <div className="flex justify-between">
               <span className="text-slate-400">Amount</span>
-              <span className="font-mono font-medium text-white">{claim.amount} USDC</span>
+              <span className="font-mono font-semibold text-white">{claim.amount} USDC</span>
             </div>
             <div className="flex justify-between">
               <span className="text-slate-400">Expires in</span>
-              <span>{claim.expiryDays} {claim.expiryDays === 1 ? "day" : "days"}</span>
+              <span className="font-medium text-slate-200">{claim.expiryDays} {claim.expiryDays === 1 ? "day" : "days"}</span>
             </div>
-            <div className="flex justify-between pt-1 border-t border-white/[0.04]">
+            <div className="flex justify-between pt-2 border-t border-white/[0.06]">
               <span className="text-slate-400">Transaction</span>
               <a
                 href={txUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-blue-400 hover:underline flex items-center gap-1"
+                className="font-mono text-blue-400 hover:underline flex items-center gap-1.5"
               >
                 <span>{claim.depositTxHash.slice(0, 6)}...{claim.depositTxHash.slice(-4)}</span>
-                <ExternalLink className="w-3 h-3" />
+                <ExternalLink className="w-3.5 h-3.5" />
               </a>
             </div>
           </div>
@@ -125,7 +125,7 @@ export function SecretPayCreatedModal({
             variant="secondary"
             size="md"
             onClick={onClose}
-            className="w-full"
+            className="w-full h-12 text-base font-semibold"
           >
             Done
           </Button>

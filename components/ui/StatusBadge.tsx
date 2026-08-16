@@ -13,7 +13,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
     { label: string; bg: string; text: string; border: string }
   > = {
     confirmed: {
-      label: "Confirmed",
+      label: "Completed",
       bg: "bg-emerald-500/10",
       text: "text-emerald-400",
       border: "border-emerald-500/20",
@@ -73,7 +73,7 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
   return (
     <span
       className={cn(
-        "inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium border",
+        "inline-flex items-center px-2.5 py-1 rounded text-xs sm:text-sm font-medium border",
         config.bg,
         config.text,
         config.border,

@@ -89,20 +89,20 @@ export function SecretPayForm({
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <GlassCard variant="default" className="space-y-4 p-5 sm:p-6">
+        <GlassCard variant="default" className="space-y-5 p-6 sm:p-7">
           {/* Amount & Token */}
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between text-xs">
-              <label className="font-medium text-slate-300">Amount</label>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-sm">
+              <label className="font-medium text-slate-200">Amount</label>
               <span className="text-slate-400">
                 Balance:{" "}
-                <span className="font-mono text-slate-200">
+                <span className="font-mono text-slate-200 font-medium">
                   {isConnected ? `${balanceUSDC} ${selectedToken.symbol}` : "Not connected"}
                 </span>
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
               <div className="sm:col-span-4">
                 <TokenSelector
                   selectedToken={selectedToken}
@@ -119,15 +119,15 @@ export function SecretPayForm({
                 />
               </div>
             </div>
-            {error && <p className="text-xs text-red-400">{error}</p>}
+            {error && <p className="text-sm text-red-400">{error}</p>}
           </div>
 
           {/* Expiry */}
-          <div className="space-y-1.5">
-            <label className="block text-xs font-medium text-slate-300">
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-slate-200">
               Expiry
             </label>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
               {CLAIM_EXPIRY_OPTIONS.map((opt) => {
                 const isSelected = expiryDays === opt.value;
                 return (
@@ -137,10 +137,10 @@ export function SecretPayForm({
                     disabled={isProcessing}
                     onClick={() => onChangeExpiry(opt.value)}
                     className={cn(
-                      "h-9 px-3 rounded-lg border text-xs font-medium transition-colors text-center",
+                      "h-11 px-3 rounded-lg border text-sm font-medium transition-colors text-center",
                       isSelected
                         ? "bg-blue-600 text-white border-blue-500"
-                        : "bg-[#0C0D12] border-white/10 text-slate-400 hover:text-white hover:border-white/20",
+                        : "bg-[#0C0D12] border-white/15 text-slate-300 hover:text-white hover:border-white/25",
                       isProcessing && "opacity-50 cursor-not-allowed"
                     )}
                   >
@@ -152,8 +152,8 @@ export function SecretPayForm({
           </div>
 
           {/* Message */}
-          <div className="space-y-1.5">
-            <label className="block text-xs font-medium text-slate-300">
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-slate-200">
               Message (optional)
             </label>
             <input
@@ -163,13 +163,13 @@ export function SecretPayForm({
               disabled={isProcessing}
               placeholder="Add a note (optional)"
               maxLength={120}
-              className="w-full h-10 bg-[#0C0D12] border border-white/10 rounded-lg px-3 text-xs text-white placeholder-slate-600 outline-none focus:border-blue-500 disabled:opacity-50"
+              className="w-full h-12 bg-[#0C0D12] border border-white/15 rounded-lg px-4 text-base text-white placeholder-slate-500 placeholder:text-base outline-none focus:border-blue-500 disabled:opacity-50"
             />
           </div>
 
           {/* Error Alert */}
           {errorMessage && (
-            <div className="p-2.5 rounded-lg bg-red-500/10 border border-red-500/20 flex items-start gap-2 text-xs text-red-300">
+            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 flex items-start gap-2.5 text-sm text-red-300">
               <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
               <p>{errorMessage}</p>
             </div>
@@ -183,8 +183,8 @@ export function SecretPayForm({
                 variant="primary"
                 size="md"
                 onClick={() => setIsWalletModalOpen(true)}
-                leftIcon={<Wallet className="w-3.5 h-3.5" />}
-                className="w-full"
+                leftIcon={<Wallet className="w-4 h-4" />}
+                className="w-full h-12 text-base font-semibold"
               >
                 Connect wallet
               </Button>
@@ -195,8 +195,8 @@ export function SecretPayForm({
                 size="md"
                 onClick={() => switchToArc()}
                 isLoading={isSwitching}
-                leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
-                className="w-full bg-amber-500 hover:bg-amber-400 text-slate-950"
+                leftIcon={<RefreshCw className="w-4 h-4" />}
+                className="w-full h-12 text-base font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950"
               >
                 Switch to Arc Testnet
               </Button>
@@ -207,8 +207,8 @@ export function SecretPayForm({
                 size="md"
                 disabled={!canCreate || isProcessing}
                 isLoading={isProcessing}
-                leftIcon={isProcessing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : undefined}
-                className="w-full"
+                leftIcon={isProcessing ? <Loader2 className="w-4 h-4 animate-spin" /> : undefined}
+                className="w-full h-12 text-base font-semibold"
               >
                 {getStepButtonLabel()}
               </Button>

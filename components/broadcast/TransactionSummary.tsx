@@ -59,28 +59,28 @@ export function TransactionSummary({
 
   return (
     <>
-      <GlassCard variant="default" className="space-y-4 p-4 sm:p-5">
-        <div className="pb-3 border-b border-white/[0.06]">
-          <h3 className="text-xs font-semibold text-white">
+      <GlassCard variant="default" className="space-y-5 p-5 sm:p-6">
+        <div className="pb-4 border-b border-white/[0.06]">
+          <h3 className="text-base sm:text-lg font-semibold text-white">
             3. Review
           </h3>
-          <span className="text-[11px] text-slate-400 mt-0.5 block">
+          <span className="text-xs sm:text-sm text-slate-400 mt-0.5 block">
             Payment summary
           </span>
         </div>
 
         {/* Breakdown List */}
-        <div className="space-y-2.5 text-xs">
+        <div className="space-y-3 text-sm sm:text-base">
           <div className="flex items-center justify-between">
             <span className="text-slate-400">Recipients</span>
-            <span className="font-mono font-medium text-white">
+            <span className="font-mono font-semibold text-white">
               {validation.recipientCount} {validation.recipientCount === 1 ? "recipient" : "recipients"}
             </span>
           </div>
 
           <div className="flex items-center justify-between">
             <span className="text-slate-400">Network</span>
-            <span className="text-white">
+            <span className="text-white font-medium">
               {ARC_TESTNET.name}
             </span>
           </div>
@@ -92,9 +92,9 @@ export function TransactionSummary({
             </span>
           </div>
 
-          <div className="pt-3 border-t border-white/[0.06] flex items-center justify-between">
-            <span className="text-slate-300 font-medium">Total</span>
-            <span className="text-sm font-bold text-white font-mono">
+          <div className="pt-3.5 border-t border-white/[0.06] flex items-center justify-between">
+            <span className="text-slate-200 font-medium">Total</span>
+            <span className="text-lg sm:text-xl font-bold text-white font-mono">
               {formatAmount(validation.totalAmount)} {token.symbol}
             </span>
           </div>
@@ -102,12 +102,12 @@ export function TransactionSummary({
 
         {/* Validation Errors Notice */}
         {validation.errors.length > 0 && (
-          <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 space-y-1">
-            <div className="flex items-center gap-1.5 text-xs text-amber-300 font-medium">
-              <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+          <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 space-y-1.5">
+            <div className="flex items-center gap-2 text-sm text-amber-300 font-medium">
+              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
               <span>Please review:</span>
             </div>
-            <ul className="list-disc list-inside space-y-0.5 text-[11px] text-amber-200/90 pl-1">
+            <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm text-amber-200/90 pl-1">
               {validation.errors.map((err, i) => (
                 <li key={i}>{err}</li>
               ))}
@@ -116,40 +116,42 @@ export function TransactionSummary({
         )}
 
         {/* Action Button */}
-        {!isConnected ? (
-          <Button
-            variant="primary"
-            size="md"
-            onClick={() => setIsWalletModalOpen(true)}
-            leftIcon={<Wallet className="w-3.5 h-3.5" />}
-            className="w-full"
-          >
-            Connect wallet
-          </Button>
-        ) : isWrongNetwork ? (
-          <Button
-            variant="primary"
-            size="md"
-            onClick={() => switchToArc()}
-            isLoading={isSwitching}
-            leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
-            className="w-full bg-amber-500 hover:bg-amber-400 text-slate-950"
-          >
-            Switch to Arc Testnet
-          </Button>
-        ) : (
-          <Button
-            variant="primary"
-            size="md"
-            onClick={onPreviewOrSend}
-            disabled={!canSubmit || isProcessing}
-            isLoading={isProcessing}
-            leftIcon={isProcessing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : undefined}
-            className="w-full"
-          >
-            {getButtonLabel()}
-          </Button>
-        )}
+        <div className="pt-1">
+          {!isConnected ? (
+            <Button
+              variant="primary"
+              size="md"
+              onClick={() => setIsWalletModalOpen(true)}
+              leftIcon={<Wallet className="w-4 h-4" />}
+              className="w-full h-12 text-base font-semibold"
+            >
+              Connect wallet
+            </Button>
+          ) : isWrongNetwork ? (
+            <Button
+              variant="primary"
+              size="md"
+              onClick={() => switchToArc()}
+              isLoading={isSwitching}
+              leftIcon={<RefreshCw className="w-4 h-4" />}
+              className="w-full h-12 text-base font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950"
+            >
+              Switch to Arc Testnet
+            </Button>
+          ) : (
+            <Button
+              variant="primary"
+              size="md"
+              onClick={onPreviewOrSend}
+              disabled={!canSubmit || isProcessing}
+              isLoading={isProcessing}
+              leftIcon={isProcessing ? <Loader2 className="w-4 h-4 animate-spin" /> : undefined}
+              className="w-full h-12 text-base font-semibold"
+            >
+              {getButtonLabel()}
+            </Button>
+          )}
+        </div>
       </GlassCard>
 
       <WalletModal

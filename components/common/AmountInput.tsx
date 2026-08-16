@@ -43,7 +43,7 @@ export function AmountInput({
   const displayError = error || (isInsufficient ? "Not enough USDC" : undefined);
 
   return (
-    <div className={cn("space-y-1", className)}>
+    <div className={cn("space-y-1.5", className)}>
       <div className="relative flex items-center">
         <input
           type="text"
@@ -53,28 +53,28 @@ export function AmountInput({
           disabled={disabled}
           placeholder={placeholder}
           className={cn(
-            "w-full h-10 bg-[#0C0D12] border rounded-lg pl-3 pr-16 text-xs font-mono text-white placeholder-slate-600 transition-colors outline-none",
+            "w-full h-12 bg-[#0C0D12] border rounded-lg pl-4 pr-20 text-base font-mono text-white placeholder-slate-500 placeholder:text-base transition-colors outline-none",
             displayError
-              ? "border-red-500/50 focus:border-red-500"
-              : "border-white/10 focus:border-blue-500",
+              ? "border-red-500/60 focus:border-red-500"
+              : "border-white/15 focus:border-blue-500",
             disabled && "opacity-50 cursor-not-allowed"
           )}
         />
-        <div className="absolute right-2.5 flex items-center gap-1.5">
+        <div className="absolute right-3 flex items-center gap-2">
           {maxBalance !== undefined && maxBalance > 0 && (
             <button
               type="button"
               onClick={handleMax}
               disabled={disabled}
-              className="px-1.5 py-0.5 text-[10px] font-medium rounded bg-white/[0.08] hover:bg-white/[0.14] text-slate-300 transition-colors disabled:opacity-50"
+              className="px-2 py-1 text-xs font-semibold rounded bg-white/[0.09] hover:bg-white/[0.16] text-slate-200 transition-colors disabled:opacity-50"
             >
               Max
             </button>
           )}
-          <span className="text-[11px] font-medium text-slate-400 pr-1">{symbol}</span>
+          <span className="text-sm font-semibold text-slate-300 pr-1">{symbol}</span>
         </div>
       </div>
-      {displayError && <p className="text-[10px] text-red-400 pl-0.5">{displayError}</p>}
+      {displayError && <p className="text-xs text-red-400 pl-0.5">{displayError}</p>}
     </div>
   );
 }

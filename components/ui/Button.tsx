@@ -26,10 +26,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const sizeStyles = {
-      sm: "h-8 px-2.5 text-xs rounded-lg gap-1.5",
-      md: "h-9 px-3.5 text-xs rounded-lg gap-1.5",
-      lg: "h-10 px-4 text-sm rounded-lg gap-2",
-      icon: "h-8 w-8 p-0 rounded-lg justify-center",
+      sm: "h-10 px-3.5 text-sm font-medium rounded-lg gap-2",
+      md: "h-12 px-5 text-base font-medium rounded-lg gap-2",
+      lg: "h-13 px-6 text-base font-semibold rounded-lg gap-2.5",
+      icon: "h-10 w-10 p-0 rounded-lg justify-center",
     };
 
     const variantStyles = {
@@ -38,9 +38,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       secondary:
         "bg-[#1A1D27] hover:bg-[#222634] text-white border border-white/10 active:scale-[0.99]",
       outline:
-        "bg-transparent border border-white/10 text-slate-200 hover:bg-white/[0.04] active:scale-[0.99]",
+        "bg-transparent border border-white/15 text-slate-200 hover:bg-white/[0.04] active:scale-[0.99]",
       ghost:
-        "bg-transparent text-slate-400 hover:text-white hover:bg-white/[0.04] active:scale-[0.99]",
+        "bg-transparent text-slate-300 hover:text-white hover:bg-white/[0.04] active:scale-[0.99]",
       danger:
         "bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 active:scale-[0.99]",
     };
@@ -58,7 +58,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {isLoading ? (
-          <Loader2 className="w-3.5 h-3.5 animate-spin text-current" />
+          <Loader2 className="w-4 h-4 animate-spin text-current" />
         ) : (
           leftIcon
         )}

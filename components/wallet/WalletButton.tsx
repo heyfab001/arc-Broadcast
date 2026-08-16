@@ -41,7 +41,7 @@ export function WalletButton() {
         variant="outline"
         size="sm"
         isLoading
-        className="text-xs min-w-[110px]"
+        className="h-10 px-3.5 text-sm font-medium min-w-[120px]"
       >
         Switching...
       </Button>
@@ -54,7 +54,7 @@ export function WalletButton() {
         variant="secondary"
         size="sm"
         isLoading
-        className="text-xs min-w-[110px]"
+        className="h-10 px-3.5 text-sm font-medium min-w-[120px]"
       >
         Connecting...
       </Button>
@@ -68,8 +68,8 @@ export function WalletButton() {
           variant="danger"
           size="sm"
           onClick={() => switchToArc()}
-          leftIcon={<AlertTriangle className="w-3 h-3 text-amber-400" />}
-          className="text-xs"
+          leftIcon={<AlertTriangle className="w-4 h-4 text-amber-400" />}
+          className="h-10 px-3.5 text-sm font-semibold"
         >
           Switch to Arc Testnet
         </Button>
@@ -85,19 +85,19 @@ export function WalletButton() {
   if (isConnected && address) {
     return (
       <>
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2">
           {/* Balance */}
-          <div className="hidden sm:flex items-center px-2.5 h-8 rounded-lg bg-[#141722] border border-white/[0.08] text-xs font-mono text-white">
+          <div className="hidden sm:flex items-center px-3 h-10 rounded-lg bg-[#141722] border border-white/[0.08] text-sm font-mono font-medium text-white">
             <span>{balanceUSDC} USDC</span>
           </div>
 
           {/* Address Button */}
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-1.5 px-2.5 h-8 rounded-lg bg-[#141722] hover:bg-[#1C202E] border border-white/[0.08] text-xs text-white transition-colors"
+            className="flex items-center gap-2 px-3 h-10 rounded-lg bg-[#141722] hover:bg-[#1C202E] border border-white/[0.08] text-sm font-medium text-white transition-colors"
           >
             <span className="font-mono">{shortAddress}</span>
-            <ChevronDown className="w-3 h-3 text-slate-400" />
+            <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
           </button>
         </div>
 
@@ -115,8 +115,8 @@ export function WalletButton() {
         variant="primary"
         size="sm"
         onClick={() => setIsModalOpen(true)}
-        leftIcon={<Wallet className="w-3.5 h-3.5" />}
-        className="text-xs"
+        leftIcon={<Wallet className="w-4 h-4" />}
+        className="h-10 px-4 text-sm font-semibold"
       >
         Connect wallet
       </Button>

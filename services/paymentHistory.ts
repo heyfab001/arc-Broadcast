@@ -1,7 +1,7 @@
 /**
  * Payment History Service
  * Reads and decodes real on-chain events from ArcBatchPayment and ArcSecretPayment
- * contracts on Arc Testnet for the connected wallet address.
+ * contracts on Arc Testnet for the connected wallet address with in-memory caching.
  */
 
 import {
@@ -9,7 +9,6 @@ import {
   http,
   formatUnits,
   Address,
-  Hex,
   parseAbiItem,
 } from "viem";
 import { ARC_TESTNET_CHAIN } from "@/config/chains";
@@ -29,7 +28,7 @@ export const historyPublicClient = createPublicClient({
   }),
 });
 
-// In-memory cache for block timestamps to avoid redundant RPC queries
+// In-memory cache for block timestamps
 const blockTimestampCache = new Map<bigint, number>();
 
 async function getBlockTimestamp(blockNumber: bigint): Promise<number> {
@@ -42,30 +41,54 @@ async function getBlockTimestamp(blockNumber: bigint): Promise<number> {
     blockTimestampCache.set(blockNumber, timestamp);
     return timestamp;
   } catch (err) {
-    console.warn(`[HISTORY] Could not fetch timestamp for block ${blockNumber}:`, err);
     return Date.now();
   }
+}
+
+// In-memory cache for user history to ensure instant loads
+interface CachedHistory {
+  transactions: Transaction[];
+  isBatchDeployed: boolean;
+  isSecretDeployed: boolean;
+  timestamp: number;
+}
+
+const memoryHistoryCache = new Map<string, CachedHistory>();
+
+export function getCachedUserHistory(userAddress: string): CachedHistory | null {
+  const key = userAddress.toLowerCase();
+  return memoryHistoryCache.get(key) || null;
 }
 
 /**
  * Fetches and resolves complete real on-chain transaction history for a wallet.
  */
-export async function fetchUserOnChainHistory(userAddress: Address): Promise<{
+export async function fetchUserOnChainHistory(
+  userAddress: Address,
+  bypassCache = false
+): Promise<{
   transactions: Transaction[];
   isBatchDeployed: boolean;
   isSecretDeployed: boolean;
 }> {
   const normalizedUser = userAddress.toLowerCase() as Address;
-  console.log(`[HISTORY DEBUG] Starting on-chain query for wallet: ${userAddress}`);
+  const cached = memoryHistoryCache.get(normalizedUser);
+
+  // Return cached results if valid (< 30s) unless bypass requested
+  if (!bypassCache && cached && Date.now() - cached.timestamp < 30_000) {
+    return {
+      transactions: cached.transactions,
+      isBatchDeployed: cached.isBatchDeployed,
+      isSecretDeployed: cached.isSecretDeployed,
+    };
+  }
 
   // 1. Get latest block
   const currentBlock = await historyPublicClient.getBlockNumber();
-  console.log(`[HISTORY DEBUG] Latest block: ${currentBlock.toString()}`);
 
-  // Bounded safe search range: from contract creation block to latest
+  // Bounded safe search range
   const fromBlock = currentBlock > 20000n ? currentBlock - 20000n : CONTRACT_DEPLOY_BLOCK;
   const safeFromBlock = fromBlock > CONTRACT_DEPLOY_BLOCK ? fromBlock : CONTRACT_DEPLOY_BLOCK;
-  console.log(`[HISTORY DEBUG] Querying block range: ${safeFromBlock} -> ${currentBlock}`);
 
   const batchContract = CONTRACTS.arcTestnet.batchPayment;
   const secretContract = CONTRACTS.arcTestnet.secretPayment;
@@ -78,9 +101,6 @@ export async function fetchUserOnChainHistory(userAddress: Address): Promise<{
 
   const isBatchDeployed = Boolean(batchBytecode && batchBytecode !== "0x");
   const isSecretDeployed = Boolean(secretBytecode && secretBytecode !== "0x");
-
-  console.log(`[HISTORY DEBUG] Batch contract (${batchContract}) bytecode: ${isBatchDeployed ? "YES" : "NO"}`);
-  console.log(`[HISTORY DEBUG] Secret contract (${secretContract}) bytecode: ${isSecretDeployed ? "YES" : "NO"}`);
 
   const transactions: Transaction[] = [];
 
@@ -98,7 +118,7 @@ export async function fetchUserOnChainHistory(userAddress: Address): Promise<{
     "event Refunded(bytes32 indexed claimId, address indexed sender, address indexed token, uint256 amount)"
   );
 
-  // 3. Parallel log queries across all contract events
+  // 3. Parallel log queries
   const [batchLogsResult, createdLogsResult, claimedLogsResult, refundedLogsResult] =
     await Promise.allSettled([
       isBatchDeployed
@@ -140,9 +160,6 @@ export async function fetchUserOnChainHistory(userAddress: Address): Promise<{
   const claimedLogs = claimedLogsResult.status === "fulfilled" ? claimedLogsResult.value : [];
   const refundedLogs = refundedLogsResult.status === "fulfilled" ? refundedLogsResult.value : [];
 
-  const rawLogsCount = batchLogs.length + createdLogs.length + claimedLogs.length + refundedLogs.length;
-  console.log(`[HISTORY DEBUG] Raw logs fetched from Arc Testnet: ${rawLogsCount}`);
-
   // 4. Process BatchTransfer events
   for (const log of batchLogs as any[]) {
     if (
@@ -167,7 +184,7 @@ export async function fetchUserOnChainHistory(userAddress: Address): Promise<{
     }
   }
 
-  // 5. Process ClaimCreated events (Secret payments created by this wallet)
+  // 5. Process ClaimCreated events
   for (const log of createdLogs as any[]) {
     if (
       log.args?.sender &&
@@ -178,7 +195,6 @@ export async function fetchUserOnChainHistory(userAddress: Address): Promise<{
       const timestamp = await getBlockTimestamp(log.blockNumber);
       const claimId = log.args.claimId;
 
-      // Resolve real on-chain status
       let status: PaymentStatus = "available";
       try {
         const onChainData = await getOnChainClaim(claimId);
@@ -193,8 +209,8 @@ export async function fetchUserOnChainHistory(userAddress: Address): Promise<{
             status = "available";
           }
         }
-      } catch (err) {
-        console.warn("[HISTORY] Could not resolve live claim status:", err);
+      } catch {
+        // Fallback status
       }
 
       transactions.push({
@@ -213,7 +229,7 @@ export async function fetchUserOnChainHistory(userAddress: Address): Promise<{
     }
   }
 
-  // 6. Process Claimed events (Claims received by this wallet)
+  // 6. Process Claimed events
   for (const log of claimedLogs as any[]) {
     if (
       log.args?.receiver &&
@@ -236,7 +252,7 @@ export async function fetchUserOnChainHistory(userAddress: Address): Promise<{
     }
   }
 
-  // 7. Process Refunded events (Refunds reclaimed by this wallet)
+  // 7. Process Refunded events
   for (const log of refundedLogs as any[]) {
     if (
       log.args?.sender &&
@@ -259,8 +275,6 @@ export async function fetchUserOnChainHistory(userAddress: Address): Promise<{
     }
   }
 
-  console.log(`[HISTORY DEBUG] Wallet-filtered transactions: ${transactions.length}`);
-
   // 8. Sort newest first
   transactions.sort((a, b) => {
     if (a.blockNumber && b.blockNumber && a.blockNumber !== b.blockNumber) {
@@ -268,6 +282,15 @@ export async function fetchUserOnChainHistory(userAddress: Address): Promise<{
     }
     return b.timestamp - a.timestamp;
   });
+
+  // Store in cache
+  const result = {
+    transactions,
+    isBatchDeployed,
+    isSecretDeployed,
+    timestamp: Date.now(),
+  };
+  memoryHistoryCache.set(normalizedUser, result);
 
   return {
     transactions,

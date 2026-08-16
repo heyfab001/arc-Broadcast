@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { HistoryFilterTabs } from "@/components/history/HistoryFilterTabs";
@@ -34,7 +34,7 @@ export default function HistoryPage() {
   };
 
   return (
-    <div className="space-y-5 animate-fade-in max-w-5xl">
+    <div className="space-y-6 animate-fade-in max-w-5xl">
       {/* Header */}
       <PageHeader
         title="Activity"
@@ -42,32 +42,33 @@ export default function HistoryPage() {
       />
 
       {/* Main Container */}
-      <GlassCard variant="default" className="p-4 sm:p-5 space-y-4">
+      <GlassCard variant="default" className="p-5 sm:p-6 space-y-5">
         {/* Controls Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5">
           <HistoryFilterTabs
             activeTab={activeTab}
             onChangeTab={setActiveTab}
           />
 
-          <div className="flex items-center gap-2 w-full sm:w-auto">
+          <div className="flex items-center gap-2.5 w-full sm:w-auto">
             {/* Search Input */}
-            <div className="relative flex-1 sm:w-56">
-              <Search className="w-3.5 h-3.5 absolute left-2.5 top-2.5 text-slate-500 pointer-events-none" />
+            <div className="relative flex-1 sm:w-64">
+              <Search className="w-4 h-4 absolute left-3 top-3.5 text-slate-500 pointer-events-none" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search"
-                className="w-full h-8 bg-[#0C0D12] border border-white/10 rounded-lg pl-8 pr-6 text-xs text-white placeholder-slate-500 outline-none focus:border-blue-500"
+                placeholder="Search payments..."
+                className="w-full h-11 bg-[#0C0D12] border border-white/15 rounded-lg pl-9 pr-8 text-sm text-white placeholder-slate-500 outline-none focus:border-blue-500 transition-colors"
               />
               {searchQuery && (
                 <button
+                  type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-2 top-2 p-0.5 text-slate-500 hover:text-white rounded"
+                  className="absolute right-2.5 top-3 p-1 text-slate-400 hover:text-white rounded"
                   aria-label="Clear search"
                 >
-                  <X className="w-3 h-3" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
               )}
             </div>
@@ -80,9 +81,9 @@ export default function HistoryPage() {
               onClick={handleManualRefresh}
               disabled={isLoading || isRefreshing}
               leftIcon={
-                <RefreshCw className={`w-3 h-3 ${isRefreshing ? "animate-spin text-blue-400" : ""}`} />
+                <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin text-blue-400" : ""}`} />
               }
-              className="h-8 text-xs shrink-0 px-2.5"
+              className="h-11 text-sm font-medium shrink-0 px-4"
             >
               {isRefreshing ? "Refreshing..." : "Refresh"}
             </Button>
