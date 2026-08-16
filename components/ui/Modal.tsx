@@ -43,7 +43,7 @@ export function Modal({
     sm: "max-w-sm",
     md: "max-w-md",
     lg: "max-w-lg",
-    xl: "max-w-2xl",
+    xl: "max-w-xl",
   };
 
   return (
@@ -51,40 +51,37 @@ export function Modal({
       {/* Backdrop */}
       <div
         onClick={onClose}
-        className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity animate-fade-in"
+        className="fixed inset-0 bg-black/75 transition-opacity"
       />
 
-      {/* Modal Card */}
+      {/* Modal Container */}
       <div
         className={cn(
-          "relative w-full bg-[#0E121E] border border-white/[0.1] rounded-2xl shadow-2xl p-6 z-10 overflow-hidden",
+          "relative w-full bg-[#13151D] border border-white/10 rounded-xl shadow-2xl p-5 z-10",
           maxWidthStyles[maxWidth],
           className
         )}
       >
-        {/* Glow effect */}
-        <div className="absolute top-0 right-0 w-40 h-40 bg-arc-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="flex items-start justify-between mb-4">
+        <div className="flex items-start justify-between pb-3 border-b border-white/[0.06] mb-4">
           <div>
             {title && (
-              <h3 className="text-lg font-semibold text-white tracking-tight">
+              <h3 className="text-sm font-semibold text-white">
                 {title}
               </h3>
             )}
             {description && (
-              <p className="text-xs text-slate-400 mt-1">{description}</p>
+              <p className="text-xs text-slate-400 mt-0.5">{description}</p>
             )}
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/[0.08] transition-colors"
+            className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/[0.06] transition-colors"
           >
-            <X className="w-4 h-4" />
+            <X className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        <div className="relative">{children}</div>
+        <div>{children}</div>
       </div>
     </div>
   );

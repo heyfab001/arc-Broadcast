@@ -11,16 +11,7 @@ import { useArcWallet } from "@/hooks/useArcWallet";
 import { WalletModal } from "@/components/wallet/WalletModal";
 import { useSecretPayExecution } from "@/hooks/useSecretPayExecution";
 import { SecretPayCreatedModal } from "./SecretPayCreatedModal";
-import {
-  KeyRound,
-  Lock,
-  Clock,
-  MessageSquare,
-  Wallet,
-  RefreshCw,
-  Loader2,
-  AlertCircle,
-} from "lucide-react";
+import { Wallet, RefreshCw, Loader2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface SecretPayFormProps {
@@ -88,57 +79,39 @@ export function SecretPayForm({
       case "WAITING_APPROVAL":
         return "Waiting for confirmation...";
       case "AWAITING_DEPOSIT":
-        return "Confirm in your wallet";
+        return "Confirm in wallet";
       case "DEPOSIT_SUBMITTED":
       case "WAITING_DEPOSIT":
         return "Waiting for confirmation...";
       default:
-        return "Create Payment";
+        return "Create payment";
     }
   };
 
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <GlassCard variant="default" className="space-y-5 p-5 sm:p-6">
-          <div className="flex items-center justify-between pb-3 border-b border-white/[0.08]">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-arc-purple/15 border border-arc-purple/30 flex items-center justify-center text-arc-purple">
-                <KeyRound className="w-4 h-4" />
-              </div>
-              <div>
-                <h3 className="text-sm font-semibold text-white">
-                  Create Payment
-                </h3>
-                <p className="text-xs text-slate-400">
-                  Lock tokens and generate a private claim link.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Token and Amount */}
-          <div className="space-y-1.5">
+        <GlassCard variant="default" className="space-y-4 p-5 sm:p-6">
+          {/* Amount & Token */}
+          <div className="space-y-1">
             <div className="flex items-center justify-between text-xs">
-              <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-                Token & Amount
-              </label>
+              <label className="font-medium text-slate-300">Amount</label>
               <span className="text-slate-400">
                 Balance:{" "}
                 <span className="font-mono text-slate-200">
-                  {isConnected ? `${balanceUSDC} ${selectedToken.symbol}` : "Connect Wallet"}
+                  {isConnected ? `${balanceUSDC} ${selectedToken.symbol}` : "Not connected"}
                 </span>
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-12 gap-2.5">
-              <div className="sm:col-span-5">
+            <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
+              <div className="sm:col-span-4">
                 <TokenSelector
                   selectedToken={selectedToken}
                   onSelectToken={onSelectToken}
                 />
               </div>
-              <div className="sm:col-span-7">
+              <div className="sm:col-span-8">
                 <AmountInput
                   value={amount}
                   onChange={onChangeAmount}
@@ -148,11 +121,11 @@ export function SecretPayForm({
                 />
               </div>
             </div>
-            {error && <p className="text-xs text-red-400 font-medium">{error}</p>}
+            {error && <p className="text-xs text-red-400">{error}</p>}
           </div>
 
-          {/* Expiry Selector */}
-          <div className="space-y-1.5">
+          {/* Expiry */}
+          <div className="space-y-1">
             <label className="block text-xs font-medium text-slate-300">
               Expiry
             </label>
@@ -166,10 +139,10 @@ export function SecretPayForm({
                     disabled={isProcessing}
                     onClick={() => onChangeExpiry(opt.value)}
                     className={cn(
-                      "py-2 px-3 rounded-xl border text-xs font-medium transition-colors text-center",
+                      "py-2 px-3 rounded-lg border text-xs font-medium transition-colors text-center",
                       isSelected
-                        ? "bg-arc-600 text-white border-arc-500"
-                        : "bg-[#090C16] border-white/[0.08] text-slate-400 hover:text-white hover:border-white/20",
+                        ? "bg-blue-600 text-white border-blue-500"
+                        : "bg-[#0C0D12] border-white/10 text-slate-400 hover:text-white hover:border-white/20",
                       isProcessing && "opacity-50 cursor-not-allowed"
                     )}
                   >
@@ -180,10 +153,10 @@ export function SecretPayForm({
             </div>
           </div>
 
-          {/* Optional Message */}
-          <div className="space-y-1.5">
+          {/* Message */}
+          <div className="space-y-1">
             <label className="block text-xs font-medium text-slate-300">
-              Message
+              Message (optional)
             </label>
             <input
               type="text"
@@ -192,59 +165,61 @@ export function SecretPayForm({
               disabled={isProcessing}
               placeholder="Add a note (optional)"
               maxLength={120}
-              className="w-full h-10 bg-[#090C16] border border-white/[0.08] rounded-xl px-3 text-xs text-white placeholder-slate-600 outline-none focus:border-arc-500 disabled:opacity-50"
+              className="w-full h-9 bg-[#0C0D12] border border-white/10 rounded-lg px-3 text-xs text-white placeholder-slate-600 outline-none focus:border-blue-500 disabled:opacity-50"
             />
           </div>
 
           {/* Error Message Alert */}
           {errorMessage && (
-            <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 flex items-start gap-2 text-xs text-red-300">
+            <div className="p-2.5 rounded-lg bg-red-500/10 border border-red-500/20 flex items-start gap-2 text-xs text-red-300">
               <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-              <p className="leading-relaxed">{errorMessage}</p>
+              <p>{errorMessage}</p>
             </div>
           )}
 
           {/* Action Button */}
-          {!isConnected ? (
-            <Button
-              type="button"
-              variant="primary"
-              size="md"
-              onClick={() => setIsWalletModalOpen(true)}
-              leftIcon={<Wallet className="w-4 h-4" />}
-              className="w-full text-xs font-semibold shadow-arc-glow"
-            >
-              Connect Wallet
-            </Button>
-          ) : isWrongNetwork ? (
-            <Button
-              type="button"
-              variant="primary"
-              size="md"
-              onClick={() => switchToArc()}
-              isLoading={isSwitching}
-              leftIcon={<RefreshCw className="w-4 h-4" />}
-              className="w-full text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-none"
-            >
-              Switch to Arc Testnet
-            </Button>
-          ) : (
-            <Button
-              type="submit"
-              variant="primary"
-              size="md"
-              disabled={!canCreate || isProcessing}
-              isLoading={isProcessing}
-              leftIcon={isProcessing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Lock className="w-4 h-4" />}
-              className="w-full text-xs font-semibold shadow-arc-glow"
-            >
-              {getStepButtonLabel()}
-            </Button>
-          )}
+          <div className="pt-2">
+            {!isConnected ? (
+              <Button
+                type="button"
+                variant="primary"
+                size="md"
+                onClick={() => setIsWalletModalOpen(true)}
+                leftIcon={<Wallet className="w-3.5 h-3.5" />}
+                className="w-full"
+              >
+                Connect wallet
+              </Button>
+            ) : isWrongNetwork ? (
+              <Button
+                type="button"
+                variant="primary"
+                size="md"
+                onClick={() => switchToArc()}
+                isLoading={isSwitching}
+                leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
+                className="w-full bg-amber-500 hover:bg-amber-400 text-slate-950"
+              >
+                Switch to Arc Testnet
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                variant="primary"
+                size="md"
+                disabled={!canCreate || isProcessing}
+                isLoading={isProcessing}
+                leftIcon={isProcessing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : undefined}
+                className="w-full"
+              >
+                {getStepButtonLabel()}
+              </Button>
+            )}
+          </div>
         </GlassCard>
       </form>
 
-      {/* Claim Created Modal */}
+      {/* Created Modal */}
       <SecretPayCreatedModal
         isOpen={Boolean(createdClaim)}
         onClose={reset}

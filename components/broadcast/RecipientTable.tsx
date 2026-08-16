@@ -4,7 +4,7 @@ import React from "react";
 import { Recipient } from "@/types/payment";
 import { RecipientRow } from "./RecipientRow";
 import { Button } from "@/components/ui/Button";
-import { Plus, Upload, Users, Inbox } from "lucide-react";
+import { Plus, Upload } from "lucide-react";
 import { MAX_RECIPIENTS } from "@/config/constants";
 
 export interface RecipientTableProps {
@@ -31,28 +31,23 @@ export function RecipientTable({
   const isMaxReached = recipients.length >= MAX_RECIPIENTS;
 
   return (
-    <div className="space-y-4">
-      {/* Table Action Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-white/[0.06]">
+    <div className="space-y-3">
+      {/* Table Header Controls */}
+      <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-white/[0.06]">
         <div>
-          <div className="flex items-center gap-2">
-            <h3 className="text-sm font-semibold text-white">Recipients</h3>
-            <span className="px-2 py-0.5 rounded-full text-xs font-mono bg-white/[0.05] border border-white/[0.08] text-slate-300">
-              {recipients.length} / {MAX_RECIPIENTS}
-            </span>
-          </div>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Add up to 100 wallet addresses.
-          </p>
+          <h3 className="text-xs font-semibold text-white">Recipients</h3>
+          <span className="text-[11px] text-slate-400">
+            Up to 100 recipients ({recipients.length}/{MAX_RECIPIENTS})
+          </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <Button
             type="button"
             variant="outline"
             size="sm"
             onClick={onOpenCsvModal}
-            leftIcon={<Upload className="w-3.5 h-3.5" />}
+            leftIcon={<Upload className="w-3 h-3" />}
           >
             Import CSV
           </Button>
@@ -63,7 +58,7 @@ export function RecipientTable({
             size="sm"
             onClick={onAddRecipient}
             disabled={isMaxReached}
-            leftIcon={<Plus className="w-3.5 h-3.5" />}
+            leftIcon={<Plus className="w-3 h-3" />}
           >
             Add recipient
           </Button>
@@ -72,31 +67,29 @@ export function RecipientTable({
             <button
               type="button"
               onClick={onClearAll}
-              className="text-xs text-slate-400 hover:text-red-400 px-2 py-1 transition-colors"
+              className="text-xs text-slate-500 hover:text-red-400 px-1.5 py-1 transition-colors"
             >
-              Clear all
+              Clear
             </button>
           )}
         </div>
       </div>
 
-      {/* Table Headers */}
-      <div className="grid grid-cols-12 gap-2.5 px-1 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+      {/* Table Column Headers */}
+      <div className="grid grid-cols-12 gap-2 px-1 text-[10px] font-semibold text-slate-500 uppercase tracking-wider">
         <div className="col-span-1 text-center">#</div>
         <div className="col-span-7">Wallet</div>
         <div className="col-span-3">Amount</div>
-        <div className="col-span-1 text-center">Remove</div>
+        <div className="col-span-1 text-center">Action</div>
       </div>
 
-      {/* Rows Container */}
+      {/* Rows */}
       {recipients.length === 0 ? (
-        <div className="py-10 text-center space-y-2 border border-dashed border-white/[0.08] rounded-xl bg-white/[0.01]">
-          <Inbox className="w-6 h-6 text-slate-500 mx-auto" />
-          <p className="text-xs font-medium text-white">No recipients added</p>
-          <p className="text-[11px] text-slate-400">Add a wallet address to get started.</p>
+        <div className="py-8 text-center border border-dashed border-white/[0.06] rounded-lg">
+          <p className="text-xs text-slate-400">No recipients added.</p>
         </div>
       ) : (
-        <div className="space-y-1 max-h-[520px] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+        <div className="space-y-1 max-h-[480px] overflow-y-auto pr-0.5">
           {recipients.map((recipient, index) => {
             const isDup = duplicateAddresses.includes(recipient.address.trim().toLowerCase());
             return (
@@ -115,15 +108,15 @@ export function RecipientTable({
         </div>
       )}
 
-      {/* Quick Add Button */}
+      {/* Quick Add Row Button */}
       <button
         type="button"
         onClick={onAddRecipient}
         disabled={isMaxReached}
-        className="w-full py-2.5 rounded-xl border border-dashed border-white/[0.1] hover:border-arc-500/40 bg-white/[0.01] hover:bg-arc-500/[0.04] text-xs font-medium text-slate-400 hover:text-white transition-all flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
+        className="w-full py-2 rounded-lg border border-dashed border-white/[0.08] hover:border-white/20 text-xs text-slate-400 hover:text-white transition-colors flex items-center justify-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed"
       >
-        <Plus className="w-3.5 h-3.5 text-arc-400" />
-        <span>Add recipient ({recipients.length}/{MAX_RECIPIENTS})</span>
+        <Plus className="w-3 h-3" />
+        <span>Add recipient</span>
       </button>
     </div>
   );

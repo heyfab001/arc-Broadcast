@@ -3,20 +3,16 @@
 import React, { useState } from "react";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/Button";
-import { StatusBadge } from "@/components/ui/StatusBadge";
 import { useArcWallet } from "@/hooks/useArcWallet";
 import { WalletModal } from "@/components/wallet/WalletModal";
 import { useClaimPayment } from "@/hooks/useClaimPayment";
 import { ARC_TESTNET } from "@/config/chains";
 import {
   Wallet,
-  Clock,
   RefreshCw,
-  CheckCircle2,
-  AlertTriangle,
   ExternalLink,
   Loader2,
-  ShieldX,
+  AlertTriangle,
 } from "lucide-react";
 
 export interface ClaimCardProps {
@@ -43,11 +39,9 @@ export function ClaimCard({ claimId }: ClaimCardProps) {
 
   const formatExpiryTime = (expiryBigInt: bigint) => {
     const date = new Date(Number(expiryBigInt) * 1000);
-    return date.toLocaleDateString(undefined, {
+    return date.toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
     });
   };
 
@@ -63,233 +57,163 @@ export function ClaimCard({ claimId }: ClaimCardProps) {
 
   return (
     <>
-      <div className="w-full max-w-md mx-auto space-y-4">
+      <div className="w-full max-w-sm mx-auto">
         <GlassCard
           variant="default"
-          className="p-6 text-center space-y-5 relative overflow-hidden"
+          className="p-6 text-center space-y-4"
         >
-          {/* Header Icon */}
-          {step === "CLAIMED" ? (
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mx-auto">
-              <CheckCircle2 className="w-6 h-6" />
-            </div>
-          ) : step === "EXPIRED" ? (
-            <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400 mx-auto">
-              <Clock className="w-6 h-6" />
-            </div>
-          ) : step === "INVALID" ? (
-            <div className="w-12 h-12 rounded-xl bg-red-500/20 border border-red-500/30 flex items-center justify-center text-red-400 mx-auto">
-              <ShieldX className="w-6 h-6" />
-            </div>
-          ) : null}
+          {/* Label */}
+          <span className="text-[11px] font-medium uppercase tracking-wider text-slate-400 block">
+            Secret payment
+          </span>
 
-          {/* Title and Subtitle */}
+          {/* Amount */}
+          <div className="py-2">
+            {step === "LOADING_CLAIM" ? (
+              <Loader2 className="w-6 h-6 animate-spin text-blue-400 mx-auto" />
+            ) : claimData ? (
+              <span className="text-3xl sm:text-4xl font-bold text-white font-mono tracking-tight block">
+                {claimData.formattedAmount} <span className="text-lg font-sans font-medium text-slate-300">USDC</span>
+              </span>
+            ) : (
+              <span className="text-3xl font-bold text-slate-500 font-mono block">
+                0.00 USDC
+              </span>
+            )}
+          </div>
+
+          {/* Description */}
           {step === "CLAIMED" ? (
-            <div>
-              <h2 className="text-xl font-bold text-white tracking-tight">
+            <div className="space-y-1">
+              <h2 className="text-sm font-semibold text-emerald-400">
                 Payment claimed
               </h2>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-slate-400">
                 Funds have been sent to your wallet.
               </p>
             </div>
           ) : step === "REFUNDED" ? (
-            <div>
-              <h2 className="text-xl font-bold text-white tracking-tight">
+            <div className="space-y-1">
+              <h2 className="text-sm font-semibold text-slate-300">
                 Payment refunded
               </h2>
-              <p className="text-xs text-slate-400 mt-1">
-                Funds were returned to the sender.
+              <p className="text-xs text-slate-400">
+                Returned to sender.
               </p>
             </div>
           ) : step === "EXPIRED" ? (
-            <div>
-              <h2 className="text-xl font-bold text-white tracking-tight">
+            <div className="space-y-1">
+              <h2 className="text-sm font-semibold text-amber-400">
                 Payment expired
               </h2>
-              <p className="text-xs text-slate-400 mt-1">
-                This claim has passed its expiration date.
-              </p>
-            </div>
-          ) : step === "INVALID" ? (
-            <div>
-              <h2 className="text-xl font-bold text-white tracking-tight">
-                Payment not found
-              </h2>
-              <p className="text-xs text-slate-400 mt-1">
-                No active payment found for this link.
+              <p className="text-xs text-slate-400">
+                This claim has expired.
               </p>
             </div>
           ) : (
-            <div>
-              <h2 className="text-xl font-bold text-white tracking-tight">
-                You&apos;ve received a payment.
-              </h2>
-              <p className="text-xs text-slate-400 mt-1">
-                Connect your wallet to claim tokens on Arc.
-              </p>
+            <p className="text-xs text-slate-400">
+              Sent to whoever claims this payment.
+            </p>
+          )}
+
+          {/* Expiry line */}
+          {claimData && step !== "CLAIMED" && step !== "REFUNDED" && (
+            <div className="text-[11px] text-slate-500">
+              Expires {formatExpiryTime(claimData.expiry)}
             </div>
           )}
 
-          {/* Amount Display */}
-          <div className="p-4 rounded-xl bg-[#080B15] border border-white/[0.08] text-center">
-            <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
-              Amount
-            </span>
-            <div className="flex items-center justify-center gap-2 mt-1">
-              {step === "LOADING_CLAIM" ? (
-                <Loader2 className="w-6 h-6 animate-spin text-arc-400" />
-              ) : claimData ? (
-                <span className="text-3xl font-extrabold text-white font-mono tracking-tight">
-                  {claimData.formattedAmount} <span className="text-base text-arc-300 font-sans font-semibold">USDC</span>
-                </span>
-              ) : (
-                <span className="text-2xl font-bold text-slate-500 font-mono">
-                  0.00 USDC
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Meta Grid */}
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06] text-center">
-              <span className="text-slate-500 block text-[10px] uppercase font-semibold">Status</span>
-              <div className="mt-1 flex justify-center">
-                {step === "CLAIMED" ? (
-                  <StatusBadge status="claimed" />
-                ) : step === "EXPIRED" ? (
-                  <StatusBadge status="expired" />
-                ) : step === "REFUNDED" ? (
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-slate-500/20 text-slate-300 border border-slate-500/30 font-medium">
-                    Refunded
-                  </span>
-                ) : step === "INVALID" ? (
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/20 text-red-300 border border-red-500/30 font-medium">
-                    Invalid
-                  </span>
-                ) : (
-                  <StatusBadge status="available" />
-                )}
-              </div>
-            </div>
-
-            <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06] text-center">
-              <span className="text-slate-500 block text-[10px] uppercase font-semibold">Expires</span>
-              <span className="mt-1 block font-medium text-slate-200">
-                {claimData ? formatExpiryTime(claimData.expiry) : "..."}
-              </span>
-            </div>
-          </div>
-
-          {/* Secret Missing Alert */}
+          {/* Secret Missing / Invalid Alerts */}
           {claimData && !secretKey && step === "CLAIM_AVAILABLE" && (
-            <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-start gap-2 text-xs text-amber-300 text-left">
-              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-              <p className="text-[11px] leading-relaxed">
-                Secret code is missing from this link. Please ask the sender for the complete link.
-              </p>
+            <div className="p-2.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 flex items-start gap-1.5 text-left">
+              <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+              <span>Secret code missing from link.</span>
             </div>
           )}
 
-          {/* Error message */}
           {errorMessage && (
-            <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-xs text-red-300 text-left">
+            <div className="p-2.5 rounded-lg bg-red-500/10 border border-red-500/20 text-xs text-red-300 text-left">
               {errorMessage}
             </div>
           )}
 
-          {/* Explorer Links */}
+          {/* Transaction Links */}
           {claimTxHash && (
-            <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-between text-xs">
-              <span className="text-emerald-300">Transaction</span>
+            <div className="pt-2 border-t border-white/[0.04] flex items-center justify-between text-xs">
+              <span className="text-slate-400">Transaction</span>
               <a
                 href={`${ARC_TESTNET.explorerUrl}/tx/${claimTxHash}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-emerald-400 hover:underline flex items-center gap-1"
+                className="font-mono text-blue-400 hover:underline flex items-center gap-1"
               >
-                <span>{claimTxHash.slice(0, 6)}...{claimTxHash.slice(-4)}</span>
+                <span>{claimTxHash.slice(0, 6)}...</span>
                 <ExternalLink className="w-3 h-3" />
               </a>
             </div>
           )}
 
-          {refundTxHash && (
-            <div className="p-2.5 rounded-xl bg-arc-600/10 border border-arc-500/20 flex items-center justify-between text-xs">
-              <span className="text-arc-300">Refund</span>
-              <a
-                href={`${ARC_TESTNET.explorerUrl}/tx/${refundTxHash}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono text-arc-400 hover:underline flex items-center gap-1"
+          {/* Action Button */}
+          <div className="pt-2">
+            {!isConnected ? (
+              <Button
+                variant="primary"
+                size="md"
+                onClick={() => setIsWalletModalOpen(true)}
+                leftIcon={<Wallet className="w-3.5 h-3.5" />}
+                className="w-full"
               >
-                <span>{refundTxHash.slice(0, 6)}...{refundTxHash.slice(-4)}</span>
-                <ExternalLink className="w-3 h-3" />
-              </a>
-            </div>
-          )}
-
-          {/* Action Buttons */}
-          {!isConnected ? (
-            <Button
-              variant="primary"
-              size="md"
-              onClick={() => setIsWalletModalOpen(true)}
-              leftIcon={<Wallet className="w-4 h-4" />}
-              className="w-full text-xs font-semibold shadow-arc-glow"
-            >
-              Connect Wallet
-            </Button>
-          ) : isWrongNetwork ? (
-            <Button
-              variant="primary"
-              size="md"
-              onClick={() => switchToArc()}
-              isLoading={isSwitching}
-              leftIcon={<RefreshCw className="w-4 h-4" />}
-              className="w-full text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-none"
-            >
-              Switch to Arc Testnet
-            </Button>
-          ) : step === "CLAIM_AVAILABLE" ? (
-            <Button
-              variant="primary"
-              size="md"
-              onClick={claimPayment}
-              disabled={!isSecretValid || isClaimingProcessing}
-              isLoading={isClaimingProcessing}
-              className="w-full text-xs font-semibold shadow-arc-glow"
-            >
-              {isClaimingProcessing ? "Claiming..." : "Claim Payment"}
-            </Button>
-          ) : step === "EXPIRED" && isSender ? (
-            <Button
-              variant="primary"
-              size="md"
-              onClick={refundPayment}
-              disabled={isRefundingProcessing}
-              isLoading={isRefundingProcessing}
-              leftIcon={<RefreshCw className="w-4 h-4" />}
-              className="w-full text-xs font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-none"
-            >
-              {isRefundingProcessing ? "Refunding..." : "Refund Expired Payment"}
-            </Button>
-          ) : step === "CLAIMED" ? (
-            <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] text-xs text-slate-300 font-mono">
-              Claimed by: {claimData?.claimedBy || userAddress}
-            </div>
-          ) : (
-            <Button
-              variant="outline"
-              size="md"
-              onClick={refreshClaim}
-              leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
-              className="w-full text-xs"
-            >
-              Refresh Status
-            </Button>
-          )}
+                Connect wallet
+              </Button>
+            ) : isWrongNetwork ? (
+              <Button
+                variant="primary"
+                size="md"
+                onClick={() => switchToArc()}
+                isLoading={isSwitching}
+                leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
+                className="w-full bg-amber-500 hover:bg-amber-400 text-slate-950"
+              >
+                Switch to Arc Testnet
+              </Button>
+            ) : step === "CLAIM_AVAILABLE" ? (
+              <Button
+                variant="primary"
+                size="md"
+                onClick={claimPayment}
+                disabled={!isSecretValid || isClaimingProcessing}
+                isLoading={isClaimingProcessing}
+                className="w-full"
+              >
+                {isClaimingProcessing ? "Claiming..." : "Claim payment"}
+              </Button>
+            ) : step === "EXPIRED" && isSender ? (
+              <Button
+                variant="primary"
+                size="md"
+                onClick={refundPayment}
+                disabled={isRefundingProcessing}
+                isLoading={isRefundingProcessing}
+                className="w-full bg-amber-500 hover:bg-amber-400 text-slate-950"
+              >
+                {isRefundingProcessing ? "Refunding..." : "Refund payment"}
+              </Button>
+            ) : step === "CLAIMED" ? (
+              <div className="p-2.5 rounded-lg bg-[#0C0D12] text-xs text-slate-400 font-mono">
+                Claimed by: {claimData?.claimedBy || userAddress}
+              </div>
+            ) : (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={refreshClaim}
+                leftIcon={<RefreshCw className="w-3.5 h-3.5" />}
+                className="w-full"
+              >
+                Refresh
+              </Button>
+            )}
+          </div>
         </GlassCard>
       </div>
 

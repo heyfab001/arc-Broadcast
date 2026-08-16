@@ -26,9 +26,9 @@ export function WalletButton() {
         variant="outline"
         size="sm"
         isLoading
-        className="font-medium text-xs border-arc-500/40 text-arc-300 min-w-[120px]"
+        className="text-xs min-w-[100px]"
       >
-        Switching...
+        Switching
       </Button>
     );
   }
@@ -39,9 +39,9 @@ export function WalletButton() {
         variant="secondary"
         size="sm"
         isLoading
-        className="font-mono text-xs min-w-[120px]"
+        className="font-mono text-xs min-w-[100px]"
       >
-        Connecting...
+        Connecting
       </Button>
     );
   }
@@ -53,10 +53,10 @@ export function WalletButton() {
           variant="danger"
           size="sm"
           onClick={() => switchToArc()}
-          leftIcon={<AlertTriangle className="w-3.5 h-3.5 text-amber-400" />}
-          className="text-xs font-semibold bg-amber-500/10 border-amber-500/30 text-amber-300 hover:bg-amber-500/20"
+          leftIcon={<AlertTriangle className="w-3 h-3 text-amber-400" />}
+          className="text-xs"
         >
-          Switch to Arc Testnet
+          Switch to Arc
         </Button>
 
         <WalletModal
@@ -70,19 +70,19 @@ export function WalletButton() {
   if (isConnected && address) {
     return (
       <>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           {/* Balance */}
-          <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#090C16] border border-white/[0.08] text-xs font-mono">
-            <span className="font-semibold text-white">{balanceUSDC} USDC</span>
+          <div className="hidden sm:flex items-center px-2.5 h-8 rounded-lg bg-[#141722] border border-white/[0.08] text-xs font-mono text-white">
+            <span>{balanceUSDC} USDC</span>
           </div>
 
           {/* Address Button */}
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#0F1424] hover:bg-[#151D34] border border-white/[0.1] hover:border-arc-500/30 text-xs text-white transition-colors shadow-sm"
+            className="flex items-center gap-1.5 px-2.5 h-8 rounded-lg bg-[#141722] hover:bg-[#1C202E] border border-white/[0.08] text-xs text-white transition-colors"
           >
-            <span className="font-mono font-medium">{shortAddress}</span>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+            <span className="font-mono">{shortAddress}</span>
+            <ChevronDown className="w-3 h-3 text-slate-400" />
           </button>
         </div>
 
@@ -101,9 +101,9 @@ export function WalletButton() {
         size="sm"
         onClick={() => setIsModalOpen(true)}
         leftIcon={<Wallet className="w-3.5 h-3.5" />}
-        className="text-xs font-semibold shadow-arc-glow"
+        className="text-xs"
       >
-        Connect Wallet
+        Connect wallet
       </Button>
 
       <WalletModal

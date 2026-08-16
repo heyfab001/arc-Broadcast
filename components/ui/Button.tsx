@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger" | "glow";
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "danger";
   size?: "sm" | "md" | "lg" | "icon";
   isLoading?: boolean;
   leftIcon?: React.ReactNode;
@@ -26,24 +26,23 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const sizeStyles = {
-      sm: "h-9 px-3 text-xs rounded-lg gap-1.5",
-      md: "h-11 px-5 text-sm rounded-xl gap-2",
-      lg: "h-13 px-7 text-base rounded-xl gap-2.5 font-semibold",
-      icon: "h-10 w-10 p-0 rounded-xl justify-center",
+      sm: "h-8 px-2.5 text-xs rounded-lg gap-1.5",
+      md: "h-9 px-3.5 text-xs rounded-lg gap-1.5",
+      lg: "h-10 px-4 text-sm rounded-lg gap-2",
+      icon: "h-8 w-8 p-0 rounded-lg justify-center",
     };
 
     const variantStyles = {
       primary:
-        "bg-gradient-to-r from-arc-600 to-arc-violet text-white font-medium shadow-lg shadow-arc-600/25 hover:shadow-arc-glow hover:brightness-110 active:scale-[0.98] border border-white/10",
+        "bg-blue-600 hover:bg-blue-500 text-white font-medium shadow-none active:scale-[0.99]",
       secondary:
-        "bg-surface-100/80 hover:bg-surface-50 text-slate-200 border border-white/[0.08] hover:border-white/20 active:scale-[0.98]",
+        "bg-[#1A1D27] hover:bg-[#222634] text-white border border-white/10 active:scale-[0.99]",
       outline:
-        "bg-transparent border border-white/15 text-slate-200 hover:bg-white/[0.05] hover:border-white/30 active:scale-[0.98]",
+        "bg-transparent border border-white/10 text-slate-200 hover:bg-white/[0.04] active:scale-[0.99]",
       ghost:
-        "bg-transparent text-slate-400 hover:text-white hover:bg-white/[0.06] active:scale-[0.98]",
+        "bg-transparent text-slate-400 hover:text-white hover:bg-white/[0.04] active:scale-[0.99]",
       danger:
-        "bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 hover:border-red-500/40 active:scale-[0.98]",
-      glow: "bg-arc-600 text-white shadow-arc-glow hover:shadow-arc-glow-lg hover:bg-arc-500 active:scale-[0.98] border border-arc-400/40",
+        "bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500/20 active:scale-[0.99]",
     };
 
     return (
@@ -51,7 +50,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || isLoading}
         className={cn(
-          "inline-flex items-center justify-center font-medium transition-all duration-200 select-none outline-none focus-visible:ring-2 focus-visible:ring-arc-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none",
+          "inline-flex items-center justify-center font-medium transition-colors select-none outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none",
           sizeStyles[size],
           variantStyles[variant],
           className
@@ -59,7 +58,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       >
         {isLoading ? (
-          <Loader2 className="w-4 h-4 animate-spin text-current" />
+          <Loader2 className="w-3.5 h-3.5 animate-spin text-current" />
         ) : (
           leftIcon
         )}

@@ -6,22 +6,39 @@ import { usePathname } from "next/navigation";
 import { NetworkBadge } from "@/components/wallet/NetworkBadge";
 import { WalletButton } from "@/components/wallet/WalletButton";
 import { ArcLogo } from "@/components/common/ArcLogo";
-import { NAVIGATION_ITEMS } from "@/config/navigation";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+const navItems = [
+  { name: "Overview", href: "/" },
+  { name: "Broadcast", href: "/broadcast" },
+  { name: "Secret Pay", href: "/secret-pay" },
+  { name: "Activity", href: "/history" },
+  { name: "Settings", href: "/settings" },
+];
 
 export function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
 
+  const getPageTitle = () => {
+    if (pathname === "/") return "Overview";
+    if (pathname.startsWith("/broadcast")) return "Broadcast";
+    if (pathname.startsWith("/secret-pay")) return "Secret Pay";
+    if (pathname.startsWith("/history")) return "Activity";
+    if (pathname.startsWith("/settings")) return "Settings";
+    if (pathname.startsWith("/claim")) return "Claim";
+    return "Arc Broadcast";
+  };
+
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/[0.08] bg-[#07090F]/80 backdrop-blur-xl">
-      <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Mobile Logo & Hamburger */}
-        <div className="flex items-center gap-3 lg:hidden">
+    <header className="sticky top-0 z-40 w-full border-b border-white/[0.08] bg-[#0C0D12]">
+      <div className="flex h-14 items-center justify-between px-4 sm:px-6 lg:px-8">
+        {/* Mobile Toggle & Logo */}
+        <div className="flex items-center gap-2.5 lg:hidden">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-white/[0.05]"
+            className="p-1.5 text-slate-400 hover:text-white rounded-md"
             aria-label="Toggle navigation menu"
           >
             {isMobileMenuOpen ? (
@@ -33,20 +50,21 @@ export function Navbar() {
 
           <Link href="/" className="flex items-center gap-2">
             <ArcLogo size="sm" withText={false} />
-            <span className="font-semibold text-sm text-white tracking-tight">
+            <span className="font-semibold text-xs text-white">
               Arc Broadcast
             </span>
           </Link>
         </div>
 
-        {/* Desktop Left Brand breadcrumb */}
-        <div className="hidden lg:flex items-center gap-2 text-xs text-slate-400 font-medium">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-          <span>Arc Payments</span>
+        {/* Desktop Left: Current Page Title */}
+        <div className="hidden lg:block">
+          <span className="text-xs font-semibold text-slate-300">
+            {getPageTitle()}
+          </span>
         </div>
 
         {/* Top Right Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <NetworkBadge />
           <WalletButton />
         </div>
@@ -54,8 +72,8 @@ export function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden border-b border-white/[0.08] bg-[#0A0D18] px-4 py-4 space-y-1.5 animate-slide-down">
-          {NAVIGATION_ITEMS.map((item) => {
+        <div className="lg:hidden border-b border-white/[0.08] bg-[#10121A] px-4 py-3 space-y-1 animate-fade-in">
+          {navItems.map((item) => {
             const isActive =
               item.href === "/"
                 ? pathname === "/"
@@ -67,18 +85,13 @@ export function Navbar() {
                 href={item.href}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={cn(
-                  "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors",
+                  "block px-3 py-2 rounded-lg text-xs font-medium transition-colors",
                   isActive
-                    ? "bg-arc-600/20 text-white border border-arc-500/30"
-                    : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
+                    ? "bg-white/[0.08] text-white"
+                    : "text-slate-400 hover:text-white"
                 )}
               >
-                <span>{item.name}</span>
-                {item.badge && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/10 text-slate-300 font-mono">
-                    {item.badge}
-                  </span>
-                )}
+                {item.name}
               </Link>
             );
           })}

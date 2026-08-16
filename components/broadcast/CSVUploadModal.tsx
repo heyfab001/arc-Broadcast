@@ -73,19 +73,17 @@ export function CSVUploadModal({
       onClose={onClose}
       title="Import CSV"
       description="Add up to 100 wallet addresses and amounts."
-      maxWidth="lg"
+      maxWidth="md"
     >
-      <div className="space-y-4 pt-2">
-        {/* File Drop Area */}
-        <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-white/[0.08] hover:border-arc-500/40 rounded-xl bg-white/[0.01] hover:bg-arc-500/[0.02] cursor-pointer transition-colors">
-          <div className="w-10 h-10 rounded-xl bg-arc-500/10 border border-arc-500/20 flex items-center justify-center text-arc-400 mb-2">
-            <Upload className="w-5 h-5" />
-          </div>
-          <span className="text-xs font-semibold text-white">
+      <div className="space-y-3 pt-1">
+        {/* File Drop */}
+        <label className="flex flex-col items-center justify-center p-4 border border-dashed border-white/10 hover:border-white/20 rounded-lg bg-[#0C0D12] cursor-pointer transition-colors">
+          <Upload className="w-4 h-4 text-slate-400 mb-1" />
+          <span className="text-xs text-white">
             Choose CSV file or drag and drop
           </span>
-          <span className="text-[11px] text-slate-400 mt-0.5">
-            Format: address,amount (up to 100 rows)
+          <span className="text-[11px] text-slate-500 mt-0.5">
+            Format: address,amount
           </span>
           <input
             type="file"
@@ -95,46 +93,42 @@ export function CSVUploadModal({
           />
         </label>
 
-        {/* Or Paste Raw Text */}
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between">
-            <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-slate-400" />
-              Or paste CSV text:
-            </label>
+        {/* Paste Area */}
+        <div className="space-y-1">
+          <div className="flex items-center justify-between text-xs">
+            <label className="text-slate-400">Or paste text:</label>
             <button
               type="button"
               onClick={handleDownloadSample}
-              className="text-xs text-arc-400 hover:text-arc-300 flex items-center gap-1 hover:underline"
+              className="text-blue-400 hover:underline flex items-center gap-1"
             >
               <Download className="w-3 h-3" />
-              Sample CSV
+              <span>Sample</span>
             </button>
           </div>
           <textarea
-            rows={4}
+            rows={3}
             value={csvText}
             onChange={(e) => {
               setCsvText(e.target.value);
               handleParse(e.target.value);
             }}
             placeholder={"0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7,10.5\n0x3B82F62563EB1D4ED81E40AF1E3A8A00F5D48B5C,25.0"}
-            className="w-full bg-[#090C16] border border-white/[0.08] rounded-xl p-3 text-xs font-mono text-white placeholder-slate-600 outline-none focus:border-arc-500"
+            className="w-full bg-[#0C0D12] border border-white/10 rounded-lg p-2.5 text-xs font-mono text-white placeholder-slate-600 outline-none focus:border-blue-500"
           />
         </div>
 
-        {/* Parsing Summary Alert */}
+        {/* Parsed Summary */}
         {parsedInfo && parsedInfo.count > 0 && (
-          <div className="p-3 rounded-xl bg-[#0C1220] border border-white/[0.08] space-y-1.5 text-xs">
-            <span className="text-slate-300 font-medium flex items-center gap-1.5">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+          <div className="p-2.5 rounded-lg bg-[#0C0D12] border border-white/[0.06] space-y-1 text-xs">
+            <span className="text-emerald-400 font-medium flex items-center gap-1">
+              <CheckCircle2 className="w-3.5 h-3.5" />
               Found {parsedInfo.validCount} valid {parsedInfo.validCount === 1 ? "recipient" : "recipients"}
             </span>
             {parsedInfo.errors.length > 0 && (
-              <div className="space-y-0.5 pt-1 border-t border-white/[0.06]">
-                {parsedInfo.errors.slice(0, 3).map((err, i) => (
-                  <p key={i} className="text-[11px] text-amber-400 flex items-center gap-1">
-                    <AlertCircle className="w-3 h-3 shrink-0" />
+              <div className="space-y-0.5 pt-1 border-t border-white/[0.04]">
+                {parsedInfo.errors.slice(0, 2).map((err, i) => (
+                  <p key={i} className="text-[11px] text-amber-400">
                     {err}
                   </p>
                 ))}

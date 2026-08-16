@@ -15,7 +15,7 @@ import { useArcWallet } from "@/hooks/useArcWallet";
 import { useBroadcastPayment } from "@/hooks/useBroadcastPayment";
 import { CONTRACTS } from "@/config/contracts";
 import { showToast } from "@/hooks/useToast";
-import { Wallet, RefreshCw, Upload } from "lucide-react";
+import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 export default function BroadcastPage() {
@@ -23,9 +23,7 @@ export default function BroadcastPage() {
     isConnected,
     isWrongNetwork,
     balanceUSDC,
-    isBalanceLoading,
     isBalanceError,
-    refetchBalance,
   } = useArcWallet();
 
   const numBalance = isConnected && !isWrongNetwork && !isBalanceError ? parseFloat(balanceUSDC) || 0 : 0;
@@ -63,7 +61,7 @@ export default function BroadcastPage() {
   const handleOpenPreview = () => {
     if (!isConnected) {
       showToast({
-        title: "Connect Wallet",
+        title: "Connect wallet",
         message: "Connect your wallet to continue.",
         type: "warning",
       });
@@ -71,8 +69,8 @@ export default function BroadcastPage() {
     }
     if (isWrongNetwork) {
       showToast({
-        title: "Switch to Arc Testnet",
-        message: "Please switch your wallet to Arc Testnet.",
+        title: "Wrong network",
+        message: "Please switch to Arc Testnet.",
         type: "warning",
       });
       return;
@@ -91,14 +89,14 @@ export default function BroadcastPage() {
   };
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      {/* Header */}
+    <div className="space-y-6 animate-fade-in max-w-5xl">
+      {/* Page Header */}
       <PageHeader
-        title="Broadcast Payment"
-        subtitle="Send tokens to multiple wallets in one transaction."
+        title="Broadcast payment"
+        subtitle="Send USDC to multiple wallets."
         actions={
           <Button
-            variant="outline"
+            variant="secondary"
             size="sm"
             onClick={() => setIsCsvModalOpen(true)}
             leftIcon={<Upload className="w-3.5 h-3.5" />}
@@ -108,61 +106,36 @@ export default function BroadcastPage() {
         }
       />
 
-      {/* Wallet / Network Status Callout if disconnected or wrong network */}
       <WalletStatus />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
-        {/* Left Column: Form & Table (Col 8) */}
-        <div className="lg:col-span-8 space-y-6">
-          {/* Token & Balance Card */}
-          <GlassCard variant="default" className="p-4 sm:p-5">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div className="space-y-1">
-                <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+      {/* 60% / 40% Desktop Grid Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+        {/* Left Column: Form & Recipient Table (Col 7 - approx 60%) */}
+        <div className="lg:col-span-7 space-y-4">
+          {/* Currency selection & Balance bar */}
+          <GlassCard variant="default" className="p-4">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <span className="text-[11px] font-medium text-slate-400 block mb-1">
                   Token
-                </label>
+                </span>
                 <TokenSelector
                   selectedToken={selectedToken}
                   onSelectToken={setSelectedToken}
                 />
               </div>
 
-              {/* Sender Balance */}
-              <div className="p-3 rounded-xl bg-[#090C16] border border-white/[0.06] flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-arc-500/10 border border-arc-500/20 flex items-center justify-center text-arc-400">
-                  <Wallet className="w-4 h-4" />
-                </div>
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] text-slate-400 block">Balance</span>
-                    {isConnected && (
-                      <button
-                        onClick={() => refetchBalance()}
-                        className="text-slate-500 hover:text-slate-300"
-                        title="Refresh balance"
-                      >
-                        <RefreshCw className={`w-2.5 h-2.5 ${isBalanceLoading ? "animate-spin" : ""}`} />
-                      </button>
-                    )}
-                  </div>
-                  <span className="text-xs font-bold text-white font-mono">
-                    {!isConnected ? (
-                      "Connect Wallet"
-                    ) : isWrongNetwork ? (
-                      <span className="text-amber-400">Switch to Arc</span>
-                    ) : isBalanceError ? (
-                      <span className="text-amber-400">Unable to load</span>
-                    ) : (
-                      `${balanceUSDC} ${selectedToken.symbol}`
-                    )}
-                  </span>
-                </div>
+              <div className="text-right text-xs">
+                <span className="text-slate-400 block text-[11px]">Available balance</span>
+                <span className="font-mono font-medium text-white">
+                  {!isConnected ? "Not connected" : `${balanceUSDC} USDC`}
+                </span>
               </div>
             </div>
           </GlassCard>
 
-          {/* Recipient Table Card */}
-          <GlassCard variant="default" className="p-5 sm:p-6">
+          {/* Recipient Table */}
+          <GlassCard variant="default" className="p-4 sm:p-5">
             <RecipientTable
               recipients={recipients}
               tokenSymbol={selectedToken.symbol}
@@ -176,8 +149,8 @@ export default function BroadcastPage() {
           </GlassCard>
         </div>
 
-        {/* Right Column: Transaction Summary (Col 4) */}
-        <div className="lg:col-span-4 sticky top-24">
+        {/* Right Column: Payment Summary (Col 5 - approx 40%) */}
+        <div className="lg:col-span-5 sticky top-20">
           <TransactionSummary
             token={selectedToken}
             validation={validation}
@@ -196,7 +169,7 @@ export default function BroadcastPage() {
         onImport={(imported) => {
           setRecipientsBulk(imported);
           showToast({
-            title: "CSV Imported",
+            title: "CSV imported",
             message: `Imported ${imported.length} recipients.`,
             type: "success",
           });

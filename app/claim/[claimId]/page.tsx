@@ -12,13 +12,13 @@ export default function ClaimPage() {
 
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center py-6 animate-fade-in">
-      <div className="w-full max-w-md mb-4">
+      <div className="w-full max-w-sm mb-3">
         <Link
           href="/"
           className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Back to Dashboard</span>
+          <span>Overview</span>
         </Link>
       </div>
 

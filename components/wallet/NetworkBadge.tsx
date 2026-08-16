@@ -23,46 +23,45 @@ export function NetworkBadge() {
         }}
         disabled={isSwitching}
         className={cn(
-          "flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-medium transition-colors select-none",
+          "flex items-center gap-1.5 px-2.5 h-8 rounded-lg border text-xs font-medium transition-colors select-none",
           isSwitching
-            ? "bg-arc-500/15 border-arc-500/30 text-arc-300 animate-pulse"
+            ? "bg-blue-600/10 border-blue-500/30 text-blue-300"
             : isWrongNetwork
-            ? "bg-amber-500/10 border-amber-500/40 text-amber-300 hover:bg-amber-500/20"
-            : "bg-[#0E1322] border-white/[0.08] text-slate-200 hover:border-white/20"
+            ? "bg-amber-500/10 border-amber-500/30 text-amber-300 hover:bg-amber-500/20"
+            : "bg-[#141722] border-white/[0.08] text-slate-200 hover:border-white/20"
         )}
       >
         {isSwitching ? (
           <>
-            <RefreshCw className="w-3.5 h-3.5 text-arc-400 animate-spin" />
-            <span>Switching...</span>
+            <RefreshCw className="w-3 h-3 text-blue-400 animate-spin" />
+            <span>Switching</span>
           </>
         ) : isWrongNetwork ? (
           <>
-            <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-            <span className="font-semibold text-amber-300">Wrong Network</span>
+            <AlertTriangle className="w-3 h-3 text-amber-400 shrink-0" />
+            <span>Wrong network</span>
           </>
         ) : (
           <>
-            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
             <span>{ARC_TESTNET.name}</span>
           </>
         )}
-        <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+        <ChevronDown className="w-3 h-3 text-slate-400" />
       </button>
 
-      {/* Network Details Modal */}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title="Network"
-        description="Official Arc Testnet parameters."
+        description="Arc Testnet configuration."
         maxWidth="sm"
       >
         <div className="space-y-3 pt-1 text-xs">
-          <div className="space-y-2 bg-[#07090F] p-3.5 rounded-xl border border-white/[0.06] text-slate-300 font-mono">
+          <div className="space-y-1.5 bg-[#0C0D12] p-3 rounded-lg border border-white/[0.06] text-slate-300 font-mono">
             <div className="flex justify-between py-1 border-b border-white/[0.04]">
               <span className="text-slate-400 font-sans">Network</span>
-              <span className="text-white font-sans font-semibold">{ARC_TESTNET.name}</span>
+              <span className="text-white font-sans font-medium">{ARC_TESTNET.name}</span>
             </div>
             <div className="flex justify-between py-1 border-b border-white/[0.04]">
               <span className="text-slate-400 font-sans">Chain ID</span>
@@ -78,7 +77,7 @@ export function NetworkBadge() {
                 href={ARC_TESTNET.explorerUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-arc-400 hover:underline flex items-center gap-1 font-sans"
+                className="text-blue-400 hover:underline flex items-center gap-1 font-sans"
               >
                 <span>ArcScan</span>
                 <ExternalLink className="w-3 h-3" />
@@ -92,7 +91,7 @@ export function NetworkBadge() {
                 switchToArc();
                 setIsModalOpen(false);
               }}
-              className="w-full py-2 px-3 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-xl text-xs font-semibold transition-colors"
+              className="w-full py-2 px-3 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-semibold"
             >
               Switch to Arc Testnet
             </button>
