@@ -15,7 +15,7 @@ import { useArcWallet } from "@/hooks/useArcWallet";
 import { useBroadcastPayment } from "@/hooks/useBroadcastPayment";
 import { CONTRACTS } from "@/config/contracts";
 import { showToast } from "@/hooks/useToast";
-import { Wallet, RefreshCw, FileSpreadsheet } from "lucide-react";
+import { Wallet, RefreshCw, Upload } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 export default function BroadcastPage() {
@@ -63,16 +63,16 @@ export default function BroadcastPage() {
   const handleOpenPreview = () => {
     if (!isConnected) {
       showToast({
-        title: "Wallet Required",
-        message: "Please connect your Web3 wallet on Arc Testnet to prepare a batch payment.",
+        title: "Connect Wallet",
+        message: "Connect your wallet to continue.",
         type: "warning",
       });
       return;
     }
     if (isWrongNetwork) {
       showToast({
-        title: "Wrong Network",
-        message: "Please switch to Arc Testnet to continue.",
+        title: "Switch to Arc Testnet",
+        message: "Please switch your wallet to Arc Testnet.",
         type: "warning",
       });
       return;
@@ -95,34 +95,31 @@ export default function BroadcastPage() {
       {/* Header */}
       <PageHeader
         title="Broadcast Payment"
-        subtitle="Send tokens to multiple wallets in one batch on Arc Testnet."
-        badge="1–100 Recipients"
+        subtitle="Send tokens to multiple wallets in one transaction."
         actions={
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setIsCsvModalOpen(true)}
-              leftIcon={<FileSpreadsheet className="w-3.5 h-3.5" />}
-            >
-              Upload CSV
-            </Button>
-          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setIsCsvModalOpen(true)}
+            leftIcon={<Upload className="w-3.5 h-3.5" />}
+          >
+            Import CSV
+          </Button>
         }
       />
 
-      {/* Wallet / Network Status Callout */}
-      <WalletStatus actionLabel="broadcast batch payments on Arc Testnet" />
+      {/* Wallet / Network Status Callout if disconnected or wrong network */}
+      <WalletStatus />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
         {/* Left Column: Form & Table (Col 8) */}
         <div className="lg:col-span-8 space-y-6">
-          {/* Token & Real Balance Card */}
-          <GlassCard variant="default" className="p-5">
+          {/* Token & Balance Card */}
+          <GlassCard variant="default" className="p-4 sm:p-5">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
-                  Select Currency
+                <label className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
+                  Token
                 </label>
                 <TokenSelector
                   selectedToken={selectedToken}
@@ -130,31 +127,31 @@ export default function BroadcastPage() {
                 />
               </div>
 
-              {/* Real Sender Balance Display */}
+              {/* Sender Balance */}
               <div className="p-3 rounded-xl bg-[#090C16] border border-white/[0.06] flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-arc-500/10 border border-arc-500/20 flex items-center justify-center text-arc-400">
                   <Wallet className="w-4 h-4" />
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] text-slate-400 block">Arc USDC Balance</span>
+                    <span className="text-[11px] text-slate-400 block">Balance</span>
                     {isConnected && (
                       <button
                         onClick={() => refetchBalance()}
                         className="text-slate-500 hover:text-slate-300"
                         title="Refresh balance"
                       >
-                        <RefreshCw className={`w-3 h-3 ${isBalanceLoading ? "animate-spin" : ""}`} />
+                        <RefreshCw className={`w-2.5 h-2.5 ${isBalanceLoading ? "animate-spin" : ""}`} />
                       </button>
                     )}
                   </div>
-                  <span className="text-sm font-bold text-white font-mono">
+                  <span className="text-xs font-bold text-white font-mono">
                     {!isConnected ? (
                       "Connect Wallet"
                     ) : isWrongNetwork ? (
-                      <span className="text-amber-400 text-xs">Switch to Arc</span>
+                      <span className="text-amber-400">Switch to Arc</span>
                     ) : isBalanceError ? (
-                      <span className="text-amber-400 text-xs">Unable to load balance</span>
+                      <span className="text-amber-400">Unable to load</span>
                     ) : (
                       `${balanceUSDC} ${selectedToken.symbol}`
                     )}
@@ -165,7 +162,7 @@ export default function BroadcastPage() {
           </GlassCard>
 
           {/* Recipient Table Card */}
-          <GlassCard variant="default" className="p-6">
+          <GlassCard variant="default" className="p-5 sm:p-6">
             <RecipientTable
               recipients={recipients}
               tokenSymbol={selectedToken.symbol}
@@ -200,13 +197,13 @@ export default function BroadcastPage() {
           setRecipientsBulk(imported);
           showToast({
             title: "CSV Imported",
-            message: `Successfully imported ${imported.length} recipients.`,
+            message: `Imported ${imported.length} recipients.`,
             type: "success",
           });
         }}
       />
 
-      {/* Real Pre-Transaction Review Modal */}
+      {/* Preview Modal */}
       <BroadcastPreviewModal
         isOpen={isPreviewOpen}
         onClose={() => setIsPreviewOpen(false)}
@@ -217,7 +214,7 @@ export default function BroadcastPage() {
         isBroadcasting={isProcessing}
       />
 
-      {/* Real On-Chain Execution Status & Receipt Modal */}
+      {/* Execution Status Modal */}
       <BroadcastExecutionModal
         isOpen={isExecutionModalOpen}
         onClose={() => {

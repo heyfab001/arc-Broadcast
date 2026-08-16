@@ -17,17 +17,17 @@ export function HistoryFilterTabs({
   const tabs: TabOption<HistoryTab>[] = [
     {
       id: "all",
-      label: "All Activity",
+      label: "All",
       icon: <Layers className="w-3.5 h-3.5" />,
     },
     {
       id: "broadcast",
-      label: "Broadcast Payments",
+      label: "Broadcast",
       icon: <Send className="w-3.5 h-3.5" />,
     },
     {
       id: "secret_pay",
-      label: "Secret Payments",
+      label: "Secret Pay",
       icon: <KeyRound className="w-3.5 h-3.5" />,
     },
     {

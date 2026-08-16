@@ -27,16 +27,15 @@ export default function SecretPayPage() {
   } = useSecretPay(numBalance);
 
   return (
-    <div className="space-y-10 animate-fade-in max-w-4xl mx-auto">
+    <div className="space-y-8 animate-fade-in max-w-4xl mx-auto">
       {/* Header */}
       <PageHeader
         title="Secret Pay"
-        subtitle="Send tokens privately with a claim link."
-        badge="Zero-Knowledge Escrow"
+        subtitle="Send tokens with a private claim link."
       />
 
       {/* Wallet Status Banner */}
-      <WalletStatus actionLabel="create private secret payments" />
+      <WalletStatus />
 
       {/* Main Creation Form */}
       <div className="space-y-6">
@@ -54,12 +53,11 @@ export default function SecretPayPage() {
           userBalance={numBalance}
         />
 
-        {/* Security & Cryptography Guarantee */}
         <SecurityNotice />
       </div>
 
-      {/* Visual Workflow Steps */}
-      <div className="pt-4">
+      {/* How it works */}
+      <div className="pt-2">
         <WorkflowStepper />
       </div>
     </div>

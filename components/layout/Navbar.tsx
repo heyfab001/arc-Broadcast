@@ -33,18 +33,16 @@ export function Navbar() {
 
           <Link href="/" className="flex items-center gap-2">
             <ArcLogo size="sm" withText={false} />
-            <span className="font-bold text-sm text-white tracking-tight">
+            <span className="font-semibold text-sm text-white tracking-tight">
               Arc Broadcast
             </span>
           </Link>
         </div>
 
-        {/* Desktop Left breadcrumb/status */}
+        {/* Desktop Left Brand breadcrumb */}
         <div className="hidden lg:flex items-center gap-2 text-xs text-slate-400 font-medium">
-          <span className="w-2 h-2 rounded-full bg-arc-500 animate-pulse" />
-          <span>Arc Ecosystem dApp</span>
-          <span className="text-slate-600">/</span>
-          <span className="text-slate-200">Financial Payment Protocol</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+          <span>Arc Payments</span>
         </div>
 
         {/* Top Right Actions */}

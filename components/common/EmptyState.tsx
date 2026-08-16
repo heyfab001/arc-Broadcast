@@ -23,16 +23,16 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center p-12 text-center rounded-2xl border border-dashed border-white/[0.08] bg-[#0B0E17]/40",
+        "flex flex-col items-center justify-center p-10 text-center rounded-xl border border-dashed border-white/[0.08] bg-[#0B0E17]/40",
         className
       )}
     >
-      <div className="w-12 h-12 rounded-2xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-slate-400 mb-4 shadow-sm">
-        {icon || <Inbox className="w-6 h-6" />}
+      <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center text-slate-400 mb-3">
+        {icon || <Inbox className="w-5 h-5" />}
       </div>
-      <h3 className="text-base font-semibold text-white tracking-tight">{title}</h3>
+      <h3 className="text-sm font-semibold text-white">{title}</h3>
       {description && (
-        <p className="text-xs text-slate-400 max-w-sm mt-1 leading-relaxed">
+        <p className="text-xs text-slate-400 max-w-xs mt-1 leading-relaxed">
           {description}
         </p>
       )}
@@ -41,7 +41,7 @@ export function EmptyState({
           variant="secondary"
           size="sm"
           onClick={onAction}
-          className="mt-5"
+          className="mt-4"
         >
           {actionLabel}
         </Button>
@@ -50,11 +50,11 @@ export function EmptyState({
   );
 }
 
-export function LoadingState({ message = "Loading data..." }: { message?: string }) {
+export function LoadingState({ message = "Loading..." }: { message?: string }) {
   return (
-    <div className="flex flex-col items-center justify-center p-12 text-center">
-      <Loader2 className="w-8 h-8 text-arc-500 animate-spin mb-3" />
-      <p className="text-xs text-slate-400 font-medium">{message}</p>
+    <div className="flex flex-col items-center justify-center p-10 text-center">
+      <Loader2 className="w-6 h-6 text-arc-500 animate-spin mb-2.5" />
+      <p className="text-xs text-slate-400">{message}</p>
     </div>
   );
 }
@@ -69,13 +69,13 @@ export function ErrorState({
   onRetry?: () => void;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center p-8 text-center rounded-2xl border border-red-500/20 bg-red-500/[0.03]">
-      <AlertCircle className="w-8 h-8 text-red-400 mb-3" />
-      <h4 className="text-sm font-semibold text-white">{title}</h4>
-      {message && <p className="text-xs text-red-300/80 mt-1 max-w-sm">{message}</p>}
+    <div className="flex flex-col items-center justify-center p-8 text-center rounded-xl border border-red-500/20 bg-red-500/[0.03]">
+      <AlertCircle className="w-6 h-6 text-red-400 mb-2.5" />
+      <h4 className="text-xs font-semibold text-white">{title}</h4>
+      {message && <p className="text-xs text-red-300/80 mt-1 max-w-xs">{message}</p>}
       {onRetry && (
-        <Button variant="outline" size="sm" onClick={onRetry} className="mt-4">
-          Try Again
+        <Button variant="outline" size="sm" onClick={onRetry} className="mt-3.5">
+          Try again
         </Button>
       )}
     </div>

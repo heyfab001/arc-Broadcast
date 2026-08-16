@@ -34,16 +34,16 @@ export function RecipientRow({
   const isAmountError = isAmountFilled && !isAmountValid;
 
   return (
-    <div className="grid grid-cols-12 gap-2.5 items-start py-2 group">
-      {/* Index Column */}
-      <div className="col-span-1 flex items-center justify-center h-11">
-        <span className="font-mono text-xs text-slate-500 font-semibold">
-          #{index + 1}
+    <div className="grid grid-cols-12 gap-2.5 items-start py-1.5 group">
+      {/* Index */}
+      <div className="col-span-1 flex items-center justify-center h-10">
+        <span className="font-mono text-xs text-slate-500">
+          {index + 1}
         </span>
       </div>
 
-      {/* Address Column */}
-      <div className="col-span-7 sm:col-span-7 space-y-1">
+      {/* Address */}
+      <div className="col-span-7 space-y-1">
         <div className="relative">
           <input
             type="text"
@@ -51,29 +51,27 @@ export function RecipientRow({
             onChange={(e) => onUpdate(recipient.id, "address", e.target.value)}
             placeholder="0x..."
             className={cn(
-              "w-full h-11 bg-[#090C16] border rounded-xl px-3.5 text-xs font-mono text-white placeholder-slate-600 outline-none transition-all duration-200",
+              "w-full h-10 bg-[#090C16] border rounded-xl px-3 text-xs font-mono text-white placeholder-slate-600 outline-none transition-colors",
               isAddressError
                 ? "border-red-500/50 bg-red-500/[0.02] focus:border-red-500"
-                : isAddressValid
-                ? "border-white/[0.08] focus:border-arc-500"
                 : "border-white/[0.08] focus:border-arc-500"
             )}
           />
           {isAddressError && (
-            <div className="absolute right-3 top-3 text-red-400">
+            <div className="absolute right-3 top-2.5 text-red-400">
               <AlertCircle className="w-4 h-4" />
             </div>
           )}
         </div>
         {isAddressError && (
-          <p className="text-[11px] text-red-400 font-medium pl-1">
-            {isDuplicate ? "Duplicate wallet address" : "Invalid EVM hex address (must be 0x + 40 characters)"}
+          <p className="text-[11px] text-red-400 pl-1">
+            {isDuplicate ? "Duplicate address" : "Invalid address"}
           </p>
         )}
       </div>
 
-      {/* Amount Column */}
-      <div className="col-span-3 sm:col-span-3 space-y-1">
+      {/* Amount */}
+      <div className="col-span-3 space-y-1">
         <div className="relative">
           <input
             type="text"
@@ -87,38 +85,38 @@ export function RecipientRow({
             }}
             placeholder="0.00"
             className={cn(
-              "w-full h-11 bg-[#090C16] border rounded-xl pl-3 pr-12 text-xs font-mono text-white placeholder-slate-600 outline-none transition-all duration-200",
+              "w-full h-10 bg-[#090C16] border rounded-xl pl-3 pr-12 text-xs font-mono text-white placeholder-slate-600 outline-none transition-colors",
               isAmountError
                 ? "border-red-500/50 bg-red-500/[0.02] focus:border-red-500"
                 : "border-white/[0.08] focus:border-arc-500"
             )}
           />
-          <span className="absolute right-3 top-3.5 text-[11px] font-semibold text-slate-500 pointer-events-none">
+          <span className="absolute right-3 top-3 text-[10px] font-medium text-slate-500 pointer-events-none">
             {tokenSymbol}
           </span>
         </div>
         {isAmountError && (
-          <p className="text-[11px] text-red-400 font-medium pl-1">
+          <p className="text-[11px] text-red-400 pl-1">
             Invalid amount
           </p>
         )}
       </div>
 
-      {/* Remove Column */}
-      <div className="col-span-1 flex items-center justify-center h-11">
+      {/* Remove */}
+      <div className="col-span-1 flex items-center justify-center h-10">
         <button
           type="button"
           onClick={() => onRemove(recipient.id)}
           disabled={!isRemovable}
           title="Remove recipient"
           className={cn(
-            "w-9 h-9 rounded-xl flex items-center justify-center transition-all",
+            "w-8 h-8 rounded-lg flex items-center justify-center transition-colors",
             isRemovable
-              ? "text-slate-500 hover:text-red-400 hover:bg-red-500/10 active:scale-95"
-              : "text-slate-700 cursor-not-allowed opacity-40"
+              ? "text-slate-500 hover:text-red-400 hover:bg-red-500/10"
+              : "text-slate-700 cursor-not-allowed opacity-30"
           )}
         >
-          <Trash2 className="w-4 h-4" />
+          <Trash2 className="w-3.5 h-3.5" />
         </button>
       </div>
     </div>
