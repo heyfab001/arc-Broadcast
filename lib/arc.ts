@@ -6,19 +6,18 @@ import { ARC_TESTNET, ARC_CHAIN_ID, ARC_HEX_CHAIN_ID } from "@/config/chains";
  */
 export const ARC_TESTNET_ADD_ETHEREUM_CHAIN_PARAMS = {
   chainId: ARC_HEX_CHAIN_ID,
-  chainName: ARC_TESTNET.name,
+  chainName: "Arc Testnet",
   nativeCurrency: {
     name: "USDC",
     symbol: "USDC",
-    decimals: 18,
+    decimals: 6,
   },
-  rpcUrls: [ARC_TESTNET.rpcUrl],
-  blockExplorerUrls: [ARC_TESTNET.explorerUrl],
+  rpcUrls: ["https://rpc.testnet.arc.network"],
+  blockExplorerUrls: ["https://testnet.arcscan.app"],
 };
 
 /**
  * Format native Arc USDC atomic units (18 decimals) into a clean user-facing string.
- * Native Arc gas/currency uses 18 decimals internally, with 2–6 decimals displayed.
  */
 export function formatArcUsdc(
   rawBalance: bigint | string | undefined | null,
@@ -54,29 +53,28 @@ export function parseArcUsdc(amount: string): bigint {
  * User-friendly error message parser for Web3/EVM wallet interactions
  */
 export function parseWalletErrorMessage(error: unknown): string {
-  if (!error) return "An unexpected error occurred.";
+  if (!error) return "Couldn't switch networks. Please try again.";
 
   const errStr = typeof error === "object" && error !== null ? JSON.stringify(error) : String(error);
-  const errMsg = (error as { message?: string; shortMessage?: string })?.shortMessage ||
-                 (error as { message?: string })?.message ||
-                 errStr;
+  const errMsg =
+    (error as { message?: string; shortMessage?: string })?.shortMessage ||
+    (error as { message?: string })?.message ||
+    errStr;
 
   // User rejected action (EIP-1193 4001)
   if (
     errMsg.includes("User rejected") ||
     errMsg.includes("User denied") ||
     errMsg.includes("4001") ||
-    errMsg.includes("rejected the request")
+    errMsg.includes("rejected the request") ||
+    errMsg.toLowerCase().includes("user rejected")
   ) {
-    if (errMsg.toLowerCase().includes("switch") || errMsg.toLowerCase().includes("chain")) {
-      return "Network switch was cancelled.";
-    }
-    return "Wallet connection was cancelled.";
+    return "Network switch cancelled.";
   }
 
   // Chain not added (EIP-1193 4902)
-  if (errMsg.includes("4902") || errMsg.includes("Unrecognized chain")) {
-    return "Arc Testnet needs to be added to your wallet.";
+  if (errMsg.includes("4902") || errMsg.includes("Unrecognized chain") || errMsg.includes("chain not added")) {
+    return "Couldn't add Arc Testnet. Please add it manually in your wallet.";
   }
 
   // Connector not found
@@ -84,5 +82,5 @@ export function parseWalletErrorMessage(error: unknown): string {
     return "No compatible wallet detected.";
   }
 
-  return "Action could not be completed. Please try again.";
+  return "Couldn't switch networks. Please try again.";
 }

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useArcWallet } from "@/hooks/useArcWallet";
 import { ARC_TESTNET } from "@/config/chains";
 import { Modal } from "@/components/ui/Modal";
-import { ChevronDown, Check, AlertTriangle } from "lucide-react";
+import { Check, AlertTriangle, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function NetworkBadge() {
@@ -13,7 +13,7 @@ export function NetworkBadge() {
 
   if (!isConnected) {
     return (
-      <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-50 border border-gray-200 text-[15px] font-medium text-gray-700">
+      <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-gray-50 border border-gray-200 text-[15px] font-medium text-gray-700 select-none">
         <span className="w-2 h-2 rounded-full bg-gray-400" />
         <span className="hidden sm:inline">Arc Testnet</span>
       </div>
@@ -25,10 +25,14 @@ export function NetworkBadge() {
       <button
         onClick={() => switchToArc()}
         disabled={isSwitching}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-amber-50 border border-amber-200 hover:bg-amber-100 text-amber-800 text-[15px] font-semibold transition-colors"
+        className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-amber-50 border border-amber-200 hover:bg-amber-100 text-amber-800 text-[15px] font-semibold transition-colors"
       >
-        <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
-        <span>{isSwitching ? "Switching..." : "Switch to Arc"}</span>
+        {isSwitching ? (
+          <RefreshCw className="w-4 h-4 text-amber-600 animate-spin shrink-0" />
+        ) : (
+          <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+        )}
+        <span>{isSwitching ? "Switching..." : "Switch to Arc Testnet"}</span>
       </button>
     );
   }
@@ -40,8 +44,7 @@ export function NetworkBadge() {
         className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-white border border-gray-300 hover:border-gray-400 text-gray-800 text-[15px] font-semibold transition-colors shadow-2xs"
       >
         <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-        <span className="hidden sm:inline">{ARC_TESTNET.name}</span>
-        <ChevronDown className="w-4 h-4 text-gray-500" />
+        <span>Arc Testnet ✓</span>
       </button>
 
       <Modal
@@ -52,7 +55,7 @@ export function NetworkBadge() {
         maxWidth="sm"
       >
         <div className="space-y-2 pt-1">
-          <div className="flex items-center justify-between p-3.5 rounded-xl border border-blue-200 bg-blue-50/50 text-[15px]">
+          <div className="flex items-center justify-between p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/50 text-[15px]">
             <div className="flex items-center gap-2.5">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
               <div>
@@ -60,7 +63,7 @@ export function NetworkBadge() {
                 <span className="text-xs text-gray-500 font-mono">Chain ID: {ARC_TESTNET.id}</span>
               </div>
             </div>
-            <Check className="w-5 h-5 text-blue-600" />
+            <Check className="w-5 h-5 text-emerald-600" />
           </div>
         </div>
       </Modal>

@@ -8,7 +8,7 @@ import { showToast } from "@/hooks/useToast";
 
 export function useArcNetwork() {
   const currentChainId = useChainId();
-  const { isConnected } = useAccount();
+  const { isConnected, connector } = useAccount();
   const { switchChainAsync, isPending: isWagmiSwitching } = useSwitchChain();
   const [isManualSwitching, setIsManualSwitching] = useState(false);
 
@@ -21,66 +21,123 @@ export function useArcNetwork() {
 
     setIsManualSwitching(true);
     try {
+      // 1. Try standard wagmi switchChain first
       if (switchChainAsync) {
         try {
           await switchChainAsync({ chainId: ARC_CHAIN_ID });
           showToast({
-            title: "Network Switched",
-            message: "Successfully connected to Arc Testnet.",
+            title: "Connected",
+            message: "Connected to Arc Testnet ✓",
             type: "success",
           });
           setIsManualSwitching(false);
           return true;
         } catch (switchErr: unknown) {
-          // If error is chain not added (4902) or similar, fallback to wallet_addEthereumChain
-          const errObj = switchErr as { code?: number; message?: string };
-          const isNotAdded =
-            errObj?.code === 4902 ||
-            errObj?.message?.includes("4902") ||
-            errObj?.message?.includes("Unrecognized chain");
+          const errObj = switchErr as { code?: number; message?: string; shortMessage?: string };
+          const errMsg = (errObj?.shortMessage || errObj?.message || String(switchErr)).toLowerCase();
 
-          if (isNotAdded && typeof window !== "undefined" && (window as unknown as { ethereum?: { request: (args: unknown) => Promise<unknown> } }).ethereum) {
-            const ethereum = (window as unknown as { ethereum: { request: (args: unknown) => Promise<unknown> } }).ethereum;
-            await ethereum.request({
-              method: "wallet_addEthereumChain",
-              params: [ARC_TESTNET_ADD_ETHEREUM_CHAIN_PARAMS],
-            });
-            // Automatically switch after adding
-            await switchChainAsync({ chainId: ARC_CHAIN_ID });
+          // Check if user rejected the switch prompt
+          if (
+            errObj?.code === 4001 ||
+            errMsg.includes("user rejected") ||
+            errMsg.includes("denied") ||
+            errMsg.includes("cancelled")
+          ) {
             showToast({
-              title: "Arc Testnet Added",
-              message: "Arc Testnet has been added and activated in your wallet.",
-              type: "success",
+              title: "Network Switch",
+              message: "Network switch cancelled.",
+              type: "warning",
             });
             setIsManualSwitching(false);
-            return true;
+            return false;
           }
 
-          // User rejected or other error
-          const userFriendlyMsg = parseWalletErrorMessage(switchErr);
+          // Check if network is not added (EIP-1193 4902 or unrecognized chain)
+          const isNotAdded =
+            errObj?.code === 4902 ||
+            errMsg.includes("4902") ||
+            errMsg.includes("unrecognized chain") ||
+            errMsg.includes("chain not added") ||
+            errMsg.includes("unknown chain");
+
+          // 2. Request wallet_addEthereumChain via standard EIP-1193 provider
+          let provider: { request: (args: unknown) => Promise<unknown> } | null = null;
+          if (connector?.getProvider) {
+            try {
+              provider = (await connector.getProvider()) as {
+                request: (args: unknown) => Promise<unknown>;
+              };
+            } catch {
+              // fallback
+            }
+          }
+
+          if (!provider && typeof window !== "undefined") {
+            provider = (window as unknown as {
+              ethereum?: { request: (args: unknown) => Promise<unknown> };
+            }).ethereum || null;
+          }
+
+          if (isNotAdded && provider) {
+            try {
+              await provider.request({
+                method: "wallet_addEthereumChain",
+                params: [ARC_TESTNET_ADD_ETHEREUM_CHAIN_PARAMS],
+              });
+
+              // Automatically switch after user approves adding
+              await switchChainAsync({ chainId: ARC_CHAIN_ID });
+
+              showToast({
+                title: "Connected",
+                message: "Connected to Arc Testnet ✓",
+                type: "success",
+              });
+              setIsManualSwitching(false);
+              return true;
+            } catch (addErr: unknown) {
+              const addErrMsg = String((addErr as Error)?.message || addErr).toLowerCase();
+              if (addErrMsg.includes("4001") || addErrMsg.includes("user rejected") || addErrMsg.includes("denied")) {
+                showToast({
+                  title: "Network Switch",
+                  message: "Network switch cancelled.",
+                  type: "warning",
+                });
+              } else {
+                showToast({
+                  title: "Network Error",
+                  message: "Couldn't add Arc Testnet. Please add it manually in your wallet.",
+                  type: "error",
+                });
+              }
+              setIsManualSwitching(false);
+              return false;
+            }
+          }
+
+          // Other switch failure
+          const friendlyMsg = parseWalletErrorMessage(switchErr);
           showToast({
             title: "Network Switch",
-            message: userFriendlyMsg,
+            message: friendlyMsg,
             type: "warning",
           });
-          console.warn("[Arc Network] Switch error:", switchErr);
           setIsManualSwitching(false);
           return false;
         }
       }
-    } catch (err) {
-      const userFriendlyMsg = parseWalletErrorMessage(err);
+    } catch (err: unknown) {
+      const friendlyMsg = parseWalletErrorMessage(err);
       showToast({
         title: "Network Switch",
-        message: userFriendlyMsg,
+        message: friendlyMsg,
         type: "error",
       });
-      console.warn("[Arc Network] Unexpected switch error:", err);
     } finally {
       setIsManualSwitching(false);
     }
     return false;
-  }, [isConnected, switchChainAsync]);
+  }, [isConnected, connector, switchChainAsync]);
 
   return {
     currentChainId,

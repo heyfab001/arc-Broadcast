@@ -63,9 +63,9 @@ export function WalletStatus({ className }: WalletStatusProps) {
             <AlertTriangle className="w-5 h-5" />
           </div>
           <div className="space-y-0.5">
-            <h4 className="text-base font-semibold text-amber-900">Wrong network</h4>
+            <h4 className="text-base font-semibold text-amber-900">You&apos;re on the wrong network.</h4>
             <p className="text-base text-amber-800 leading-relaxed">
-              Please switch your wallet network to Arc Testnet.
+              Switch to Arc Testnet to continue.
             </p>
           </div>
         </div>
