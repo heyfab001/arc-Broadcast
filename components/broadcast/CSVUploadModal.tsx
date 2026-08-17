@@ -77,12 +77,12 @@ export function CSVUploadModal({
     >
       <div className="space-y-4 pt-1">
         {/* File Drop */}
-        <label className="flex flex-col items-center justify-center p-5 border border-dashed border-gray-300 hover:border-gray-400 rounded-xl bg-gray-50 hover:bg-gray-100/60 cursor-pointer transition-colors">
-          <Upload className="w-5 h-5 text-gray-500 mb-1.5" />
-          <span className="text-sm sm:text-base font-medium text-gray-900">
+        <label className="flex flex-col items-center justify-center p-6 border border-dashed border-gray-300 hover:border-gray-400 rounded-xl bg-gray-50 hover:bg-gray-100/60 cursor-pointer transition-colors">
+          <Upload className="w-6 h-6 text-gray-500 mb-2" />
+          <span className="text-base font-semibold text-gray-900">
             Choose CSV file or drag and drop
           </span>
-          <span className="text-xs sm:text-sm text-gray-500 mt-1">
+          <span className="text-sm text-gray-500 mt-1">
             Format: address,amount
           </span>
           <input
@@ -95,14 +95,14 @@ export function CSVUploadModal({
 
         {/* Paste Area */}
         <div className="space-y-1.5">
-          <div className="flex items-center justify-between text-sm">
-            <label className="text-gray-700 font-medium">Or paste text:</label>
+          <div className="flex items-center justify-between text-base">
+            <label className="text-gray-900 font-semibold">Or paste text:</label>
             <button
               type="button"
               onClick={handleDownloadSample}
-              className="text-blue-600 hover:underline flex items-center gap-1 font-medium"
+              className="text-blue-600 hover:underline flex items-center gap-1 font-semibold text-sm"
             >
-              <Download className="w-3.5 h-3.5" />
+              <Download className="w-4 h-4" />
               <span>Sample CSV</span>
             </button>
           </div>
@@ -114,21 +114,21 @@ export function CSVUploadModal({
               handleParse(e.target.value);
             }}
             placeholder={"0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7,10.5\n0x3B82F62563EB1D4ED81E40AF1E3A8A00F5D48B5C,25.0"}
-            className="w-full bg-white border border-gray-300 rounded-lg p-3 text-sm font-mono text-gray-900 placeholder:text-gray-400 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+            className="w-full bg-white border border-gray-300 rounded-lg p-3.5 text-base font-mono text-gray-900 placeholder:text-gray-400 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
           />
         </div>
 
         {/* Parsed Summary */}
         {parsedInfo && parsedInfo.count > 0 && (
-          <div className="p-3.5 rounded-lg bg-gray-50 border border-gray-200 space-y-1.5 text-sm">
-            <span className="text-emerald-700 font-medium flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+          <div className="p-4 rounded-lg bg-gray-50 border border-gray-200 space-y-1.5 text-base">
+            <span className="text-emerald-700 font-semibold flex items-center gap-1.5">
+              <CheckCircle2 className="w-5 h-5 text-emerald-600" />
               Found {parsedInfo.validCount} valid {parsedInfo.validCount === 1 ? "recipient" : "recipients"}
             </span>
             {parsedInfo.errors.length > 0 && (
-              <div className="space-y-1 pt-1.5 border-t border-gray-200">
+              <div className="space-y-1 pt-2 border-t border-gray-200">
                 {parsedInfo.errors.slice(0, 3).map((err, i) => (
-                  <p key={i} className="text-xs text-amber-700 font-medium">
+                  <p key={i} className="text-sm text-amber-700 font-medium">
                     {err}
                   </p>
                 ))}
@@ -137,16 +137,16 @@ export function CSVUploadModal({
           </div>
         )}
 
-        <div className="flex justify-end gap-2.5 pt-2">
-          <Button variant="ghost" size="sm" onClick={onClose} className="h-11 text-sm font-medium">
+        <div className="flex justify-end gap-3 pt-2">
+          <Button variant="ghost" size="md" onClick={onClose} className="h-12 text-base font-semibold">
             Cancel
           </Button>
           <Button
             variant="primary"
-            size="sm"
+            size="md"
             onClick={handleConfirmImport}
             disabled={!parsedInfo || parsedInfo.recipients.length === 0}
-            className="h-11 px-5 text-sm font-semibold"
+            className="h-12 px-6 text-base font-semibold"
           >
             Import {parsedInfo?.validCount ? `(${parsedInfo.validCount})` : ""}
           </Button>

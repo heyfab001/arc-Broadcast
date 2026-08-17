@@ -51,7 +51,7 @@ export function SecretPayCreatedModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50">
-      <div className="w-full max-w-md relative animate-fade-in">
+      <div className="w-full max-w-lg relative animate-fade-in">
         <GlassCard
           variant="default"
           className="p-6 sm:p-7 space-y-5 relative shadow-modal"
@@ -65,8 +65,8 @@ export function SecretPayCreatedModal({
             <X className="w-5 h-5" />
           </button>
 
-          <div className="space-y-1">
-            <h3 className="text-xl font-semibold text-gray-900">
+          <div className="space-y-1.5">
+            <h3 className="text-xl sm:text-2xl font-semibold text-gray-900">
               Payment ready
             </h3>
             <p className="text-base text-gray-600 leading-relaxed">
@@ -76,12 +76,12 @@ export function SecretPayCreatedModal({
 
           {/* Link Box */}
           <div className="space-y-2">
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5">
               <input
                 type="text"
                 readOnly
                 value={claim.claimUrl}
-                className="w-full h-12 bg-gray-50 border border-gray-300 rounded-lg px-3.5 text-sm text-gray-900 font-mono select-all outline-none"
+                className="w-full h-12 bg-gray-50 border border-gray-300 rounded-lg px-3.5 text-base text-gray-900 font-mono select-all outline-none font-medium"
               />
               <Button
                 type="button"
@@ -89,7 +89,7 @@ export function SecretPayCreatedModal({
                 size="md"
                 onClick={handleCopy}
                 leftIcon={copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                className="h-12 shrink-0 text-sm sm:text-base font-semibold px-4 min-w-[140px]"
+                className="h-12 shrink-0 text-base font-semibold px-5 min-w-[150px]"
               >
                 {copied ? "Link copied" : "Copy claim link"}
               </Button>
@@ -97,22 +97,22 @@ export function SecretPayCreatedModal({
           </div>
 
           {/* Details */}
-          <div className="space-y-2.5 text-sm bg-gray-50 p-4 rounded-xl border border-gray-200 text-gray-700">
+          <div className="space-y-3 text-base bg-gray-50 p-4 rounded-xl border border-gray-200 text-gray-700">
             <div className="flex justify-between">
-              <span className="text-gray-500">Amount</span>
-              <span className="font-mono font-semibold text-gray-900">{claim.amount} USDC</span>
+              <span className="text-gray-500 font-medium">Amount</span>
+              <span className="font-mono font-bold text-gray-900">{claim.amount} USDC</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-gray-500">Expires in</span>
-              <span className="font-medium text-gray-900">{claim.expiryDays} {claim.expiryDays === 1 ? "day" : "days"}</span>
+              <span className="text-gray-500 font-medium">Expires in</span>
+              <span className="font-semibold text-gray-900">{claim.expiryDays} {claim.expiryDays === 1 ? "day" : "days"}</span>
             </div>
-            <div className="flex justify-between pt-2 border-t border-gray-200">
-              <span className="text-gray-500">Transaction</span>
+            <div className="flex justify-between pt-2.5 border-t border-gray-200">
+              <span className="text-gray-500 font-medium">Transaction</span>
               <a
                 href={txUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-blue-600 hover:underline flex items-center gap-1.5 font-medium"
+                className="font-mono text-blue-600 hover:underline flex items-center gap-1.5 font-semibold text-sm"
               >
                 <span>{claim.depositTxHash.slice(0, 6)}...{claim.depositTxHash.slice(-4)}</span>
                 <ExternalLink className="w-3.5 h-3.5" />

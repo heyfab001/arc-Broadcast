@@ -48,21 +48,21 @@ export function Navbar() {
             )}
           </button>
 
-          <Link href="/" prefetch className="flex items-center gap-2">
+          <Link href="/" prefetch className="flex items-center gap-2.5">
             <ArcLogo size="sm" withText={false} />
-            <span className="font-semibold text-base text-gray-900">
+            <span className="font-semibold text-lg text-gray-900">
               Arc Broadcast
             </span>
           </Link>
         </div>
 
         {/* Desktop Left: Current Section Title */}
-        <div className="hidden lg:flex items-center gap-2">
-          <span className="text-sm font-semibold text-gray-900">
+        <div className="hidden lg:flex items-center gap-2.5">
+          <span className="text-base font-semibold text-gray-900">
             {getPageTitle()}
           </span>
           <span className="text-gray-300">•</span>
-          <span className="text-xs text-gray-500 font-medium">
+          <span className="text-sm text-gray-500 font-medium">
             Payments on Arc
           </span>
         </div>

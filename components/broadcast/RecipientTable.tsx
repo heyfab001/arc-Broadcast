@@ -43,10 +43,10 @@ export function RecipientTable({
       {/* Step Header */}
       <div className="flex items-center justify-between gap-3 pb-4 border-b border-gray-200">
         <div>
-          <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+          <h3 className="text-lg sm:text-xl font-semibold text-gray-900">
             1. Who are you sending to?
           </h3>
-          <span className="text-sm text-gray-500 mt-0.5 block">
+          <span className="text-sm text-gray-500 mt-0.5 block font-medium">
             {recipients.length} / {MAX_RECIPIENTS} recipients
           </span>
         </div>
@@ -57,7 +57,8 @@ export function RecipientTable({
             variant="outline"
             size="sm"
             onClick={onOpenCsvModal}
-            leftIcon={<Upload className="w-3.5 h-3.5" />}
+            leftIcon={<Upload className="w-4 h-4" />}
+            className="h-10 text-sm font-semibold"
           >
             Import CSV
           </Button>
@@ -68,7 +69,8 @@ export function RecipientTable({
             size="sm"
             onClick={handleAdd}
             disabled={isMaxReached}
-            leftIcon={<Plus className="w-3.5 h-3.5" />}
+            leftIcon={<Plus className="w-4 h-4" />}
+            className="h-10 text-sm font-semibold"
           >
             + Add wallet
           </Button>
@@ -77,7 +79,7 @@ export function RecipientTable({
             <button
               type="button"
               onClick={onClearAll}
-              className="text-xs sm:text-sm text-gray-500 hover:text-red-600 px-2 py-1 transition-colors"
+              className="text-sm font-medium text-gray-500 hover:text-red-600 px-2 py-1 transition-colors"
             >
               Clear
             </button>
@@ -86,7 +88,7 @@ export function RecipientTable({
       </div>
 
       {/* Table Headers */}
-      <div className="grid grid-cols-12 gap-2.5 px-1 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+      <div className="grid grid-cols-12 gap-2.5 px-1 text-sm font-semibold text-gray-600 uppercase tracking-wider">
         <div className="col-span-1 text-center">#</div>
         <div className="col-span-7">Wallet address</div>
         <div className="col-span-3">Amount</div>
@@ -96,10 +98,10 @@ export function RecipientTable({
       {/* Rows */}
       {recipients.length === 0 ? (
         <div className="py-10 text-center border border-dashed border-gray-300 rounded-xl bg-gray-50">
-          <p className="text-sm text-gray-500">No recipients added.</p>
+          <p className="text-base text-gray-500">No recipients added.</p>
         </div>
       ) : (
-        <div className="space-y-2 max-h-[480px] overflow-y-auto pr-1">
+        <div className="space-y-2.5 max-h-[480px] overflow-y-auto pr-1">
           {recipients.map((recipient, index) => {
             const isDup = duplicateAddresses.includes(recipient.address.trim().toLowerCase());
             return (
@@ -124,9 +126,9 @@ export function RecipientTable({
         type="button"
         onClick={handleAdd}
         disabled={isMaxReached}
-        className="w-full h-12 rounded-lg border border-dashed border-gray-300 hover:border-gray-400 text-sm sm:text-base font-medium text-gray-700 hover:text-gray-900 bg-white hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed shadow-2xs"
+        className="w-full h-12 rounded-lg border border-dashed border-gray-300 hover:border-gray-400 text-base font-semibold text-gray-700 hover:text-gray-900 bg-white hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 disabled:opacity-40 disabled:cursor-not-allowed shadow-2xs"
       >
-        <Plus className="w-4 h-4 text-gray-500" />
+        <Plus className="w-5 h-5 text-gray-500" />
         <span>+ Add wallet</span>
       </button>
     </div>

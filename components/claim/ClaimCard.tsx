@@ -60,17 +60,17 @@ export function ClaimCard({ claimId }: ClaimCardProps) {
       <div className="w-full max-w-md mx-auto">
         <GlassCard
           variant="default"
-          className="p-7 text-center space-y-5"
+          className="p-7 sm:p-8 text-center space-y-6"
         >
           {/* Small Label */}
-          <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-gray-500 block">
+          <span className="text-sm font-semibold uppercase tracking-wider text-gray-500 block">
             Secret payment
           </span>
 
           {/* Large Amount */}
           <div className="py-2">
             {step === "LOADING_CLAIM" ? (
-              <Loader2 className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
+              <Loader2 className="w-9 h-9 animate-spin text-blue-600 mx-auto" />
             ) : claimData ? (
               <span className="text-4xl sm:text-5xl font-bold text-gray-900 font-mono tracking-tight block">
                 {claimData.formattedAmount} <span className="text-2xl font-sans font-medium text-gray-600">USDC</span>
@@ -85,7 +85,7 @@ export function ClaimCard({ claimId }: ClaimCardProps) {
           {/* Subtitle / Status Text */}
           {step === "CLAIMED" ? (
             <div className="space-y-1">
-              <h2 className="text-lg font-semibold text-emerald-700">
+              <h2 className="text-xl font-semibold text-emerald-700">
                 Payment claimed
               </h2>
               <p className="text-base text-gray-600">
@@ -94,7 +94,7 @@ export function ClaimCard({ claimId }: ClaimCardProps) {
             </div>
           ) : step === "REFUNDED" ? (
             <div className="space-y-1">
-              <h2 className="text-lg font-semibold text-gray-700">
+              <h2 className="text-xl font-semibold text-gray-700">
                 Payment refunded
               </h2>
               <p className="text-base text-gray-500">
@@ -103,7 +103,7 @@ export function ClaimCard({ claimId }: ClaimCardProps) {
             </div>
           ) : step === "EXPIRED" ? (
             <div className="space-y-1">
-              <h2 className="text-lg font-semibold text-amber-800">
+              <h2 className="text-xl font-semibold text-amber-800">
                 Payment expired
               </h2>
               <p className="text-base text-gray-600">
@@ -111,41 +111,41 @@ export function ClaimCard({ claimId }: ClaimCardProps) {
               </p>
             </div>
           ) : (
-            <p className="text-base text-gray-600">
+            <p className="text-base text-gray-600 font-medium">
               Someone sent you a payment.
             </p>
           )}
 
           {/* Expiry line */}
           {claimData && step !== "CLAIMED" && step !== "REFUNDED" && (
-            <div className="text-xs sm:text-sm text-gray-500">
+            <div className="text-sm text-gray-500 font-medium">
               Expires {formatExpiryTime(claimData.expiry)}
             </div>
           )}
 
           {/* Secret Missing Alert */}
           {claimData && !secretKey && step === "CLAIM_AVAILABLE" && (
-            <div className="p-3.5 rounded-lg bg-amber-50 border border-amber-200 text-sm text-amber-800 flex items-start gap-2 text-left font-medium">
-              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-600" />
+            <div className="p-4 rounded-lg bg-amber-50 border border-amber-200 text-base text-amber-800 flex items-start gap-2.5 text-left font-medium">
+              <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5 text-amber-600" />
               <span>Secret code missing from link.</span>
             </div>
           )}
 
           {errorMessage && (
-            <div className="p-3.5 rounded-lg bg-red-50 border border-red-200 text-sm text-red-700 text-left font-medium">
+            <div className="p-4 rounded-lg bg-red-50 border border-red-200 text-base text-red-700 text-left font-medium">
               {errorMessage}
             </div>
           )}
 
           {/* Transaction Links */}
           {claimTxHash && (
-            <div className="pt-3 border-t border-gray-200 flex items-center justify-between text-sm">
-              <span className="text-gray-500">Transaction</span>
+            <div className="pt-3 border-t border-gray-200 flex items-center justify-between text-base">
+              <span className="text-gray-500 font-medium">Transaction</span>
               <a
                 href={`${ARC_TESTNET.explorerUrl}/tx/${claimTxHash}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-blue-600 hover:underline flex items-center gap-1.5 font-medium"
+                className="font-mono text-blue-600 hover:underline flex items-center gap-1.5 font-semibold text-sm"
               >
                 <span>{claimTxHash.slice(0, 6)}...{claimTxHash.slice(-4)}</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -160,7 +160,7 @@ export function ClaimCard({ claimId }: ClaimCardProps) {
                 variant="primary"
                 size="md"
                 onClick={() => setIsWalletModalOpen(true)}
-                leftIcon={<Wallet className="w-4 h-4" />}
+                leftIcon={<Wallet className="w-5 h-5" />}
                 className="w-full h-12 text-base font-semibold"
               >
                 Connect wallet to claim
@@ -171,7 +171,7 @@ export function ClaimCard({ claimId }: ClaimCardProps) {
                 size="md"
                 onClick={() => switchToArc()}
                 isLoading={isSwitching}
-                leftIcon={<RefreshCw className="w-4 h-4" />}
+                leftIcon={<RefreshCw className="w-5 h-5" />}
                 className="w-full h-12 text-base font-semibold bg-amber-500 hover:bg-amber-600 text-white shadow-none"
               >
                 Switch to Arc Testnet
@@ -199,7 +199,7 @@ export function ClaimCard({ claimId }: ClaimCardProps) {
                 {isRefundingProcessing ? "Refunding..." : "Refund payment"}
               </Button>
             ) : step === "CLAIMED" ? (
-              <div className="p-3.5 rounded-xl bg-gray-50 text-sm text-gray-700 font-mono border border-gray-200">
+              <div className="p-4 rounded-xl bg-gray-50 text-base text-gray-800 font-mono border border-gray-200 font-medium">
                 Claimed by: {claimData?.claimedBy || userAddress}
               </div>
             ) : (
@@ -208,7 +208,7 @@ export function ClaimCard({ claimId }: ClaimCardProps) {
                 size="sm"
                 onClick={refreshClaim}
                 leftIcon={<RefreshCw className="w-4 h-4" />}
-                className="w-full h-11 text-sm font-medium"
+                className="w-full h-12 text-base font-semibold"
               >
                 Refresh
               </Button>

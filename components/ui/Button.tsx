@@ -26,23 +26,23 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const sizeStyles = {
-      sm: "h-10 px-3.5 text-sm font-medium rounded-lg gap-2",
-      md: "h-12 px-5 text-base font-medium rounded-lg gap-2",
-      lg: "h-13 px-6 text-base font-semibold rounded-lg gap-2.5",
-      icon: "h-10 w-10 p-0 rounded-lg justify-center",
+      sm: "h-11 px-4 text-base font-semibold rounded-lg gap-2",
+      md: "h-12 px-5 text-base font-semibold rounded-lg gap-2",
+      lg: "h-13 px-6 text-lg font-semibold rounded-lg gap-2.5",
+      icon: "h-11 w-11 p-0 rounded-lg justify-center",
     };
 
     const variantStyles = {
       primary:
-        "bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm active:scale-[0.99]",
+        "bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-2xs active:scale-[0.99]",
       secondary:
-        "bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 shadow-sm active:scale-[0.99]",
+        "bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 font-semibold shadow-2xs active:scale-[0.99]",
       outline:
-        "bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 active:scale-[0.99]",
+        "bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 font-semibold active:scale-[0.99]",
       ghost:
-        "bg-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-100 active:scale-[0.99]",
+        "bg-transparent text-gray-700 hover:text-gray-900 hover:bg-gray-100 font-semibold active:scale-[0.99]",
       danger:
-        "bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 active:scale-[0.99]",
+        "bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 font-semibold active:scale-[0.99]",
     };
 
     return (
@@ -50,7 +50,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         disabled={disabled || isLoading}
         className={cn(
-          "inline-flex items-center justify-center font-medium transition-colors select-none outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none",
+          "inline-flex items-center justify-center font-semibold transition-colors select-none outline-none disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none",
           sizeStyles[size],
           variantStyles[variant],
           className

@@ -53,7 +53,7 @@ export function AmountInput({
           disabled={disabled}
           placeholder={placeholder}
           className={cn(
-            "w-full h-12 bg-white border rounded-lg pl-4 pr-20 text-base font-mono text-gray-900 placeholder:text-gray-400 shadow-2xs transition-colors outline-none",
+            "w-full h-12 bg-white border rounded-lg pl-4 pr-24 text-base font-mono font-medium text-gray-900 placeholder:text-base placeholder:text-gray-400 shadow-2xs transition-colors outline-none",
             displayError
               ? "border-red-400 focus:border-red-500 focus:ring-1 focus:ring-red-500"
               : "border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600",
@@ -66,15 +66,15 @@ export function AmountInput({
               type="button"
               onClick={handleMax}
               disabled={disabled}
-              className="px-2 py-1 text-xs font-semibold rounded bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors disabled:opacity-50"
+              className="px-2.5 py-1 text-xs font-semibold rounded bg-gray-100 hover:bg-gray-200 text-gray-800 transition-colors disabled:opacity-50"
             >
               Max
             </button>
           )}
-          <span className="text-sm font-semibold text-gray-600 pr-1">{symbol}</span>
+          <span className="text-base font-semibold text-gray-700 pr-1">{symbol}</span>
         </div>
       </div>
-      {displayError && <p className="text-xs sm:text-sm text-red-600 pl-0.5">{displayError}</p>}
+      {displayError && <p className="text-sm text-red-600 pl-0.5 font-medium">{displayError}</p>}
     </div>
   );
 }

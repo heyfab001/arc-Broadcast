@@ -37,37 +37,37 @@ export function BroadcastPreviewModal({
       description="Review recipients and total before signing."
       maxWidth="md"
     >
-      <div className="space-y-5 pt-1 text-sm">
+      <div className="space-y-5 pt-1 text-base">
         {/* Breakdown Card */}
-        <div className="p-4 rounded-xl bg-gray-50 border border-gray-200 space-y-2.5">
+        <div className="p-4 rounded-xl bg-gray-50 border border-gray-200 space-y-3">
           <div className="flex justify-between items-center">
-            <span className="text-gray-600">Total amount</span>
-            <span className="font-mono font-bold text-gray-900 text-base sm:text-lg">
+            <span className="text-gray-600 font-medium">Total amount</span>
+            <span className="font-mono font-bold text-gray-900 text-xl">
               {formatAmount(validation.totalAmount)} {token.symbol}
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-gray-600">Recipients</span>
-            <span className="font-mono font-semibold text-gray-900">{validation.recipientCount}</span>
+            <span className="text-gray-600 font-medium">Recipients</span>
+            <span className="font-mono font-semibold text-gray-900 text-base">{validation.recipientCount}</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-gray-600">Network</span>
-            <span className="text-gray-900 font-medium">{ARC_TESTNET.name}</span>
+            <span className="text-gray-600 font-medium">Network</span>
+            <span className="text-gray-900 font-semibold text-base">{ARC_TESTNET.name}</span>
           </div>
         </div>
 
         {/* Recipients Mini List */}
-        <div className="space-y-1.5">
-          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+        <div className="space-y-2">
+          <span className="text-sm font-semibold text-gray-500 uppercase tracking-wider">
             Recipients ({recipients.length})
           </span>
-          <div className="max-h-48 overflow-y-auto rounded-xl border border-gray-200 bg-white divide-y divide-gray-100">
+          <div className="max-h-52 overflow-y-auto rounded-xl border border-gray-200 bg-white divide-y divide-gray-100">
             {recipients.map((r, i) => (
-              <div key={r.id} className="p-3 flex justify-between items-center font-mono text-xs sm:text-sm">
-                <span className="text-gray-700">
+              <div key={r.id} className="p-3.5 flex justify-between items-center font-mono text-base">
+                <span className="text-gray-800 font-medium">
                   {i + 1}. {truncateAddress(r.address, 6)}
                 </span>
-                <span className="text-gray-900 font-semibold">
+                <span className="text-gray-900 font-bold">
                   {r.amount} {token.symbol}
                 </span>
               </div>
@@ -76,26 +76,26 @@ export function BroadcastPreviewModal({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-end gap-2.5 pt-3 border-t border-gray-200">
+        <div className="flex justify-end gap-3 pt-3 border-t border-gray-200">
           <Button
             type="button"
             variant="ghost"
-            size="sm"
+            size="md"
             onClick={onClose}
             disabled={isBroadcasting}
-            className="h-11 px-4 text-sm font-medium"
+            className="h-12 px-5 text-base font-semibold"
           >
             Back
           </Button>
           <Button
             type="button"
             variant="primary"
-            size="sm"
+            size="md"
             onClick={onConfirmBroadcast}
             disabled={isBroadcasting}
             isLoading={isBroadcasting}
-            leftIcon={isBroadcasting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-            className="h-11 px-6 text-sm font-semibold"
+            leftIcon={isBroadcasting ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+            className="h-12 px-6 text-base font-semibold"
           >
             {isBroadcasting ? "Sending..." : "Send payment"}
           </Button>

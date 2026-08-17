@@ -100,7 +100,7 @@ export default function BroadcastPage() {
             size="sm"
             onClick={() => setIsCsvModalOpen(true)}
             leftIcon={<Upload className="w-4 h-4" />}
-            className="h-11 px-4 text-sm font-semibold"
+            className="h-11 px-4 text-base font-semibold"
           >
             Import CSV
           </Button>
@@ -114,21 +114,21 @@ export default function BroadcastPage() {
         {/* Left Column: Form & Recipient Table (Col 7 - approx 60%) */}
         <div className="lg:col-span-7 space-y-4">
           {/* Currency selection & Balance bar */}
-          <GlassCard variant="default" className="p-5">
+          <GlassCard variant="default" className="p-5 sm:p-6">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <span className="text-sm font-medium text-gray-700 block mb-1.5">
+                <label className="text-base font-semibold text-gray-900 block mb-1.5">
                   Token
-                </span>
+                </label>
                 <TokenSelector
                   selectedToken={selectedToken}
                   onSelectToken={setSelectedToken}
                 />
               </div>
 
-              <div className="text-right text-sm">
-                <span className="text-gray-500 block text-xs sm:text-sm">Available balance</span>
-                <span className="font-mono font-semibold text-gray-900 text-sm sm:text-base mt-0.5 block">
+              <div className="text-right">
+                <span className="text-gray-500 block text-sm font-medium">Available balance</span>
+                <span className="font-mono font-semibold text-gray-900 text-base mt-0.5 block">
                   {!isConnected ? "Not connected" : `${balanceUSDC} USDC`}
                 </span>
               </div>

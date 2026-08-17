@@ -46,10 +46,10 @@ export function RecipientRow({
   const numLabel = (index + 1).toString().padStart(2, "0");
 
   return (
-    <div className="grid grid-cols-12 gap-2.5 items-start py-1.5 transition-all duration-150">
+    <div className="grid grid-cols-12 gap-2.5 items-start py-1 transition-all duration-150">
       {/* Index */}
       <div className="col-span-1 flex items-center justify-center h-12">
-        <span className="font-mono text-xs sm:text-sm text-gray-400 font-medium">
+        <span className="font-mono text-sm text-gray-500 font-semibold">
           {numLabel}
         </span>
       </div>
@@ -64,7 +64,7 @@ export function RecipientRow({
             onChange={(e) => onUpdate(recipient.id, "address", e.target.value)}
             placeholder="Paste wallet address"
             className={cn(
-              "w-full h-12 bg-white border rounded-lg pl-3.5 pr-9 text-base font-mono text-gray-900 placeholder:text-gray-400 shadow-2xs outline-none transition-colors",
+              "w-full h-12 bg-white border rounded-lg pl-3.5 pr-9 text-base font-mono font-medium text-gray-900 placeholder:text-base placeholder:text-gray-400 shadow-2xs outline-none transition-colors",
               isAddressError
                 ? "border-red-400 focus:border-red-500 focus:ring-1 focus:ring-red-500"
                 : isAddressValid
@@ -78,12 +78,12 @@ export function RecipientRow({
         </div>
 
         {isAddressError && (
-          <p className="text-xs sm:text-sm text-red-600 pl-0.5 font-medium">
+          <p className="text-sm text-red-600 pl-0.5 font-medium">
             {isDuplicate ? "Duplicate wallet address" : "Enter a valid wallet address"}
           </p>
         )}
         {isAddressValid && (
-          <p className="text-xs sm:text-sm text-emerald-700 pl-0.5 flex items-center gap-1 font-medium">
+          <p className="text-sm text-emerald-700 pl-0.5 flex items-center gap-1 font-medium">
             <span>✓ Valid address</span>
           </p>
         )}
@@ -104,18 +104,18 @@ export function RecipientRow({
             }}
             placeholder="0.00"
             className={cn(
-              "w-full h-12 bg-white border rounded-lg pl-3.5 pr-14 text-base font-mono text-gray-900 placeholder:text-gray-400 shadow-2xs outline-none transition-colors",
+              "w-full h-12 bg-white border rounded-lg pl-3.5 pr-14 text-base font-mono font-medium text-gray-900 placeholder:text-base placeholder:text-gray-400 shadow-2xs outline-none transition-colors",
               isAmountError
                 ? "border-red-400 focus:border-red-500 focus:ring-1 focus:ring-red-500"
                 : "border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
             )}
           />
-          <span className="absolute right-3 top-3.5 text-xs sm:text-sm font-semibold text-gray-500 pointer-events-none">
+          <span className="absolute right-3 top-3.5 text-sm font-semibold text-gray-600 pointer-events-none">
             {tokenSymbol}
           </span>
         </div>
         {isAmountError && (
-          <p className="text-xs sm:text-sm text-red-600 pl-0.5 font-medium">
+          <p className="text-sm text-red-600 pl-0.5 font-medium">
             Invalid amount
           </p>
         )}

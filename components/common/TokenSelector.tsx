@@ -54,7 +54,7 @@ export function TokenSelector({
                   setIsOpen(false);
                 }}
                 className={cn(
-                  "w-full flex items-center justify-between p-3.5 rounded-xl border text-left transition-colors text-sm sm:text-base",
+                  "w-full flex items-center justify-between p-3.5 rounded-xl border text-left transition-colors",
                   isSelected
                     ? "bg-blue-50 border-blue-200 text-blue-900"
                     : "bg-white border-gray-200 hover:bg-gray-50 text-gray-800"

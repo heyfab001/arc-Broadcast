@@ -22,12 +22,12 @@ export function PageHeader({
         className
       )}
     >
-      <div className="space-y-1">
-        <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-gray-900 leading-tight">
+      <div className="space-y-1.5">
+        <h1 className="text-[30px] sm:text-[36px] font-semibold tracking-tight text-gray-900 leading-tight">
           {title}
         </h1>
         {subtitle && (
-          <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+          <p className="text-base text-gray-600 leading-relaxed">
             {subtitle}
           </p>
         )}

@@ -18,10 +18,10 @@ export function ArcLogo({
   subtitle,
 }: ArcLogoProps) {
   const sizeMap = {
-    sm: { box: "w-7 h-7", img: 24, text: "text-sm font-semibold" },
-    md: { box: "w-8 h-8", img: 30, text: "text-base font-semibold" },
-    lg: { box: "w-10 h-10", img: 36, text: "text-lg font-semibold" },
-    xl: { box: "w-12 h-12", img: 44, text: "text-xl font-semibold" },
+    sm: { box: "w-8 h-8", img: 26, text: "text-base font-semibold" },
+    md: { box: "w-9 h-9", img: 32, text: "text-lg font-semibold" },
+    lg: { box: "w-11 h-11", img: 40, text: "text-xl font-semibold" },
+    xl: { box: "w-14 h-14", img: 50, text: "text-2xl font-semibold" },
   };
 
   const currentSize = sizeMap[size];
@@ -30,7 +30,7 @@ export function ArcLogo({
     <div
       className={cn(
         currentSize.box,
-        "rounded-lg bg-white border border-gray-200 shadow-sm flex items-center justify-center overflow-hidden shrink-0",
+        "rounded-lg bg-white border border-gray-200 shadow-2xs flex items-center justify-center overflow-hidden shrink-0",
         className
       )}
     >
@@ -50,14 +50,14 @@ export function ArcLogo({
   }
 
   return (
-    <div className="flex items-center gap-2.5">
+    <div className="flex items-center gap-3">
       {logoIcon}
       <div>
         <span className={cn("text-gray-900 tracking-tight block leading-tight", currentSize.text)}>
           Arc Broadcast
         </span>
         {subtitle && (
-          <span className="text-xs text-gray-500 block leading-tight mt-0.5">
+          <span className="text-sm text-gray-500 block leading-tight mt-0.5 font-normal">
             {subtitle}
           </span>
         )}

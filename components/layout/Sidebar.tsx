@@ -36,7 +36,7 @@ export function Sidebar() {
       </Link>
 
       {/* Main Navigation */}
-      <nav className="space-y-1 flex-1">
+      <nav className="space-y-1.5 flex-1">
         {mainNavItems.map((item) => {
           const Icon = item.icon;
           const isActive =
@@ -50,10 +50,10 @@ export function Sidebar() {
               href={item.href}
               prefetch
               className={cn(
-                "flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[15px] font-medium transition-colors duration-150",
+                "flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-base transition-colors duration-150",
                 isActive
                   ? "bg-blue-50 text-blue-600 font-semibold"
-                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50 font-medium"
               )}
             >
               <Icon
@@ -74,10 +74,10 @@ export function Sidebar() {
           href="/settings"
           prefetch
           className={cn(
-            "flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[15px] font-medium transition-colors duration-150",
+            "flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-base transition-colors duration-150",
             isSettingsActive
               ? "bg-blue-50 text-blue-600 font-semibold"
-              : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+              : "text-gray-600 hover:text-gray-900 hover:bg-gray-50 font-medium"
           )}
         >
           <Settings
@@ -93,17 +93,17 @@ export function Sidebar() {
       {/* Bottom Wallet Session Indicator */}
       <div className="pt-3 border-t border-gray-100">
         {isConnected ? (
-          <div className="p-3 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-between text-sm">
+          <div className="p-3 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-between text-[15px]">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-md bg-white border border-gray-200 shadow-2xs flex items-center justify-center text-gray-700">
                 <Wallet className="w-4 h-4" />
               </div>
-              <span className="font-mono text-gray-900 text-xs sm:text-sm font-medium">{shortAddress}</span>
+              <span className="font-mono text-gray-900 text-sm font-semibold">{shortAddress}</span>
             </div>
-            <span className="font-mono text-xs sm:text-sm font-medium text-gray-700">{balanceUSDC} USDC</span>
+            <span className="font-mono text-sm font-semibold text-gray-700">{balanceUSDC} USDC</span>
           </div>
         ) : (
-          <div className="text-xs text-gray-400 px-1 font-mono">
+          <div className="text-sm text-gray-500 px-1 font-mono">
             Arc Testnet (5042002)
           </div>
         )}
