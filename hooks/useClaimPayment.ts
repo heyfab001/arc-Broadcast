@@ -2,12 +2,13 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useAccount, useWriteContract, usePublicClient } from "wagmi";
-import { Hex, Address } from "viem";
+import { Hex } from "viem";
 import { CONTRACTS } from "@/config/contracts";
 import { TRANSACTIONS_FROZEN, TRANSACTIONS_FROZEN_MESSAGE } from "@/config/constants";
 import { ARC_TESTNET_CHAIN } from "@/config/chains";
 import { ArcSecretPaymentAbi } from "@/contracts/abis/ArcSecretPaymentAbi";
 import { getOnChainClaim, OnChainClaim, computeSecretHash } from "@/services/secretPayment";
+import { normalizeChainId } from "@/lib/arc";
 
 export type ClaimStep =
   | "LOADING_CLAIM"
@@ -86,9 +87,10 @@ export function useClaimPayment(claimIdParam: string) {
       }
 
       setStep("CLAIM_AVAILABLE");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("[CLAIM_PAY] Error fetching claim:", err);
-      setErrorMessage(err?.message || "Failed to load claim from blockchain.");
+      const errObj = err as { message?: string };
+      setErrorMessage(errObj?.message || "Failed to load claim from blockchain.");
       setStep("ERROR");
     }
   }, [claimId]);
@@ -129,8 +131,9 @@ export function useClaimPayment(claimIdParam: string) {
       return;
     }
 
-    if (chainId !== ARC_TESTNET_CHAIN.id) {
-      setErrorMessage(`Please switch to ${ARC_TESTNET_CHAIN.name}.`);
+    const normalizedChain = normalizeChainId(chainId);
+    if (normalizedChain !== ARC_TESTNET_CHAIN.id) {
+      setErrorMessage("Please switch to Arc Testnet.");
       return;
     }
 
@@ -172,9 +175,10 @@ export function useClaimPayment(claimIdParam: string) {
       console.log("[CLAIM_PAY] Claim confirmed on-chain.");
       setStep("CLAIMED");
       await refreshClaim();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("[CLAIM_PAY] Error claiming payment:", err);
-      const rawMsg = err?.shortMessage || err?.message || "Claim transaction failed";
+      const errObj = err as { shortMessage?: string; message?: string };
+      const rawMsg = errObj?.shortMessage || errObj?.message || "Claim transaction failed";
       if (rawMsg.includes("User rejected") || rawMsg.includes("denied")) {
         setErrorMessage("Claim transaction was cancelled in your wallet.");
       } else {
@@ -202,8 +206,9 @@ export function useClaimPayment(claimIdParam: string) {
       return;
     }
 
-    if (chainId !== ARC_TESTNET_CHAIN.id) {
-      setErrorMessage(`Please switch to ${ARC_TESTNET_CHAIN.name}.`);
+    const normalizedChain = normalizeChainId(chainId);
+    if (normalizedChain !== ARC_TESTNET_CHAIN.id) {
+      setErrorMessage("Please switch to Arc Testnet.");
       return;
     }
 
@@ -240,9 +245,10 @@ export function useClaimPayment(claimIdParam: string) {
       console.log("[CLAIM_PAY] Refund confirmed on-chain.");
       setStep("REFUNDED");
       await refreshClaim();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("[CLAIM_PAY] Error refunding payment:", err);
-      const rawMsg = err?.shortMessage || err?.message || "Refund transaction failed";
+      const errObj = err as { shortMessage?: string; message?: string };
+      const rawMsg = errObj?.shortMessage || errObj?.message || "Refund transaction failed";
       setErrorMessage(rawMsg);
       setStep("EXPIRED");
     }

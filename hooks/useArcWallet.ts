@@ -6,7 +6,6 @@ import {
   useConnect,
   useDisconnect,
   useBalance,
-  useChainId,
   Connector,
 } from "wagmi";
 import { ARC_CHAIN_ID, ARC_TESTNET } from "@/config/chains";
@@ -20,8 +19,15 @@ export function useArcWallet() {
   const { address, isConnected, isConnecting, isReconnecting, connector } = useAccount();
   const { connectAsync, connectors, isPending: isConnectPending } = useConnect();
   const { disconnect } = useDisconnect();
-  const chainId = useChainId();
-  const { isArcTestnet, isWrongNetwork, isSwitching, switchToArc } = useArcNetwork();
+  const {
+    currentChainId,
+    actualChainId,
+    isArcTestnet,
+    isWrongNetwork,
+    isSwitching,
+    switchToArc,
+    syncProviderChainId,
+  } = useArcNetwork();
 
   // Query real native USDC balance on Arc Testnet (no aggressive polling)
   const {
@@ -33,7 +39,7 @@ export function useArcWallet() {
     address: address,
     chainId: ARC_CHAIN_ID,
     query: {
-      enabled: isConnected && !!address,
+      enabled: isConnected && !!address && isArcTestnet,
       refetchInterval: 60_000,
       refetchIntervalInBackground: false,
     },
@@ -52,11 +58,11 @@ export function useArcWallet() {
 
   // Formatted native USDC balance
   const balanceUSDC = useMemo(() => {
-    if (!isConnected || !address) return "0.00";
+    if (!isConnected || !address || isWrongNetwork) return "0.00";
     if (isBalanceLoading && !balanceData) return "0.00";
     if (isBalanceError || !balanceData) return "0.00";
     return formatArcUsdc(balanceData.value, 4);
-  }, [isConnected, address, isBalanceLoading, isBalanceError, balanceData]);
+  }, [isConnected, address, isWrongNetwork, isBalanceLoading, isBalanceError, balanceData]);
 
   const balanceRaw = balanceData?.value ?? BigInt(0);
 
@@ -101,7 +107,8 @@ export function useArcWallet() {
     isConnecting: isConnecting || isConnectPending || isReconnecting,
     isDisconnected: !isConnected,
     status: connectionStatus,
-    chainId,
+    chainId: actualChainId ?? currentChainId,
+    actualChainId,
     isArcTestnet,
     isWrongNetwork,
     isSwitching,
@@ -115,6 +122,7 @@ export function useArcWallet() {
     connectWallet,
     disconnectWallet,
     switchToArc,
+    syncProviderChainId,
     currentNetwork: ARC_TESTNET,
   };
 }

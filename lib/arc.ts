@@ -17,6 +17,25 @@ export const ARC_TESTNET_ADD_ETHEREUM_CHAIN_PARAMS = {
 };
 
 /**
+ * Safe chain ID normalizer handling numbers, hex strings ("0x4d2b22", "0x1"), decimal strings, and BigInt
+ */
+export function normalizeChainId(chainId: unknown): number | null {
+  if (chainId === null || chainId === undefined) return null;
+  if (typeof chainId === "number") return isNaN(chainId) ? null : chainId;
+  if (typeof chainId === "bigint") return Number(chainId);
+  if (typeof chainId === "string") {
+    const trimmed = chainId.trim();
+    if (trimmed.startsWith("0x") || trimmed.startsWith("0X")) {
+      const parsed = parseInt(trimmed, 16);
+      return isNaN(parsed) ? null : parsed;
+    }
+    const parsed = parseInt(trimmed, 10);
+    return isNaN(parsed) ? null : parsed;
+  }
+  return null;
+}
+
+/**
  * Format native Arc USDC atomic units (18 decimals) into a clean user-facing string.
  */
 export function formatArcUsdc(

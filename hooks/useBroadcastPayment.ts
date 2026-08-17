@@ -14,7 +14,7 @@ import {
 } from "@/services/broadcastPayment";
 import { Recipient } from "@/types/payment";
 import { ARC_CHAIN_ID, ARC_TESTNET } from "@/config/chains";
-import { parseWalletErrorMessage } from "@/lib/arc";
+import { parseWalletErrorMessage, normalizeChainId } from "@/lib/arc";
 import { showToast } from "@/hooks/useToast";
 import { isAddress } from "viem";
 
@@ -157,10 +157,11 @@ export function useBroadcastPayment() {
       }
 
       // 2. Network check
-      if (chainId !== ARC_CHAIN_ID) {
-        console.warn("[BROADCAST] Wrong network:", chainId, "Expected:", ARC_CHAIN_ID);
+      const normalizedChain = normalizeChainId(chainId);
+      if (normalizedChain !== ARC_CHAIN_ID) {
+        console.warn("[BROADCAST] Wrong network:", chainId, "Normalized:", normalizedChain, "Expected:", ARC_CHAIN_ID);
         setStep("ERROR");
-        setError("Switch to Arc Testnet");
+        setError("Please switch to Arc Testnet.");
         setStatusText("Switch to Arc Testnet");
         showToast({
           title: "Wrong Network",

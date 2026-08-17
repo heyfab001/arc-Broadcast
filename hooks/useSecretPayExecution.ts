@@ -2,12 +2,13 @@
 
 import { useState, useCallback } from "react";
 import { useAccount, useWriteContract, usePublicClient } from "wagmi";
-import { parseUnits, Hex, Address } from "viem";
+import { parseUnits, Hex } from "viem";
 import { CONTRACTS, DEFAULT_USDC_DECIMALS } from "@/config/contracts";
 import { TRANSACTIONS_FROZEN, TRANSACTIONS_FROZEN_MESSAGE } from "@/config/constants";
 import { ARC_TESTNET_CHAIN } from "@/config/chains";
 import { ArcSecretPaymentAbi } from "@/contracts/abis/ArcSecretPaymentAbi";
 import { Erc20Abi } from "@/contracts/abis/ArcBatchPaymentAbi";
+import { normalizeChainId } from "@/lib/arc";
 import {
   generateSecureSecret,
   generateClaimId,
@@ -75,8 +76,9 @@ export function useSecretPayExecution() {
         return;
       }
 
-      if (chainId !== ARC_TESTNET_CHAIN.id) {
-        setErrorMessage(`Please switch to ${ARC_TESTNET_CHAIN.name} (Chain ID: ${ARC_TESTNET_CHAIN.id}).`);
+      const normalizedChain = normalizeChainId(chainId);
+      if (normalizedChain !== ARC_TESTNET_CHAIN.id) {
+        setErrorMessage("Please switch to Arc Testnet.");
         setStep("ERROR");
         return;
       }
@@ -194,9 +196,10 @@ export function useSecretPayExecution() {
 
         setStep("PAYMENT_CREATED");
         console.log("[SECRET_PAY] 10. Payment created successfully. Claim URL ready.");
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("[SECRET_PAY] Execution error:", err);
-        const rawMsg = err?.shortMessage || err?.message || "Transaction failed";
+        const errObj = err as { shortMessage?: string; message?: string };
+        const rawMsg = errObj?.shortMessage || errObj?.message || "Transaction failed";
         if (
           rawMsg.includes("User rejected") ||
           rawMsg.includes("denied") ||
