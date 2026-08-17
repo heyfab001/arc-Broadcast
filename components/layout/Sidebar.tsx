@@ -31,7 +31,7 @@ export function Sidebar() {
   return (
     <aside className="hidden lg:flex flex-col w-64 border-r border-gray-200 bg-white p-5 sticky top-0 h-screen z-30 shrink-0">
       {/* Brand Header */}
-      <Link href="/" className="px-2 mb-8 block hover:opacity-90 transition-opacity">
+      <Link href="/" prefetch className="px-2 mb-8 block hover:opacity-90 transition-opacity">
         <ArcLogo size="md" withText subtitle="Payments on Arc" />
       </Link>
 
@@ -48,6 +48,7 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              prefetch
               className={cn(
                 "flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[15px] font-medium transition-colors duration-150",
                 isActive
@@ -71,6 +72,7 @@ export function Sidebar() {
       <div className="pt-3 mb-3 border-t border-gray-100">
         <Link
           href="/settings"
+          prefetch
           className={cn(
             "flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[15px] font-medium transition-colors duration-150",
             isSettingsActive

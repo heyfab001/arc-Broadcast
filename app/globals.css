@@ -38,9 +38,9 @@ body {
   background: #94A3B8;
 }
 
-/* Fast, subtle page transition */
+/* Fast 100ms page entry transition */
 .animate-fade-in {
-  animation: fadeIn 0.15s ease-out forwards;
+  animation: fadeIn 0.1s ease-out forwards;
 }
 
 @keyframes fadeIn {

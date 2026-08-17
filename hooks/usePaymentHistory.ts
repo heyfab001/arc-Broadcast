@@ -8,7 +8,11 @@ import { fetchUserOnChainHistory, getCachedUserHistory } from "@/services/paymen
 
 export type HistoryTab = "all" | "broadcast" | "secret_pay" | "claim";
 
-export function usePaymentHistory() {
+export interface UsePaymentHistoryOptions {
+  autoFetch?: boolean;
+}
+
+export function usePaymentHistory({ autoFetch = true }: UsePaymentHistoryOptions = {}) {
   const { address: userAddress, isConnected, chainId } = useAccount();
 
   const [activeTab, setActiveTab] = useState<HistoryTab>("all");
@@ -17,7 +21,7 @@ export function usePaymentHistory() {
   // Instant initial load from in-memory cache if available
   const initialCache = userAddress ? getCachedUserHistory(userAddress) : null;
   const [transactions, setTransactions] = useState<Transaction[]>(initialCache?.transactions || []);
-  const [isLoading, setIsLoading] = useState<boolean>(!initialCache && Boolean(isConnected && userAddress));
+  const [isLoading, setIsLoading] = useState<boolean>(!initialCache && Boolean(isConnected && userAddress && autoFetch));
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [isBatchDeployed, setIsBatchDeployed] = useState(true);
@@ -62,24 +66,31 @@ export function usePaymentHistory() {
     [isConnected, userAddress, isWrongNetwork, transactions.length]
   );
 
-  // Initial load on wallet connect / address change
+  // Initial load on mount ONLY if autoFetch is true and cache is not present
   useEffect(() => {
+    if (!autoFetch) {
+      if (userAddress) {
+        const cached = getCachedUserHistory(userAddress);
+        if (cached) setTransactions(cached.transactions);
+      }
+      setIsLoading(false);
+      return;
+    }
+
     if (userAddress && isConnected && !isWrongNetwork) {
       const cached = getCachedUserHistory(userAddress);
       if (cached) {
         setTransactions(cached.transactions);
         setIsLoading(false);
-        // Refresh quietly in the background
-        loadHistory(false, false);
       } else {
-        loadHistory(true, true);
+        loadHistory(true, false);
       }
     }
-  }, [userAddress, isConnected, isWrongNetwork]);
+  }, [userAddress, isConnected, isWrongNetwork, autoFetch, loadHistory]);
 
-  // Auto-refresh every 60 seconds only when tab is visible
+  // Auto-refresh every 60 seconds only when tab is visible and on active history page
   useEffect(() => {
-    if (!isConnected || isWrongNetwork || !userAddress) return;
+    if (!autoFetch || !isConnected || isWrongNetwork || !userAddress) return;
 
     const interval = setInterval(() => {
       if (typeof document !== "undefined" && document.visibilityState === "visible") {
@@ -99,7 +110,7 @@ export function usePaymentHistory() {
       clearInterval(interval);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [isConnected, isWrongNetwork, userAddress, loadHistory]);
+  }, [autoFetch, isConnected, isWrongNetwork, userAddress, loadHistory]);
 
   // Filter by Tab and Search Query entirely locally with 0 latency
   const filteredTransactions = useMemo(() => {

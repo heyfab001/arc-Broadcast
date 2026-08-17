@@ -48,7 +48,7 @@ export function Navbar() {
             )}
           </button>
 
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" prefetch className="flex items-center gap-2">
             <ArcLogo size="sm" withText={false} />
             <span className="font-semibold text-base text-gray-900">
               Arc Broadcast
@@ -87,6 +87,7 @@ export function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
+                prefetch
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={cn(
                   "block px-3.5 py-2.5 rounded-lg text-base font-medium transition-colors",

@@ -74,8 +74,8 @@ export async function fetchUserOnChainHistory(
   const normalizedUser = userAddress.toLowerCase() as Address;
   const cached = memoryHistoryCache.get(normalizedUser);
 
-  // Return cached results if valid (< 30s) unless bypass requested
-  if (!bypassCache && cached && Date.now() - cached.timestamp < 30_000) {
+  // Return cached results if valid (< 60s) unless bypass requested
+  if (!bypassCache && cached && Date.now() - cached.timestamp < 60_000) {
     return {
       transactions: cached.transactions,
       isBatchDeployed: cached.isBatchDeployed,

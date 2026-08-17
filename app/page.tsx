@@ -8,7 +8,8 @@ import { usePaymentHistory } from "@/hooks/usePaymentHistory";
 import { Send, KeyRound, ArrowRight } from "lucide-react";
 
 export default function DashboardPage() {
-  const { transactions, isLoading, error, refresh } = usePaymentHistory();
+  // autoFetch: false prevents triggering heavy on-chain log queries on Overview navigation
+  const { transactions, isLoading, error, refresh } = usePaymentHistory({ autoFetch: false });
 
   return (
     <div className="space-y-8 animate-fade-in max-w-5xl">
@@ -25,7 +26,7 @@ export default function DashboardPage() {
       {/* Two Primary Action Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {/* Broadcast Payment Card */}
-        <Link href="/broadcast" className="block group">
+        <Link href="/broadcast" className="block group" prefetch>
           <GlassCard variant="interactive" className="p-6 space-y-5 h-full flex flex-col justify-between">
             <div className="space-y-3.5">
               <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
@@ -50,7 +51,7 @@ export default function DashboardPage() {
         </Link>
 
         {/* Secret Pay Card */}
-        <Link href="/secret-pay" className="block group">
+        <Link href="/secret-pay" className="block group" prefetch>
           <GlassCard variant="interactive" className="p-6 space-y-5 h-full flex flex-col justify-between">
             <div className="space-y-3.5">
               <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
@@ -83,6 +84,7 @@ export default function DashboardPage() {
           </h2>
           <Link
             href="/history"
+            prefetch
             className="text-sm font-medium text-blue-600 hover:underline"
           >
             View all
