@@ -10,11 +10,14 @@ import {
 } from "@/lib/arc";
 import { showToast } from "@/hooks/useToast";
 
+// Global in-flight lock across all components to prevent duplicate switch calls
+let isGlobalSwitching = false;
+
 export function useArcNetwork() {
   const { isConnected, connector, chainId: accountChainId } = useAccount();
-  const { switchChainAsync, isPending: isWagmiSwitching } = useSwitchChain();
+  const { switchChainAsync } = useSwitchChain();
   const [providerChainId, setProviderChainId] = useState<number | null>(null);
-  const [isManualSwitching, setIsManualSwitching] = useState(false);
+  const [isSwitching, setIsSwitching] = useState<boolean>(false);
 
   // Helper to query actual chain ID from active EIP-1193 provider
   const syncProviderChainId = useCallback(async () => {
@@ -49,7 +52,7 @@ export function useArcNetwork() {
     return null;
   }, [connector]);
 
-  // Sync on connect, connector change, or accountChainId change
+  // Sync on initial connect or connector change (read-only, never triggers switch)
   useEffect(() => {
     if (isConnected) {
       if (accountChainId) {
@@ -64,7 +67,7 @@ export function useArcNetwork() {
     }
   }, [isConnected, accountChainId, connector, syncProviderChainId]);
 
-  // Listen to EIP-1193 chainChanged event directly on the provider
+  // Listen to EIP-1193 chainChanged event directly on the active provider
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -125,14 +128,20 @@ export function useArcNetwork() {
     return effectiveChainId !== ARC_CHAIN_ID;
   }, [isConnected, effectiveChainId]);
 
-  const isSwitching = isWagmiSwitching || isManualSwitching;
-
+  // Explicit user-initiated switch request with mutex lock (NEVER auto-retries)
   const switchToArc = useCallback(async (): Promise<boolean> => {
     if (!isConnected) return false;
 
-    setIsManualSwitching(true);
+    // Mutex lock to prevent duplicate concurrent switch requests
+    if (isGlobalSwitching) {
+      console.log("[Arc Network] Switch request already in-flight. Ignoring duplicate click.");
+      return false;
+    }
+
+    isGlobalSwitching = true;
+    setIsSwitching(true);
+
     try {
-      // 1. Get active provider
       let provider: { request: (args: { method: string; params?: unknown[] }) => Promise<unknown> } | null = null;
       if (connector?.getProvider) {
         try {
@@ -145,7 +154,7 @@ export function useArcNetwork() {
         }).ethereum || null;
       }
 
-      // Try switchChainAsync
+      // Step 1: Attempt standard wallet switch
       if (switchChainAsync) {
         try {
           await switchChainAsync({ chainId: ARC_CHAIN_ID });
@@ -153,7 +162,7 @@ export function useArcNetwork() {
           const errObj = switchErr as { code?: number; message?: string; shortMessage?: string };
           const errMsg = (errObj?.shortMessage || errObj?.message || String(switchErr)).toLowerCase();
 
-          // User rejected
+          // User rejected the switch request
           if (
             errObj?.code === 4001 ||
             errMsg.includes("user rejected") ||
@@ -165,11 +174,12 @@ export function useArcNetwork() {
               message: "Network switch cancelled.",
               type: "warning",
             });
-            setIsManualSwitching(false);
+            isGlobalSwitching = false;
+            setIsSwitching(false);
             return false;
           }
 
-          // Unrecognized chain (4902)
+          // Unrecognized chain (4902) -> Request add network once
           const isNotAdded =
             errObj?.code === 4902 ||
             errMsg.includes("4902") ||
@@ -184,14 +194,14 @@ export function useArcNetwork() {
                 params: [ARC_TESTNET_ADD_ETHEREUM_CHAIN_PARAMS],
               });
 
-              // Switch after add
+              // Switch after network addition approved
               await switchChainAsync({ chainId: ARC_CHAIN_ID });
             } catch (addErr: unknown) {
               const addErrMsg = String((addErr as Error)?.message || addErr).toLowerCase();
               if (addErrMsg.includes("4001") || addErrMsg.includes("user rejected") || addErrMsg.includes("denied")) {
                 showToast({
                   title: "Network Switch",
-                  message: "Network switch cancelled.",
+                  message: "Adding Arc Testnet was cancelled.",
                   type: "warning",
                 });
               } else {
@@ -201,7 +211,8 @@ export function useArcNetwork() {
                   type: "error",
                 });
               }
-              setIsManualSwitching(false);
+              isGlobalSwitching = false;
+              setIsSwitching(false);
               return false;
             }
           } else {
@@ -211,13 +222,14 @@ export function useArcNetwork() {
               message: friendlyMsg,
               type: "warning",
             });
-            setIsManualSwitching(false);
+            isGlobalSwitching = false;
+            setIsSwitching(false);
             return false;
           }
         }
       }
 
-      // Re-verify actual provider chain ID after switch attempt
+      // Step 2: Verify actual provider chain ID after switch
       const verified = await syncProviderChainId();
       if (verified === ARC_CHAIN_ID) {
         showToast({
@@ -225,7 +237,8 @@ export function useArcNetwork() {
           message: "Connected to Arc Testnet ✓",
           type: "success",
         });
-        setIsManualSwitching(false);
+        isGlobalSwitching = false;
+        setIsSwitching(false);
         return true;
       }
     } catch (err: unknown) {
@@ -236,7 +249,8 @@ export function useArcNetwork() {
         type: "error",
       });
     } finally {
-      setIsManualSwitching(false);
+      isGlobalSwitching = false;
+      setIsSwitching(false);
     }
     return false;
   }, [isConnected, connector, switchChainAsync, syncProviderChainId]);

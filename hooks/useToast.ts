@@ -10,6 +10,7 @@ export interface ToastItem {
   message?: string;
   type: ToastType;
   duration?: number;
+  timestamp?: number;
 }
 
 // Global listeners for simple reactive toasts across components
@@ -22,12 +23,33 @@ function notify() {
 }
 
 export function showToast(toast: Omit<ToastItem, "id">) {
+  const now = Date.now();
+
+  // Deduplicate identical toasts within a 3-second window
+  const isDuplicate = currentToasts.some(
+    (t) =>
+      t.title === toast.title &&
+      t.message === toast.message &&
+      now - (t.timestamp || 0) < 3000
+  );
+
+  if (isDuplicate) {
+    return;
+  }
+
   const id = Math.random().toString(36).substring(2, 9);
-  const newToast: ToastItem = { ...toast, id };
-  currentToasts = [...currentToasts, newToast];
+  const newToast: ToastItem = { ...toast, id, timestamp: now };
+
+  // Keep max 3 toasts on screen
+  if (currentToasts.length >= 3) {
+    currentToasts = [...currentToasts.slice(1), newToast];
+  } else {
+    currentToasts = [...currentToasts, newToast];
+  }
+
   notify();
 
-  const duration = toast.duration ?? 4500;
+  const duration = toast.duration ?? 4000;
   if (duration > 0) {
     setTimeout(() => {
       dismissToast(id);
