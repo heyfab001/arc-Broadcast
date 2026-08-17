@@ -69,7 +69,7 @@ export function Sidebar() {
       </nav>
 
       {/* Creator Credit (Directly Above Settings) */}
-      <div className="px-3.5 py-2.5 my-1 text-sm text-[#4B5563] font-medium select-none">
+      <div className="px-3.5 py-2.5 my-1 text-sm text-[#111827] font-medium select-none">
         <a
           href="https://x.com/cd_sh73839"
           target="_blank"

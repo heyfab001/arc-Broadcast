@@ -86,7 +86,7 @@ export function Navbar() {
             if (item.href === "/settings") {
               return (
                 <React.Fragment key={item.href}>
-                  <div className="px-3.5 py-2 text-sm text-[#4B5563] font-medium border-t border-gray-100 my-1">
+                  <div className="px-3.5 py-2 text-sm text-[#111827] font-medium border-t border-gray-100 my-1">
                     <a
                       href="https://x.com/cd_sh73839"
                       target="_blank"
