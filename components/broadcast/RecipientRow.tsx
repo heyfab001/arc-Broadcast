@@ -49,7 +49,7 @@ export function RecipientRow({
     <div className="grid grid-cols-12 gap-2.5 items-start py-1.5 transition-all duration-150">
       {/* Index */}
       <div className="col-span-1 flex items-center justify-center h-12">
-        <span className="font-mono text-xs sm:text-sm text-slate-500 font-medium">
+        <span className="font-mono text-xs sm:text-sm text-gray-400 font-medium">
           {numLabel}
         </span>
       </div>
@@ -64,26 +64,26 @@ export function RecipientRow({
             onChange={(e) => onUpdate(recipient.id, "address", e.target.value)}
             placeholder="Paste wallet address"
             className={cn(
-              "w-full h-12 bg-[#0C0D12] border rounded-lg pl-3.5 pr-9 text-base font-mono text-white placeholder-slate-500 placeholder:text-base outline-none transition-colors",
+              "w-full h-12 bg-white border rounded-lg pl-3.5 pr-9 text-base font-mono text-gray-900 placeholder:text-gray-400 shadow-2xs outline-none transition-colors",
               isAddressError
-                ? "border-red-500/60 focus:border-red-500"
+                ? "border-red-400 focus:border-red-500 focus:ring-1 focus:ring-red-500"
                 : isAddressValid
-                ? "border-emerald-500/50 focus:border-emerald-500"
-                : "border-white/15 focus:border-blue-500"
+                ? "border-emerald-500 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
+                : "border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
             )}
           />
           {isAddressValid && (
-            <Check className="w-4 h-4 text-emerald-400 absolute right-3 top-4 pointer-events-none" />
+            <Check className="w-4 h-4 text-emerald-600 absolute right-3 top-4 pointer-events-none" />
           )}
         </div>
 
         {isAddressError && (
-          <p className="text-xs sm:text-sm text-red-400 pl-0.5">
+          <p className="text-xs sm:text-sm text-red-600 pl-0.5 font-medium">
             {isDuplicate ? "Duplicate wallet address" : "Enter a valid wallet address"}
           </p>
         )}
         {isAddressValid && (
-          <p className="text-xs sm:text-sm text-emerald-400 pl-0.5 flex items-center gap-1">
+          <p className="text-xs sm:text-sm text-emerald-700 pl-0.5 flex items-center gap-1 font-medium">
             <span>✓ Valid address</span>
           </p>
         )}
@@ -104,18 +104,18 @@ export function RecipientRow({
             }}
             placeholder="0.00"
             className={cn(
-              "w-full h-12 bg-[#0C0D12] border rounded-lg pl-3.5 pr-14 text-base font-mono text-white placeholder-slate-500 placeholder:text-base outline-none transition-colors",
+              "w-full h-12 bg-white border rounded-lg pl-3.5 pr-14 text-base font-mono text-gray-900 placeholder:text-gray-400 shadow-2xs outline-none transition-colors",
               isAmountError
-                ? "border-red-500/60 focus:border-red-500"
-                : "border-white/15 focus:border-blue-500"
+                ? "border-red-400 focus:border-red-500 focus:ring-1 focus:ring-red-500"
+                : "border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
             )}
           />
-          <span className="absolute right-3 top-3.5 text-xs sm:text-sm font-semibold text-slate-400 pointer-events-none">
+          <span className="absolute right-3 top-3.5 text-xs sm:text-sm font-semibold text-gray-500 pointer-events-none">
             {tokenSymbol}
           </span>
         </div>
         {isAmountError && (
-          <p className="text-xs sm:text-sm text-red-400 pl-0.5">
+          <p className="text-xs sm:text-sm text-red-600 pl-0.5 font-medium">
             Invalid amount
           </p>
         )}
@@ -132,8 +132,8 @@ export function RecipientRow({
           className={cn(
             "w-10 h-10 rounded-lg flex items-center justify-center transition-colors",
             isRemovable
-              ? "text-slate-400 hover:text-red-400 hover:bg-white/[0.06]"
-              : "text-slate-700 cursor-not-allowed opacity-30"
+              ? "text-gray-400 hover:text-red-600 hover:bg-red-50"
+              : "text-gray-300 cursor-not-allowed opacity-40"
           )}
         >
           <Trash2 className="w-4 h-4" />

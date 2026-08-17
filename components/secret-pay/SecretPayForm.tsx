@@ -93,10 +93,10 @@ export function SecretPayForm({
           {/* Amount & Token */}
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
-              <label className="font-medium text-slate-200">Amount</label>
-              <span className="text-slate-400">
+              <label className="font-semibold text-gray-900">Amount</label>
+              <span className="text-gray-500">
                 Balance:{" "}
-                <span className="font-mono text-slate-200 font-medium">
+                <span className="font-mono text-gray-900 font-semibold">
                   {isConnected ? `${balanceUSDC} ${selectedToken.symbol}` : "Not connected"}
                 </span>
               </span>
@@ -119,12 +119,12 @@ export function SecretPayForm({
                 />
               </div>
             </div>
-            {error && <p className="text-sm text-red-400">{error}</p>}
+            {error && <p className="text-sm text-red-600 font-medium">{error}</p>}
           </div>
 
           {/* Expiry */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-slate-200">
+            <label className="block text-sm font-semibold text-gray-900">
               Expiry
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
@@ -137,10 +137,10 @@ export function SecretPayForm({
                     disabled={isProcessing}
                     onClick={() => onChangeExpiry(opt.value)}
                     className={cn(
-                      "h-11 px-3 rounded-lg border text-sm font-medium transition-colors text-center",
+                      "h-11 px-3 rounded-lg border text-sm font-medium transition-colors text-center shadow-2xs",
                       isSelected
-                        ? "bg-blue-600 text-white border-blue-500"
-                        : "bg-[#0C0D12] border-white/15 text-slate-300 hover:text-white hover:border-white/25",
+                        ? "bg-blue-50 text-blue-700 border-blue-600 font-semibold"
+                        : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50 hover:border-gray-400",
                       isProcessing && "opacity-50 cursor-not-allowed"
                     )}
                   >
@@ -153,7 +153,7 @@ export function SecretPayForm({
 
           {/* Message */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-slate-200">
+            <label className="block text-sm font-semibold text-gray-900">
               Message (optional)
             </label>
             <input
@@ -163,15 +163,15 @@ export function SecretPayForm({
               disabled={isProcessing}
               placeholder="Add a note (optional)"
               maxLength={120}
-              className="w-full h-12 bg-[#0C0D12] border border-white/15 rounded-lg px-4 text-base text-white placeholder-slate-500 placeholder:text-base outline-none focus:border-blue-500 disabled:opacity-50"
+              className="w-full h-12 bg-white border border-gray-300 rounded-lg px-4 text-base text-gray-900 placeholder:text-gray-400 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-2xs disabled:opacity-50 disabled:bg-gray-50"
             />
           </div>
 
           {/* Error Alert */}
           {errorMessage && (
-            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 flex items-start gap-2.5 text-sm text-red-300">
+            <div className="p-3.5 rounded-lg bg-red-50 border border-red-200 flex items-start gap-2.5 text-sm text-red-700">
               <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-              <p>{errorMessage}</p>
+              <p className="font-medium">{errorMessage}</p>
             </div>
           )}
 
@@ -196,7 +196,7 @@ export function SecretPayForm({
                 onClick={() => switchToArc()}
                 isLoading={isSwitching}
                 leftIcon={<RefreshCw className="w-4 h-4" />}
-                className="w-full h-12 text-base font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950"
+                className="w-full h-12 text-base font-semibold bg-amber-500 hover:bg-amber-600 text-white shadow-none"
               >
                 Switch to Arc Testnet
               </Button>

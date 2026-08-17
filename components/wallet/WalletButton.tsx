@@ -68,8 +68,8 @@ export function WalletButton() {
           variant="danger"
           size="sm"
           onClick={() => switchToArc()}
-          leftIcon={<AlertTriangle className="w-4 h-4 text-amber-400" />}
-          className="h-10 px-3.5 text-sm font-semibold"
+          leftIcon={<AlertTriangle className="w-4 h-4 text-amber-600" />}
+          className="h-10 px-3.5 text-sm font-semibold bg-amber-50 text-amber-800 border-amber-300 hover:bg-amber-100"
         >
           Switch to Arc Testnet
         </Button>
@@ -87,17 +87,17 @@ export function WalletButton() {
       <>
         <div className="flex items-center gap-2">
           {/* Balance */}
-          <div className="hidden sm:flex items-center px-3 h-10 rounded-lg bg-[#141722] border border-white/[0.08] text-sm font-mono font-medium text-white">
+          <div className="hidden sm:flex items-center px-3 h-10 rounded-lg bg-white border border-gray-200 shadow-2xs text-sm font-mono font-medium text-gray-800">
             <span>{balanceUSDC} USDC</span>
           </div>
 
           {/* Address Button */}
           <button
             onClick={() => setIsModalOpen(true)}
-            className="flex items-center gap-2 px-3 h-10 rounded-lg bg-[#141722] hover:bg-[#1C202E] border border-white/[0.08] text-sm font-medium text-white transition-colors"
+            className="flex items-center gap-2 px-3 h-10 rounded-lg bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300 shadow-2xs text-sm font-medium text-gray-900 transition-colors"
           >
             <span className="font-mono">{shortAddress}</span>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+            <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
           </button>
         </div>
 

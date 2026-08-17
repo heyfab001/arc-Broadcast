@@ -30,11 +30,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <head>
         <link rel="manifest" href="/manifest.json" />
       </head>
-      <body className="bg-arc-radial-glow text-slate-100 flex min-h-screen">
+      <body className="bg-[#F8FAFC] text-gray-900 flex min-h-screen font-sans antialiased">
         <Web3Providers>
           <WalletProvider>
             {/* Desktop Sidebar */}
@@ -43,7 +43,7 @@ export default function RootLayout({
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col min-w-0">
               <Navbar />
-              <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8 max-w-7xl w-full mx-auto">
+              <main className="flex-1 py-8 px-4 sm:px-6 lg:px-8 max-w-5xl w-full mx-auto">
                 {children}
               </main>
               <Footer />

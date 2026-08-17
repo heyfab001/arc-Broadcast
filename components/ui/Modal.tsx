@@ -51,32 +51,32 @@ export function Modal({
       {/* Backdrop */}
       <div
         onClick={onClose}
-        className="fixed inset-0 bg-black/80 transition-opacity"
+        className="fixed inset-0 bg-gray-900/50 transition-opacity"
       />
 
       {/* Modal Container */}
       <div
         className={cn(
-          "relative w-full bg-[#13151D] border border-white/10 rounded-xl shadow-2xl p-6 z-10",
+          "relative w-full bg-white border border-gray-200 rounded-xl shadow-modal p-6 z-10 animate-fade-in text-gray-900",
           maxWidthStyles[maxWidth],
           className
         )}
       >
-        <div className="flex items-start justify-between pb-4 border-b border-white/[0.06] mb-5">
+        <div className="flex items-start justify-between pb-4 border-b border-gray-100 mb-5">
           <div className="space-y-0.5">
             {title && (
-              <h3 className="text-base sm:text-lg font-semibold text-white">
+              <h3 className="text-lg font-semibold text-gray-900">
                 {title}
               </h3>
             )}
             {description && (
-              <p className="text-xs sm:text-sm text-slate-400">{description}</p>
+              <p className="text-sm text-gray-500">{description}</p>
             )}
           </div>
           <button
             onClick={onClose}
             aria-label="Close modal"
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-white hover:bg-white/[0.08] transition-colors"
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>

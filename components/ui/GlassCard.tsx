@@ -2,7 +2,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 
 export interface GlassCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "subtle" | "interactive" | "glow";
+  variant?: "default" | "subtle" | "interactive" | "flat";
 }
 
 export function GlassCard({
@@ -12,17 +12,17 @@ export function GlassCard({
   ...props
 }: GlassCardProps) {
   const variantStyles = {
-    default: "bg-[#13151D] border border-white/[0.08]",
-    subtle: "bg-white/[0.02] border border-white/[0.05]",
+    default: "bg-white border border-gray-200 shadow-card",
+    subtle: "bg-gray-50 border border-gray-200",
     interactive:
-      "bg-[#13151D] border border-white/[0.08] hover:border-white/[0.18] transition-colors cursor-pointer",
-    glow: "bg-[#13151D] border border-white/[0.08]",
+      "bg-white border border-gray-200 hover:border-gray-300 shadow-card hover:shadow-md transition-all duration-150 cursor-pointer",
+    flat: "bg-white border border-gray-200",
   };
 
   return (
     <div
       className={cn(
-        "rounded-xl p-5",
+        "rounded-xl p-5 sm:p-6",
         variantStyles[variant],
         className
       )}

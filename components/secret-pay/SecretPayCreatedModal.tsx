@@ -50,38 +50,38 @@ export function SecretPayCreatedModal({
   const txUrl = `${ARC_TESTNET.explorerUrl}/tx/${claim.depositTxHash}`;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75">
-      <div className="w-full max-w-md relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50">
+      <div className="w-full max-w-md relative animate-fade-in">
         <GlassCard
           variant="default"
-          className="p-6 space-y-5 relative"
+          className="p-6 sm:p-7 space-y-5 relative shadow-modal"
         >
           {/* Close Button */}
           <button
             onClick={onClose}
             aria-label="Close modal"
-            className="absolute top-5 right-5 p-1 text-slate-400 hover:text-white rounded hover:bg-white/[0.06] transition-colors"
+            className="absolute top-5 right-5 p-1 text-gray-400 hover:text-gray-700 rounded-lg hover:bg-gray-100 transition-colors"
           >
-            <X className="w-4 h-4" />
+            <X className="w-5 h-5" />
           </button>
 
           <div className="space-y-1">
-            <h3 className="text-base sm:text-lg font-semibold text-white">
+            <h3 className="text-xl font-semibold text-gray-900">
               Payment ready
             </h3>
-            <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-              Share this link with the person you want to receive it.
+            <p className="text-base text-gray-600 leading-relaxed">
+              Share this link with the recipient.
             </p>
           </div>
 
           {/* Link Box */}
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
               <input
                 type="text"
                 readOnly
                 value={claim.claimUrl}
-                className="w-full h-12 bg-[#0C0D12] border border-white/15 rounded-lg px-3.5 text-sm text-slate-200 font-mono select-all outline-none"
+                className="w-full h-12 bg-gray-50 border border-gray-300 rounded-lg px-3.5 text-sm text-gray-900 font-mono select-all outline-none"
               />
               <Button
                 type="button"
@@ -97,22 +97,22 @@ export function SecretPayCreatedModal({
           </div>
 
           {/* Details */}
-          <div className="space-y-2 text-sm bg-[#0C0D12] p-4 rounded-lg border border-white/[0.06] text-slate-300">
+          <div className="space-y-2.5 text-sm bg-gray-50 p-4 rounded-xl border border-gray-200 text-gray-700">
             <div className="flex justify-between">
-              <span className="text-slate-400">Amount</span>
-              <span className="font-mono font-semibold text-white">{claim.amount} USDC</span>
+              <span className="text-gray-500">Amount</span>
+              <span className="font-mono font-semibold text-gray-900">{claim.amount} USDC</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-slate-400">Expires in</span>
-              <span className="font-medium text-slate-200">{claim.expiryDays} {claim.expiryDays === 1 ? "day" : "days"}</span>
+              <span className="text-gray-500">Expires in</span>
+              <span className="font-medium text-gray-900">{claim.expiryDays} {claim.expiryDays === 1 ? "day" : "days"}</span>
             </div>
-            <div className="flex justify-between pt-2 border-t border-white/[0.06]">
-              <span className="text-slate-400">Transaction</span>
+            <div className="flex justify-between pt-2 border-t border-gray-200">
+              <span className="text-gray-500">Transaction</span>
               <a
                 href={txUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-blue-400 hover:underline flex items-center gap-1.5"
+                className="font-mono text-blue-600 hover:underline flex items-center gap-1.5 font-medium"
               >
                 <span>{claim.depositTxHash.slice(0, 6)}...{claim.depositTxHash.slice(-4)}</span>
                 <ExternalLink className="w-3.5 h-3.5" />

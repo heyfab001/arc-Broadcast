@@ -32,13 +32,13 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-white/[0.08] bg-[#0C0D12]">
+    <header className="sticky top-0 z-40 w-full border-b border-gray-200 bg-white">
       <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Mobile Toggle & Logo */}
         <div className="flex items-center gap-3 lg:hidden">
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 text-slate-300 hover:text-white rounded-lg"
+            className="p-2 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100 transition-colors"
             aria-label="Toggle navigation menu"
           >
             {isMobileMenuOpen ? (
@@ -48,23 +48,27 @@ export function Navbar() {
             )}
           </button>
 
-          <Link href="/" className="flex items-center gap-2.5">
+          <Link href="/" className="flex items-center gap-2">
             <ArcLogo size="sm" withText={false} />
-            <span className="font-semibold text-sm sm:text-base text-white">
+            <span className="font-semibold text-base text-gray-900">
               Arc Broadcast
             </span>
           </Link>
         </div>
 
-        {/* Desktop Left: Current Page Title */}
-        <div className="hidden lg:block">
-          <span className="text-sm sm:text-base font-semibold text-slate-200">
+        {/* Desktop Left: Current Section Title */}
+        <div className="hidden lg:flex items-center gap-2">
+          <span className="text-sm font-semibold text-gray-900">
             {getPageTitle()}
+          </span>
+          <span className="text-gray-300">•</span>
+          <span className="text-xs text-gray-500 font-medium">
+            Payments on Arc
           </span>
         </div>
 
         {/* Top Right Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5 sm:gap-3">
           <NetworkBadge />
           <WalletButton />
         </div>
@@ -72,7 +76,7 @@ export function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden border-b border-white/[0.08] bg-[#10121A] px-4 py-4 space-y-1.5 animate-fade-in">
+        <div className="lg:hidden border-b border-gray-200 bg-white px-4 py-3 space-y-1 animate-fade-in shadow-lg">
           {navItems.map((item) => {
             const isActive =
               item.href === "/"
@@ -85,10 +89,10 @@ export function Navbar() {
                 href={item.href}
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={cn(
-                  "block px-4 py-3 rounded-lg text-base font-medium transition-colors",
+                  "block px-3.5 py-2.5 rounded-lg text-base font-medium transition-colors",
                   isActive
-                    ? "bg-white/[0.09] text-white"
-                    : "text-slate-400 hover:text-white"
+                    ? "bg-blue-50 text-blue-600 font-semibold"
+                    : "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                 )}
               >
                 {item.name}

@@ -9,12 +9,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#0C0D12",
+        background: "#F8FAFC",
         surface: {
-          DEFAULT: "#13151D",
-          hover: "#181B26",
-          active: "#1E2230",
-          border: "rgba(255, 255, 255, 0.08)",
+          DEFAULT: "#FFFFFF",
+          hover: "#F9FAFB",
+          active: "#F3F4F6",
+          border: "#E5E7EB",
         },
         arc: {
           50: "#EFF6FF",
@@ -27,13 +27,15 @@ const config: Config = {
           700: "#1D4ED8",
           800: "#1E40AF",
           900: "#1E3A8A",
-          cyan: "#38BDF8",
-          purple: "#818CF8",
         },
       },
       fontFamily: {
         sans: ["var(--font-inter)", "Inter", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
         mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "monospace"],
+      },
+      boxShadow: {
+        card: "0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)",
+        modal: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)",
       },
     },
   },

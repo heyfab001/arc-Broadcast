@@ -27,12 +27,12 @@ export function TokenSelector({
         disabled={disabled}
         onClick={() => setIsOpen(true)}
         className={cn(
-          "flex items-center gap-2.5 px-4 h-12 rounded-lg bg-[#0C0D12] border border-white/15 hover:border-white/25 text-white transition-colors text-base font-semibold",
-          disabled && "opacity-50 cursor-not-allowed"
+          "flex items-center gap-2.5 px-4 h-12 rounded-lg bg-white border border-gray-300 hover:border-gray-400 text-gray-900 shadow-2xs transition-colors text-base font-semibold",
+          disabled && "opacity-50 cursor-not-allowed bg-gray-50"
         )}
       >
         <span>{selectedToken.symbol}</span>
-        <ChevronDown className="w-4 h-4 text-slate-400" />
+        <ChevronDown className="w-4 h-4 text-gray-500" />
       </button>
 
       <Modal
@@ -42,7 +42,7 @@ export function TokenSelector({
         description="Choose token on Arc Testnet."
         maxWidth="sm"
       >
-        <div className="space-y-1.5 pt-1">
+        <div className="space-y-2 pt-1">
           {SUPPORTED_TOKENS.map((token) => {
             const isSelected = token.symbol === selectedToken.symbol;
             return (
@@ -54,25 +54,25 @@ export function TokenSelector({
                   setIsOpen(false);
                 }}
                 className={cn(
-                  "w-full flex items-center justify-between p-3 rounded-lg border text-left transition-colors text-sm sm:text-base",
+                  "w-full flex items-center justify-between p-3.5 rounded-xl border text-left transition-colors text-sm sm:text-base",
                   isSelected
-                    ? "bg-blue-600/10 border-blue-500/40 text-white"
-                    : "bg-[#0C0D12] border-white/[0.06] hover:bg-white/[0.04] text-slate-300"
+                    ? "bg-blue-50 border-blue-200 text-blue-900"
+                    : "bg-white border-gray-200 hover:bg-gray-50 text-gray-800"
                 )}
               >
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-semibold text-white text-base">{token.symbol}</span>
+                    <span className="font-semibold text-gray-900 text-base">{token.symbol}</span>
                     {token.isNative && (
-                      <span className="text-xs px-1.5 py-0.5 rounded bg-white/[0.08] text-slate-300 font-mono">
+                      <span className="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600 font-mono font-medium">
                         Gas
                       </span>
                     )}
                   </div>
-                  <span className="text-sm text-slate-400">{token.name}</span>
+                  <span className="text-sm text-gray-500">{token.name}</span>
                 </div>
 
-                {isSelected && <Check className="w-4 h-4 text-blue-400" />}
+                {isSelected && <Check className="w-5 h-5 text-blue-600" />}
               </button>
             );
           })}

@@ -29,10 +29,10 @@ export function Sidebar() {
   const isSettingsActive = pathname.startsWith("/settings");
 
   return (
-    <aside className="hidden lg:flex flex-col w-64 border-r border-white/[0.08] bg-[#0C0D12] p-5 sticky top-0 h-screen z-30 shrink-0">
+    <aside className="hidden lg:flex flex-col w-64 border-r border-gray-200 bg-white p-5 sticky top-0 h-screen z-30 shrink-0">
       {/* Brand Header */}
       <Link href="/" className="px-2 mb-8 block hover:opacity-90 transition-opacity">
-        <ArcLogo size="md" withText />
+        <ArcLogo size="md" withText subtitle="Payments on Arc" />
       </Link>
 
       {/* Main Navigation */}
@@ -51,14 +51,14 @@ export function Sidebar() {
               className={cn(
                 "flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[15px] font-medium transition-colors duration-150",
                 isActive
-                  ? "bg-white/[0.09] text-white"
-                  : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
+                  ? "bg-blue-50 text-blue-600 font-semibold"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
               )}
             >
               <Icon
                 className={cn(
                   "w-5 h-5 shrink-0",
-                  isActive ? "text-blue-400" : "text-slate-400"
+                  isActive ? "text-blue-600" : "text-gray-400"
                 )}
               />
               <span>{item.name}</span>
@@ -68,20 +68,20 @@ export function Sidebar() {
       </nav>
 
       {/* Settings Navigation Link */}
-      <div className="pt-3 mb-4 border-t border-white/[0.06]">
+      <div className="pt-3 mb-3 border-t border-gray-100">
         <Link
           href="/settings"
           className={cn(
             "flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-[15px] font-medium transition-colors duration-150",
             isSettingsActive
-              ? "bg-white/[0.09] text-white"
-              : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
+              ? "bg-blue-50 text-blue-600 font-semibold"
+              : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
           )}
         >
           <Settings
             className={cn(
               "w-5 h-5 shrink-0",
-              isSettingsActive ? "text-blue-400" : "text-slate-400"
+              isSettingsActive ? "text-blue-600" : "text-gray-400"
             )}
           />
           <span>Settings</span>
@@ -89,19 +89,19 @@ export function Sidebar() {
       </div>
 
       {/* Bottom Wallet Session Indicator */}
-      <div className="pt-3 border-t border-white/[0.06]">
+      <div className="pt-3 border-t border-gray-100">
         {isConnected ? (
-          <div className="p-3 rounded-lg bg-[#141722] border border-white/[0.08] flex items-center justify-between text-sm">
+          <div className="p-3 rounded-lg bg-gray-50 border border-gray-200 flex items-center justify-between text-sm">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-md bg-white/[0.06] flex items-center justify-center text-slate-300">
+              <div className="w-7 h-7 rounded-md bg-white border border-gray-200 shadow-2xs flex items-center justify-center text-gray-700">
                 <Wallet className="w-4 h-4" />
               </div>
-              <span className="font-mono text-white text-xs sm:text-sm font-medium">{shortAddress}</span>
+              <span className="font-mono text-gray-900 text-xs sm:text-sm font-medium">{shortAddress}</span>
             </div>
-            <span className="font-mono text-xs sm:text-sm text-slate-300">{balanceUSDC} USDC</span>
+            <span className="font-mono text-xs sm:text-sm font-medium text-gray-700">{balanceUSDC} USDC</span>
           </div>
         ) : (
-          <div className="text-xs text-slate-500 px-1 font-mono">
+          <div className="text-xs text-gray-400 px-1 font-mono">
             Arc Testnet (5042002)
           </div>
         )}

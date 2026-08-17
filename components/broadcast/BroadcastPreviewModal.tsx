@@ -39,35 +39,35 @@ export function BroadcastPreviewModal({
     >
       <div className="space-y-5 pt-1 text-sm">
         {/* Breakdown Card */}
-        <div className="p-4 rounded-xl bg-[#0C0D12] border border-white/[0.06] space-y-2.5">
+        <div className="p-4 rounded-xl bg-gray-50 border border-gray-200 space-y-2.5">
           <div className="flex justify-between items-center">
-            <span className="text-slate-400">Total amount</span>
-            <span className="font-mono font-bold text-white text-base sm:text-lg">
+            <span className="text-gray-600">Total amount</span>
+            <span className="font-mono font-bold text-gray-900 text-base sm:text-lg">
               {formatAmount(validation.totalAmount)} {token.symbol}
             </span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-slate-400">Recipients</span>
-            <span className="font-mono font-semibold text-white">{validation.recipientCount}</span>
+            <span className="text-gray-600">Recipients</span>
+            <span className="font-mono font-semibold text-gray-900">{validation.recipientCount}</span>
           </div>
           <div className="flex justify-between items-center">
-            <span className="text-slate-400">Network</span>
-            <span className="text-white font-medium">{ARC_TESTNET.name}</span>
+            <span className="text-gray-600">Network</span>
+            <span className="text-gray-900 font-medium">{ARC_TESTNET.name}</span>
           </div>
         </div>
 
         {/* Recipients Mini List */}
         <div className="space-y-1.5">
-          <span className="text-xs sm:text-sm font-semibold text-slate-400 uppercase tracking-wider">
+          <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
             Recipients ({recipients.length})
           </span>
-          <div className="max-h-48 overflow-y-auto rounded-xl border border-white/[0.06] bg-[#0C0D12] divide-y divide-white/[0.04]">
+          <div className="max-h-48 overflow-y-auto rounded-xl border border-gray-200 bg-white divide-y divide-gray-100">
             {recipients.map((r, i) => (
               <div key={r.id} className="p-3 flex justify-between items-center font-mono text-xs sm:text-sm">
-                <span className="text-slate-300">
+                <span className="text-gray-700">
                   {i + 1}. {truncateAddress(r.address, 6)}
                 </span>
-                <span className="text-white font-semibold">
+                <span className="text-gray-900 font-semibold">
                   {r.amount} {token.symbol}
                 </span>
               </div>
@@ -76,7 +76,7 @@ export function BroadcastPreviewModal({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-end gap-2.5 pt-3 border-t border-white/[0.06]">
+        <div className="flex justify-end gap-2.5 pt-3 border-t border-gray-200">
           <Button
             type="button"
             variant="ghost"

@@ -24,7 +24,7 @@ export function Tabs<T extends string = string>({
   return (
     <div
       className={cn(
-        "flex items-center gap-1.5 p-1 bg-[#0C0D12] border border-white/10 rounded-lg overflow-x-auto scrollbar-none",
+        "flex items-center gap-1 p-1 bg-gray-100 border border-gray-200 rounded-lg overflow-x-auto scrollbar-none",
         className
       )}
     >
@@ -36,10 +36,10 @@ export function Tabs<T extends string = string>({
             type="button"
             onClick={() => onChange(tab.id)}
             className={cn(
-              "flex items-center gap-2 px-3.5 py-2 rounded-md text-sm font-medium transition-colors whitespace-nowrap",
+              "flex items-center gap-2 px-3.5 py-1.5 rounded-md text-sm font-medium transition-all whitespace-nowrap",
               isActive
-                ? "bg-white/[0.09] text-white"
-                : "text-slate-400 hover:text-white hover:bg-white/[0.04]"
+                ? "bg-white text-gray-900 shadow-2xs font-semibold"
+                : "text-gray-600 hover:text-gray-900 hover:bg-white/50"
             )}
           >
             {tab.icon}
@@ -47,10 +47,10 @@ export function Tabs<T extends string = string>({
             {tab.count !== undefined && (
               <span
                 className={cn(
-                  "px-1.5 py-0.5 rounded text-xs font-mono",
+                  "px-1.5 py-0.5 rounded text-xs font-mono font-medium",
                   isActive
-                    ? "bg-white/20 text-white"
-                    : "bg-white/10 text-slate-400"
+                    ? "bg-blue-50 text-blue-700"
+                    : "bg-gray-200/70 text-gray-600"
                 )}
               >
                 {tab.count}

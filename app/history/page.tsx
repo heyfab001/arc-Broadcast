@@ -53,19 +53,19 @@ export default function HistoryPage() {
           <div className="flex items-center gap-2.5 w-full sm:w-auto">
             {/* Search Input */}
             <div className="relative flex-1 sm:w-64">
-              <Search className="w-4 h-4 absolute left-3 top-3.5 text-slate-500 pointer-events-none" />
+              <Search className="w-4 h-4 absolute left-3 top-3.5 text-gray-400 pointer-events-none" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search payments..."
-                className="w-full h-11 bg-[#0C0D12] border border-white/15 rounded-lg pl-9 pr-8 text-sm text-white placeholder-slate-500 outline-none focus:border-blue-500 transition-colors"
+                className="w-full h-11 bg-white border border-gray-300 rounded-lg pl-9 pr-8 text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600 shadow-2xs transition-colors"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-2.5 top-3 p-1 text-slate-400 hover:text-white rounded"
+                  className="absolute right-2.5 top-3 p-1 text-gray-400 hover:text-gray-700 rounded"
                   aria-label="Clear search"
                 >
                   <X className="w-3.5 h-3.5" />
@@ -81,7 +81,7 @@ export default function HistoryPage() {
               onClick={handleManualRefresh}
               disabled={isLoading || isRefreshing}
               leftIcon={
-                <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin text-blue-400" : ""}`} />
+                <RefreshCw className={`w-4 h-4 ${isRefreshing ? "animate-spin text-blue-600" : "text-gray-500"}`} />
               }
               className="h-11 text-sm font-medium shrink-0 px-4"
             >

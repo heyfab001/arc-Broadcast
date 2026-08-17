@@ -26,36 +26,37 @@ export function ToastContainer() {
 
 function ToastCard({ toast }: { toast: ToastItem }) {
   const icons = {
-    success: <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />,
-    warning: <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />,
-    error: <AlertCircle className="w-5 h-5 text-red-400 shrink-0" />,
-    info: <Info className="w-5 h-5 text-arc-400 shrink-0" />,
+    success: <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />,
+    warning: <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />,
+    error: <AlertCircle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />,
+    info: <Info className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />,
   };
 
   const borders = {
-    success: "border-emerald-500/30 bg-[#0B1416]/95",
-    warning: "border-amber-500/30 bg-[#16120B]/95",
-    error: "border-red-500/30 bg-[#160B0B]/95",
-    info: "border-arc-500/30 bg-[#0B101E]/95",
+    success: "border-emerald-200 bg-white",
+    warning: "border-amber-200 bg-white",
+    error: "border-red-200 bg-white",
+    info: "border-blue-200 bg-white",
   };
 
   return (
     <div
       className={cn(
-        "pointer-events-auto flex items-start gap-3 p-4 rounded-xl border backdrop-blur-xl shadow-2xl transition-all duration-300 transform translate-y-0",
+        "pointer-events-auto flex items-start gap-3 p-4 rounded-xl border shadow-modal transition-all duration-150 transform translate-y-0",
         borders[toast.type]
       )}
     >
       {icons[toast.type]}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-white tracking-tight">{toast.title}</p>
+        <p className="text-sm font-semibold text-gray-900">{toast.title}</p>
         {toast.message && (
-          <p className="text-xs text-slate-300 mt-0.5 leading-relaxed break-words">{toast.message}</p>
+          <p className="text-xs sm:text-sm text-gray-600 mt-0.5 leading-relaxed break-words">{toast.message}</p>
         )}
       </div>
       <button
         onClick={() => dismissToast(toast.id)}
-        className="text-slate-400 hover:text-white p-1 rounded-md transition-colors"
+        aria-label="Dismiss toast"
+        className="text-gray-400 hover:text-gray-700 p-1 rounded-md transition-colors"
       >
         <X className="w-4 h-4" />
       </button>

@@ -82,25 +82,25 @@ export function BroadcastExecutionModal({
         {/* Status Graphic */}
         <div className="py-4 text-center space-y-3">
           {isSuccess ? (
-            <div className="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mx-auto">
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 mx-auto">
               <CheckCircle2 className="w-6 h-6" />
             </div>
           ) : isCancelled ? (
-            <div className="w-12 h-12 rounded-xl bg-slate-500/10 border border-slate-500/20 flex items-center justify-center text-slate-400 mx-auto">
+            <div className="w-12 h-12 rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-500 mx-auto">
               <XCircle className="w-6 h-6" />
             </div>
           ) : isError ? (
-            <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-400 mx-auto">
+            <div className="w-12 h-12 rounded-xl bg-red-50 border border-red-200 flex items-center justify-center text-red-600 mx-auto">
               <AlertCircle className="w-6 h-6" />
             </div>
           ) : (
-            <div className="w-12 h-12 rounded-xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mx-auto">
+            <div className="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 mx-auto">
               <Loader2 className="w-6 h-6 animate-spin" />
             </div>
           )}
 
           <div className="space-y-1">
-            <h4 className="text-base font-semibold text-white">
+            <h4 className="text-base font-semibold text-gray-900">
               {isSuccess
                 ? `${totalAmount} ${tokenSymbol} sent to ${recipientCount} ${recipientCount === 1 ? "wallet" : "wallets"}`
                 : isCancelled
@@ -110,7 +110,7 @@ export function BroadcastExecutionModal({
                 : getDescription()}
             </h4>
             {!isSuccess && !isCancelled && !isError && (
-              <p className="text-xs sm:text-sm text-slate-400">
+              <p className="text-xs sm:text-sm text-gray-500">
                 {step.includes("AWAITING")
                   ? "Please check your connected wallet extension."
                   : "Blockchain confirmation in progress on Arc Testnet."}
@@ -121,15 +121,15 @@ export function BroadcastExecutionModal({
 
         {/* Transaction Hashes */}
         {(approvalTxHash || batchTxHash) && (
-          <div className="p-3.5 rounded-xl bg-[#0C0D12] border border-white/[0.06] space-y-2 font-mono text-xs sm:text-sm">
+          <div className="p-3.5 rounded-xl bg-gray-50 border border-gray-200 space-y-2 font-mono text-xs sm:text-sm">
             {approvalTxHash && (
               <div className="flex justify-between items-center">
-                <span className="text-slate-400 font-sans">Approval:</span>
+                <span className="text-gray-500 font-sans">Approval:</span>
                 <a
                   href={`${ARC_TESTNET.explorerUrl}/tx/${approvalTxHash}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 hover:underline flex items-center gap-1 font-mono"
+                  className="text-blue-600 hover:underline flex items-center gap-1 font-mono font-medium"
                 >
                   <span>{approvalTxHash.slice(0, 6)}...{approvalTxHash.slice(-4)}</span>
                   <ExternalLink className="w-3.5 h-3.5" />
@@ -138,12 +138,12 @@ export function BroadcastExecutionModal({
             )}
             {batchTxHash && (
               <div className="flex justify-between items-center">
-                <span className="text-slate-400 font-sans">Broadcast:</span>
+                <span className="text-gray-500 font-sans">Broadcast:</span>
                 <a
                   href={`${ARC_TESTNET.explorerUrl}/tx/${batchTxHash}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 hover:underline flex items-center gap-1 font-mono"
+                  className="text-blue-600 hover:underline flex items-center gap-1 font-mono font-medium"
                 >
                   <span>{batchTxHash.slice(0, 6)}...{batchTxHash.slice(-4)}</span>
                   <ExternalLink className="w-3.5 h-3.5" />
@@ -191,7 +191,7 @@ export function BroadcastExecutionModal({
               variant="ghost"
               size="sm"
               disabled
-              className="w-full text-slate-500 opacity-60"
+              className="w-full text-gray-400 opacity-60"
             >
               Please wait...
             </Button>

@@ -53,11 +53,11 @@ export function AmountInput({
           disabled={disabled}
           placeholder={placeholder}
           className={cn(
-            "w-full h-12 bg-[#0C0D12] border rounded-lg pl-4 pr-20 text-base font-mono text-white placeholder-slate-500 placeholder:text-base transition-colors outline-none",
+            "w-full h-12 bg-white border rounded-lg pl-4 pr-20 text-base font-mono text-gray-900 placeholder:text-gray-400 shadow-2xs transition-colors outline-none",
             displayError
-              ? "border-red-500/60 focus:border-red-500"
-              : "border-white/15 focus:border-blue-500",
-            disabled && "opacity-50 cursor-not-allowed"
+              ? "border-red-400 focus:border-red-500 focus:ring-1 focus:ring-red-500"
+              : "border-gray-300 focus:border-blue-600 focus:ring-1 focus:ring-blue-600",
+            disabled && "opacity-50 cursor-not-allowed bg-gray-50"
           )}
         />
         <div className="absolute right-3 flex items-center gap-2">
@@ -66,15 +66,15 @@ export function AmountInput({
               type="button"
               onClick={handleMax}
               disabled={disabled}
-              className="px-2 py-1 text-xs font-semibold rounded bg-white/[0.09] hover:bg-white/[0.16] text-slate-200 transition-colors disabled:opacity-50"
+              className="px-2 py-1 text-xs font-semibold rounded bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors disabled:opacity-50"
             >
               Max
             </button>
           )}
-          <span className="text-sm font-semibold text-slate-300 pr-1">{symbol}</span>
+          <span className="text-sm font-semibold text-gray-600 pr-1">{symbol}</span>
         </div>
       </div>
-      {displayError && <p className="text-xs text-red-400 pl-0.5">{displayError}</p>}
+      {displayError && <p className="text-xs sm:text-sm text-red-600 pl-0.5">{displayError}</p>}
     </div>
   );
 }

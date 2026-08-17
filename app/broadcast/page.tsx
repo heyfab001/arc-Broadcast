@@ -92,8 +92,8 @@ export default function BroadcastPage() {
     <div className="space-y-6 animate-fade-in max-w-5xl">
       {/* Page Header */}
       <PageHeader
-        title="Broadcast payment"
-        subtitle="Send USDC to multiple wallets."
+        title="Broadcast Payment"
+        subtitle="Send USDC to multiple wallets in one transaction."
         actions={
           <Button
             variant="secondary"
@@ -117,7 +117,7 @@ export default function BroadcastPage() {
           <GlassCard variant="default" className="p-5">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <span className="text-xs sm:text-sm font-medium text-slate-300 block mb-1.5">
+                <span className="text-sm font-medium text-gray-700 block mb-1.5">
                   Token
                 </span>
                 <TokenSelector
@@ -127,8 +127,8 @@ export default function BroadcastPage() {
               </div>
 
               <div className="text-right text-sm">
-                <span className="text-slate-400 block text-xs sm:text-sm">Available balance</span>
-                <span className="font-mono font-semibold text-white text-sm sm:text-base mt-0.5 block">
+                <span className="text-gray-500 block text-xs sm:text-sm">Available balance</span>
+                <span className="font-mono font-semibold text-gray-900 text-sm sm:text-base mt-0.5 block">
                   {!isConnected ? "Not connected" : `${balanceUSDC} USDC`}
                 </span>
               </div>

@@ -60,41 +60,41 @@ export function TransactionSummary({
   return (
     <>
       <GlassCard variant="default" className="space-y-5 p-5 sm:p-6">
-        <div className="pb-4 border-b border-white/[0.06]">
-          <h3 className="text-base sm:text-lg font-semibold text-white">
-            3. Review
-          </h3>
-          <span className="text-xs sm:text-sm text-slate-400 mt-0.5 block">
+        <div className="pb-4 border-b border-gray-200">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900">
             Payment summary
+          </h3>
+          <span className="text-sm text-gray-500 mt-0.5 block">
+            Review recipients and total
           </span>
         </div>
 
         {/* Breakdown List */}
         <div className="space-y-3 text-sm sm:text-base">
           <div className="flex items-center justify-between">
-            <span className="text-slate-400">Recipients</span>
-            <span className="font-mono font-semibold text-white">
+            <span className="text-gray-600">Recipients</span>
+            <span className="font-mono font-semibold text-gray-900">
               {validation.recipientCount} {validation.recipientCount === 1 ? "recipient" : "recipients"}
             </span>
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-slate-400">Network</span>
-            <span className="text-white font-medium">
+            <span className="text-gray-600">Network</span>
+            <span className="text-gray-900 font-medium">
               {ARC_TESTNET.name}
             </span>
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-slate-400">Estimated fee</span>
-            <span className="text-slate-300">
+            <span className="text-gray-600">Estimated fee</span>
+            <span className="text-gray-500 text-sm">
               Calculated in wallet
             </span>
           </div>
 
-          <div className="pt-3.5 border-t border-white/[0.06] flex items-center justify-between">
-            <span className="text-slate-200 font-medium">Total</span>
-            <span className="text-lg sm:text-xl font-bold text-white font-mono">
+          <div className="pt-3.5 border-t border-gray-200 flex items-center justify-between">
+            <span className="text-gray-900 font-semibold">Total</span>
+            <span className="text-xl font-bold text-gray-900 font-mono">
               {formatAmount(validation.totalAmount)} {token.symbol}
             </span>
           </div>
@@ -102,12 +102,12 @@ export function TransactionSummary({
 
         {/* Validation Errors Notice */}
         {validation.errors.length > 0 && (
-          <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 space-y-1.5">
-            <div className="flex items-center gap-2 text-sm text-amber-300 font-medium">
-              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+          <div className="p-3.5 rounded-lg bg-amber-50 border border-amber-200 space-y-1.5">
+            <div className="flex items-center gap-2 text-sm text-amber-800 font-medium">
+              <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
               <span>Please review:</span>
             </div>
-            <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm text-amber-200/90 pl-1">
+            <ul className="list-disc list-inside space-y-1 text-xs sm:text-sm text-amber-800/90 pl-1 font-medium">
               {validation.errors.map((err, i) => (
                 <li key={i}>{err}</li>
               ))}
@@ -134,7 +134,7 @@ export function TransactionSummary({
               onClick={() => switchToArc()}
               isLoading={isSwitching}
               leftIcon={<RefreshCw className="w-4 h-4" />}
-              className="w-full h-12 text-base font-semibold bg-amber-500 hover:bg-amber-400 text-slate-950"
+              className="w-full h-12 text-base font-semibold bg-amber-500 hover:bg-amber-600 text-white shadow-none"
             >
               Switch to Arc Testnet
             </Button>
