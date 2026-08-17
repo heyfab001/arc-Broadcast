@@ -68,6 +68,20 @@ export function Sidebar() {
         })}
       </nav>
 
+      {/* Creator Credit (Directly Above Settings) */}
+      <div className="px-3.5 py-2.5 my-1 text-sm text-[#4B5563] font-medium select-none">
+        <a
+          href="https://x.com/cd_sh73839"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:text-blue-600 transition-colors inline-flex items-center gap-1.5"
+        >
+          <span>Built by HeyFab</span>
+          <span className="text-gray-400">·</span>
+          <span className="text-xs font-mono leading-none">𝕏</span>
+        </a>
+      </div>
+
       {/* Settings Navigation Link */}
       <div className="pt-3 mb-3 border-t border-gray-100">
         <Link
